@@ -2,7 +2,7 @@ export default async function fetchTimetableList() {
   let timeTableData = "";
   let timeTableOk = false;
   await fetch(
-    `${process.env.NEXT_PUBLIC_PROXY_URL}/${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/lista.html`
+    `${process.env.NEXT_PUBLIC_PROXY_URL ? `${process.env.NEXT_PUBLIC_PROXY_URL}/` : ""}${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/lista.html`
   )
     .then((response) => {
       timeTableOk = response.ok;
