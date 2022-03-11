@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.4",
@@ -17,10 +18,13 @@
     "react-inlinesvg": "^2.3.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.4",
     "@types/react": "17.0.25",
     "autoprefixer": "^10.4.2",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "jest": "^27.5.1",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.17",
     "typescript": "4.4.3"
