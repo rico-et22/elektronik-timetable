@@ -44,8 +44,8 @@ const TimeTableMobile = ({ timeTable, timeTableList }: Props) => {
   );
 
   return (
-    <div className="pb-24">
-      <div className="bg-gray-200 flex justify-between px-6 mb-8 sticky top-0">
+    <div className="pb-24 lg:pb-4">
+      <div className="bg-gray-200 flex justify-between px-6 mb-8 sticky top-0 lg:h-[4.5rem]">
         {timeTable.dayNames.map((dayName, index) => (
           <button
             key={`dayName-${dayName}`}

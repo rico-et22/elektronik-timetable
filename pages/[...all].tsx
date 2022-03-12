@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { List, Table, Timetable } from "@wulkanowy/timetable-parser";
-import BottomBar from "../components/BottomBar/BottomBar";
+import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
 import NoTimeTableError from "../components/NoTimeTableError";
 import {
@@ -10,40 +10,23 @@ import {
   TimeTableStatus,
 } from "../types/TimeTable";
 import fetchTimetable from "../helpers/fetchTimetable";
-import TimeTableMobile from "../components/TimeTableMobile";
+import TimeTableMobile from "../components/TimeTableAsList";
+import Layout from "../components/Layout";
 
-type TablePageProps = {
+interface TablePageProps {
   timeTableList: List;
   timeTableListStatus: TimeTableStatus;
   timeTable: TimeTableData;
   timeTableStatus: TimeTableStatus;
 };
 
-const TablePage: NextPage<TablePageProps> = ({
-  timeTableList,
-  timeTableListStatus,
-  timeTable,
-  timeTableStatus,
-}) => {
+const TablePage: NextPage<TablePageProps> = (props) => {
   return (
     <>
       <Head>
         <title>Plany lekcji</title>
       </Head>
-      <div
-        className={`${
-          timeTableStatus === "ok" ? "" : "h-screen flex flex-col "
-        }`}
-      >
-        <TopBar />
-        <TimeTableMobile timeTable={timeTable} timeTableList={timeTableList} />
-        {timeTableListStatus === "ok" && (
-          <BottomBar timeTableList={timeTableList} />
-        )}
-        {timeTableStatus !== "ok" && (
-          <NoTimeTableError status={timeTableStatus} />
-        )}
-      </div>
+      <Layout {...props} />
     </>
   );
 };
