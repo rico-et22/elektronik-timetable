@@ -10,7 +10,7 @@ import {
   TimeTableStatus,
 } from "../types/TimeTable";
 import fetchTimetable from "../helpers/fetchTimetable";
-import TimeTableMobile from "../components/TimeTableAsList";
+import TimeTableAsList from "../components/TimeTableAsList";
 import Layout from "../components/Layout";
 
 interface TablePageProps {

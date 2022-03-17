@@ -9,7 +9,7 @@
 # Preparing the timetable to use with the app
 
 👉 A timetable base URL is a one that points to a folder in the server containing the timetable list - a "lista.html" file.
-## Method 1 - original website and CORS Anywhere proxy
+## Method 2 - original website and CORS Anywhere proxy
 In this method we're going to use the original timetable hosted on your school's website.
 
 To get it working, you need to deploy a CORS Anywhere instance as timetable fetching won't work without it due to CORS issues. Optivum's CORS Policy can't be altered, but don't worry, there are no sensitive data passing through, it's just a timetable 😅. However if security is your #1 priority use method 2.
@@ -22,7 +22,7 @@ You should see two frames with "Not Found" errors. That's okay.
 
 If there are problems with SSL, add `process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';` to the top of the config file and restart the instance.
 
-## Method 2 - clone and self-serve on an external server
+## Method 3 - clone and self-serve on an external server
 You can also clone the whole timetable and host it on your own server.
 
 This way you won't have to worry about CORS Anywhere proxying and related issues, provided if you set up proper CORS handling.
@@ -35,7 +35,7 @@ Example: `wget -mpEk https://www.elektronik.rzeszow.pl/plan-lekcji-2 --no-check-
 
 This way is also faster.
 
-## Method 3 - clone and self-serve in this app
+## Method 4 - clone and self-serve in this app
 What about hosting it inside the app itself?
 
 Simply use the power of Next.js and copy the cloned data to the /public folder!
@@ -47,7 +47,7 @@ After cloning the repo, define the environment variables (.env):
 
 `NEXT_PUBLIC_PROXY_URL` - CORS Anywhere proxy URL - method 1 only
 
-`NEXT_PUBLIC_TIMETABLE_BASE_URL` - timetable base URL: original URL for method 1, self-hosted URL for method 2 and 3
+`NEXT_PUBLIC_TIMETABLE_BASE_URL` - timetable base URL: original URL for method 2, self-hosted URL for method 3 and 4
 
 Example:
 ```

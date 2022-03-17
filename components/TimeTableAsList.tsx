@@ -11,7 +11,7 @@ interface Props {
   timeTableList: List;
 }
 
-const TimeTableMobile = ({ timeTable, timeTableList }: Props) => {
+const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
   const [selectedDayIndex, setSelectedDayIndex] = React.useState<
     number | null
   >();
@@ -72,58 +72,54 @@ const TimeTableMobile = ({ timeTable, timeTableList }: Props) => {
             </div>
             <div className="bg-gray-50 w-full px-4 py-1">
               {selectedDayIndex != null &&
-                timeTable.days[selectedDayIndex][index][0] && (
-                  <>
-                    <p className="font-bold mb-1">
-                      {timeTable.days[selectedDayIndex][index][0].subject}
-                    </p>
-                    <div className="text-sm flex">
-                      {router.query.all &&
-                        router.query.all[0] !== "teacher" && (
-                          <div className="flex items-center mr-4">
-                            <UserGroupIcon className="h-3 w-3 mr-1" />
+                timeTable.days[selectedDayIndex][index].length > 0 &&
+                timeTable.days[selectedDayIndex][index].map(
+                  (subject, subjectIndex) => (
+                    <div
+                      key={`day-${selectedDayIndex}-${index}-${subjectIndex}`}
+                      className={
+                        subjectIndex !==
+                        timeTable.days[selectedDayIndex][index].length - 1
+                          ? "mb-2"
+                          : ""
+                      }
+                    >
+                      <p className="font-bold mb-1">{subject.subject}{subject.groupName && ` (${subject.groupName})`}</p>
+                      <div className="text-sm flex">
+                        {router.query.all &&
+                          router.query.all[0] !== "teacher" && (
+                            <div className="flex items-center mr-4">
+                              <UserGroupIcon className="h-3 w-3 mr-1" />
+                              <Link
+                                href={`/teacher/${
+                                  getTeacherData(subject.teacher)?.value
+                                }`}
+                              >
+                                <a className="text-elektronik-blue">
+                                  {
+                                    getTeacherData(subject.teacher)?.name.split(
+                                      " "
+                                    )[0]
+                                  }
+                                </a>
+                              </Link>
+                            </div>
+                          )}{" "}
+                        {router.query.all && router.query.all[0] !== "room" && (
+                          <div className="flex items-center">
+                            <LocationMarkerIcon className="h-3 w-3 mr-1" />
                             <Link
-                              href={`/teacher/${
-                                getTeacherData(
-                                  timeTable.days[selectedDayIndex][index][0]
-                                    .teacher
-                                )?.value
-                              }`}
+                              href={`/room/${getRoomData(subject.room)?.value}`}
                             >
                               <a className="text-elektronik-blue">
-                                {
-                                  getTeacherData(
-                                    timeTable.days[selectedDayIndex][index][0]
-                                      .teacher
-                                  )?.name.split(" ")[0]
-                                }
+                                {getRoomData(subject.room)?.name.split(" ")[0]}
                               </a>
                             </Link>
                           </div>
-                        )}{" "}
-                      {router.query.all && router.query.all[0] !== "room" && (
-                        <div className="flex items-center">
-                          <LocationMarkerIcon className="h-3 w-3 mr-1" />
-                          <Link
-                            href={`/room/${
-                              getRoomData(
-                                timeTable.days[selectedDayIndex][index][0].room
-                              )?.value
-                            }`}
-                          >
-                            <a className="text-elektronik-blue">
-                              {
-                                getRoomData(
-                                  timeTable.days[selectedDayIndex][index][0]
-                                    .room
-                                )?.name.split(" ")[0]
-                              }
-                            </a>
-                          </Link>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </>
+                  )
                 )}
             </div>
           </div>
@@ -133,4 +129,4 @@ const TimeTableMobile = ({ timeTable, timeTableList }: Props) => {
   );
 };
 
-export default TimeTableMobile;
+export default TimeTableAsList;
