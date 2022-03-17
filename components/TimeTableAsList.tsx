@@ -1,4 +1,4 @@
-import { LocationMarkerIcon, UserGroupIcon } from "@heroicons/react/outline";
+import { AcademicCapIcon, LocationMarkerIcon, UserGroupIcon } from "@heroicons/react/outline";
 import { List } from "@wulkanowy/timetable-parser";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
@@ -24,6 +24,15 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
     if (!selectedDayIndex && timeTable?.dayNames?.length > 0)
       setSelectedDayIndex(0);
   }, [selectedDayIndex, timeTable.dayNames]);
+
+  const getClassData = React.useCallback(
+    (classCode: string | undefined) => {
+      return timeTableList.classes?.find(
+        (singleClass) => singleClass.name.split(" ")[0] === classCode
+      );
+    },
+    [timeTableList.classes]
+  );
 
   const getTeacherData = React.useCallback(
     (teacherCode: string | undefined) => {
@@ -86,8 +95,20 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                     >
                       <p className="font-bold mb-1">{subject.subject}{subject.groupName && ` (${subject.groupName})`}</p>
                       <div className="text-sm flex">
+                      {router.query.all && router.query.all[0] !== "class" && subject.className && (
+                          <div className="flex items-center mr-4">
+                            <AcademicCapIcon className="h-3 w-3 mr-1" />
+                            <Link
+                              href={`/class/${getClassData(subject.className)?.value}`}
+                            >
+                              <a className="text-elektronik-blue">
+                                {getClassData(subject.className)?.name.split(" ")[0]}
+                              </a>
+                            </Link>
+                          </div>
+                        )}
                         {router.query.all &&
-                          router.query.all[0] !== "teacher" && (
+                          router.query.all[0] !== "teacher" && subject.teacher && (
                             <div className="flex items-center mr-4">
                               <UserGroupIcon className="h-3 w-3 mr-1" />
                               <Link
@@ -105,7 +126,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                               </Link>
                             </div>
                           )}{" "}
-                        {router.query.all && router.query.all[0] !== "room" && (
+                        {router.query.all && router.query.all[0] !== "room" && subject.room && (
                           <div className="flex items-center">
                             <LocationMarkerIcon className="h-3 w-3 mr-1" />
                             <Link
