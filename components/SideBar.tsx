@@ -4,6 +4,7 @@ import ClassesSelector from "./Selectors/ClassesSelector";
 import TeachersSelector from "./Selectors/TeachersSelector";
 import RoomsSelector from "./Selectors/RoomsSelector";
 import { useRouter } from "next/dist/client/router";
+import Credits from "./Credits";
 
 type BottomBarProps = {
   timeTableList: List;
@@ -53,9 +54,7 @@ const SideBar = ({ timeTableList }: BottomBarProps) => {
   }, [classes, rooms, router.query.all, teachers]);
 
   return (
-    <div
-      className="w-full transform-gpu bg-gray-300 filter drop-shadow-2xl h-[calc(100vh-4.5rem)] overflow-y-auto"
-    >
+    <div className="w-full transform-gpu bg-gray-300 filter drop-shadow-2xl h-[calc(100vh-4.5rem)] overflow-y-auto flex flex-col">
       <div className="sticky top-0 bg-gray-300 p-4">
         <div
           className={`bg-gray-100 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg`}
@@ -75,6 +74,9 @@ const SideBar = ({ timeTableList }: BottomBarProps) => {
         <ClassesSelector classes={classes} />
         <TeachersSelector teachers={teachers} />
         <RoomsSelector rooms={rooms} />
+      </div>
+      <div className="px-4 mb-5 mt-auto">
+        <Credits />
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import ClassesSelector from "./Selectors/ClassesSelector";
 import TeachersSelector from "./Selectors/TeachersSelector";
 import RoomsSelector from "./Selectors/RoomsSelector";
 import { useRouter } from "next/dist/client/router";
+import Credits from "./Credits";
 
 type BottomBarProps = {
   timeTableList: List;
@@ -82,7 +83,7 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
 
   return (
     <div
-      className={`w-full fixed bottom-0 transition-all duration-500 transform-gpu ease-in-out bg-gray-300 filter drop-shadow-2xl ${
+      className={`w-full fixed bottom-0 transition-all duration-500 transform-gpu ease-in-out bg-gray-300 filter drop-shadow-2xl flex flex-col ${
         expanded ? "h-full overflow-y-auto" : "h-[5.25rem] overflow-hidden"
       }`}
     >
@@ -108,6 +109,9 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
         <ClassesSelector classes={classes} />
         <TeachersSelector teachers={teachers} />
         <RoomsSelector rooms={rooms} />
+      </div>
+      <div className="px-4 mb-5 mt-auto">
+        <Credits />
       </div>
     </div>
   );
