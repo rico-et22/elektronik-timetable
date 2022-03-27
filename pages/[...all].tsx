@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { List, Table, Timetable } from "@wulkanowy/timetable-parser";
 import BottomBar from "../components/BottomBar";
-import TopBar from "../components/TopBar";
+import HeaderBar from "../components/HeaderBar";
 import NoTimeTableError from "../components/NoTimeTableError";
 import {
   TimeTableData,

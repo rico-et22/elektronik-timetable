@@ -78,11 +78,11 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
 
   return (
     <div className="pb-24 lg:pb-4">
-      <div className="bg-gray-200 flex justify-between px-6 mb-8 sticky top-0 lg:h-[4.5rem]">
+      <div className="bg-gray-200 flex justify-between px-6 mb-8 sticky top-0">
         {timeTable.dayNames.map((dayName, index) => (
           <button
             key={`dayName-${dayName}`}
-            className={`py-4 w-1/5 ${
+            className={`py-3 lg:py-2 w-1/5 ${
               selectedDayIndex === index ? "bg-elektronik-blue text-white" : ""
             }`}
             onClick={() => setSelectedDayIndex(index)}
