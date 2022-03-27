@@ -42,21 +42,21 @@ const Layout = ({
         } lg:hidden`}
       >
         <HeaderBar />
-        {timeTable && (
-          <div
-            className={`relative ${
-              showSpinner
-                ? "h-[calc(100vh-9.75rem)] overflow-hidden"
-                : "overflow-y-auto"
-            }`}
-          >
+        <div
+          className={`relative ${
+            showSpinner
+              ? "h-[calc(100vh-9.75rem)] overflow-hidden"
+              : "overflow-y-auto"
+          }`}
+        >
+          {timeTable && (
             <TimeTableAsList
               timeTable={timeTable}
               timeTableList={timeTableList}
             />
-            {showSpinner && <Spinner />}
-          </div>
-        )}
+          )}
+          {showSpinner && <Spinner />}
+        </div>
         {timeTableListStatus === "ok" && (
           <BottomBar timeTableList={timeTableList} />
         )}
@@ -91,12 +91,12 @@ const Layout = ({
                   timeTableList={timeTableList}
                 />
               )}
-              {showSpinner && <Spinner />}
             </>
-          )}
+          )}{" "}
           {timeTableStatus && timeTableStatus !== "ok" && (
             <NoTimeTableError status={timeTableStatus} />
           )}
+          {showSpinner && <Spinner />}
         </div>
       </div>
     </>
