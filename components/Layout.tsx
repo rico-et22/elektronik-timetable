@@ -43,7 +43,7 @@ const Layout = ({
       >
         <HeaderBar />
         <div
-          className={`relative ${
+          className={`relative min-h-[calc(100vh-4.5rem)] ${
             showSpinner
               ? "h-[calc(100vh-9.75rem)] overflow-hidden"
               : "overflow-y-auto"
