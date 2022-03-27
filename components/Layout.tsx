@@ -10,6 +10,7 @@ import TimeTableAsTable from "./TimeTableAsTable";
 import HeaderBar from "./HeaderBar";
 import TopBar from "./TopBar";
 import { SettingsContext } from "../pages/_app";
+import Spinner from "./Spinner";
 
 interface Props {
   timeTableList: List;
@@ -25,7 +26,7 @@ const Layout = ({
   timeTableStatus,
 }: Props) => {
   const router = useRouter();
-  const { desktopComponent } = React.useContext(SettingsContext);
+  const { desktopComponent, showSpinner } = React.useContext(SettingsContext);
 
   React.useEffect(() => {
     if (timeTableList.classes.length > 0 && router.asPath === "/") {
@@ -42,10 +43,19 @@ const Layout = ({
       >
         <HeaderBar />
         {timeTable && (
-          <TimeTableAsList
-            timeTable={timeTable}
-            timeTableList={timeTableList}
-          />
+          <div
+            className={`relative ${
+              showSpinner
+                ? "h-[calc(100vh-9.75rem)] overflow-hidden"
+                : "overflow-y-auto"
+            }`}
+          >
+            <TimeTableAsList
+              timeTable={timeTable}
+              timeTableList={timeTableList}
+            />
+            {showSpinner && <Spinner />}
+          </div>
         )}
         {timeTableListStatus === "ok" && (
           <BottomBar timeTableList={timeTableList} />
@@ -61,7 +71,11 @@ const Layout = ({
             <SideBar timeTableList={timeTableList} />
           )}
         </div>
-        <div className="w-3/4 h-screen overflow-y-auto">
+        <div
+          className={`w-3/4 h-screen relative ${
+            showSpinner ? "overflow-hidden" : "overflow-y-auto"
+          }`}
+        >
           {timeTable && (
             <>
               <TopBar timeTableList={timeTableList} />
@@ -77,6 +91,7 @@ const Layout = ({
                   timeTableList={timeTableList}
                 />
               )}
+              {showSpinner && <Spinner />}
             </>
           )}
           {timeTableStatus && timeTableStatus !== "ok" && (
