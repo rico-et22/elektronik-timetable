@@ -27,12 +27,17 @@ const Layout = ({
 }: Props) => {
   const router = useRouter();
   const { desktopComponent, showSpinner } = React.useContext(SettingsContext);
+  const desktopLayoutRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
     if (timeTableList.classes.length > 0 && router.asPath === "/") {
       router.push(`/class/${timeTableList.classes[0].value}`);
     }
   }, [router, timeTableList.classes]);
+
+  React.useEffect(() => {
+    if (showSpinner) desktopLayoutRef.current?.scrollTo(0,0)
+  }, [showSpinner])
 
   return (
     <>
@@ -75,6 +80,7 @@ const Layout = ({
           className={`w-3/4 h-screen relative ${
             showSpinner ? "overflow-hidden" : "overflow-y-auto"
           }`}
+          ref={desktopLayoutRef}
         >
           {timeTable && (
             <>
