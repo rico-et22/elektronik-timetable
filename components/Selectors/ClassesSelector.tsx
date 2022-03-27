@@ -1,4 +1,4 @@
-import { useState, useRef, RefObject, useEffect } from "react";
+import { useState, useRef, RefObject, useEffect, useContext } from "react";
 import {
   AcademicCapIcon,
   ChevronDownIcon,
@@ -8,6 +8,7 @@ import { ListItem } from "@wulkanowy/timetable-parser";
 import { SortedListItem } from "../../types/SortedListItem";
 import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
+import { SettingsContext } from "../../pages/_app";
 
 type ClassesSelectorProps = {
   classes: ListItem[];
@@ -32,6 +33,8 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
     else if (null !== ref.current) ref.current.style.maxHeight = "0";
     stateChangeFunction(!state);
   };
+  const { setBottomBarExpanded } = useContext(SettingsContext);
+
   useEffect(() => {
     if (classes && classes.length > 0) {
       setSortedClasses(
@@ -48,6 +51,11 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
       );
     }
   }, [classes]);
+
+  const handleLinkClick = () => {
+    if (setBottomBarExpanded) setBottomBarExpanded(false);
+  };
+
   return (
     <div className="mb-8">
       <button
@@ -87,6 +95,7 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
                             ? "font-bold"
                             : ""
                         }`}
+                        onClick={() => handleLinkClick()}
                       >
                         {item.name}
                       </a>

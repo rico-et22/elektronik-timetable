@@ -1,4 +1,11 @@
-import { useState, useRef, RefObject, useEffect, useMemo } from "react";
+import {
+  useState,
+  useRef,
+  RefObject,
+  useEffect,
+  useMemo,
+  useContext,
+} from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 import { List } from "@wulkanowy/timetable-parser";
 import ClassesSelector from "./Selectors/ClassesSelector";
@@ -6,6 +13,7 @@ import TeachersSelector from "./Selectors/TeachersSelector";
 import RoomsSelector from "./Selectors/RoomsSelector";
 import { useRouter } from "next/dist/client/router";
 import Credits from "./Credits";
+import { SettingsContext } from "../pages/_app";
 
 type BottomBarProps = {
   timeTableList: List;
@@ -19,25 +27,9 @@ type RouteContext = {
 
 const BottomBar = ({ timeTableList }: BottomBarProps) => {
   const { classes, rooms, teachers } = timeTableList;
-  const [expanded, setExpanded] = useState(false);
-  const [isRoomsTabOpen, setIsRoomsTabOpen] = useState(false);
   const router = useRouter();
-
-  const getRoundedClass = (stateValue: boolean) => {
-    if (stateValue) return "rounded-t-lg";
-    else return "rounded-lg";
-  };
-  const roomsList = useRef<HTMLDivElement>(null);
-  const handleClick = (
-    state: boolean,
-    stateChangeFunction: Function,
-    ref: RefObject<HTMLDivElement>
-  ) => {
-    if (!state && ref && null !== ref.current)
-      ref.current.style.maxHeight = `${ref.current.scrollHeight}px`;
-    else if (null !== ref.current) ref.current.style.maxHeight = "0";
-    stateChangeFunction(!state);
-  };
+  const { bottomBarExpanded, setBottomBarExpanded } =
+    useContext(SettingsContext);
 
   const routeContext = useMemo(() => {
     const returnedValue: RouteContext = {
@@ -72,24 +64,26 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
     return returnedValue;
   }, [classes, rooms, router.query.all, teachers]);
 
-  useEffect(() => {
-    setExpanded(false);
-  }, [routeContext]);
+  const handleToggleButtonClick = () => {
+    if (setBottomBarExpanded) setBottomBarExpanded(!bottomBarExpanded);
+  };
 
   useEffect(() => {
-    if (expanded) document.body.style.overflow = "hidden"
-    else document.body.style.overflow = ""
-  }, [expanded])
+    if (bottomBarExpanded) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+  }, [bottomBarExpanded]);
 
   return (
     <div
       className={`w-full fixed bottom-0 transition-all duration-500 transform-gpu ease-in-out bg-gray-300 filter drop-shadow-2xl flex flex-col ${
-        expanded ? "h-full overflow-y-auto" : "h-[5.25rem] overflow-hidden"
+        bottomBarExpanded
+          ? "h-full overflow-y-auto"
+          : "h-[5.25rem] overflow-hidden"
       }`}
     >
       <div className="sticky top-0 bg-gray-300 p-4">
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => handleToggleButtonClick()}
           className={`bg-gray-100 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg`}
         >
           <h2 className="text-lg truncate">
@@ -101,8 +95,8 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
             )}
             {!routeContext.name && "Wybierz z listy..."}
           </h2>
-          {expanded && <ChevronDownIcon className="h-5 w-5" />}
-          {!expanded && <ChevronUpIcon className="h-5 w-5" />}
+          {bottomBarExpanded && <ChevronDownIcon className="h-5 w-5" />}
+          {!bottomBarExpanded && <ChevronUpIcon className="h-5 w-5" />}
         </button>
       </div>
       <div className="p-4">

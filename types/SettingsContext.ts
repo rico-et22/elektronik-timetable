@@ -6,4 +6,6 @@ export interface SettingsContextType {
   desktopComponent: DesktopComponent;
   setDesktopComponent?: Dispatch<SetStateAction<DesktopComponent>>;
   showSpinner: boolean;
+  bottomBarExpanded: boolean;
+  setBottomBarExpanded?: Dispatch<SetStateAction<boolean>>;
 }

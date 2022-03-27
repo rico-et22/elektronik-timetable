@@ -1,9 +1,14 @@
-import { useState, useRef, RefObject, useEffect } from "react";
-import { ChevronDownIcon, ChevronUpIcon, UserGroupIcon } from "@heroicons/react/outline";
+import { useState, useRef, RefObject, useEffect, useContext } from "react";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  UserGroupIcon,
+} from "@heroicons/react/outline";
 import { ListItem } from "@wulkanowy/timetable-parser";
 import { SortedListItem } from "../../types/SortedListItem";
 import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
+import { SettingsContext } from "../../pages/_app";
 
 type TeachersSelectorProps = {
   teachers?: ListItem[];
@@ -28,6 +33,8 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
     else if (null !== ref.current) ref.current.style.maxHeight = "0";
     stateChangeFunction(!state);
   };
+  const { setBottomBarExpanded } = useContext(SettingsContext);
+
   useEffect(() => {
     if (teachers && teachers.length > 0) {
       setSortedTeachers(
@@ -46,6 +53,11 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
       );
     }
   }, [teachers]);
+
+  const handleLinkClick = () => {
+    if (setBottomBarExpanded) setBottomBarExpanded(false);
+  };
+
   return (
     <div className="mb-8">
       <button
@@ -85,6 +97,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
                             ? "font-bold"
                             : ""
                         }`}
+                        onClick={() => handleLinkClick()}
                       >
                         {item.name}
                       </a>

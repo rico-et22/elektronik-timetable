@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 const defaultContextValue: SettingsContextType = {
   desktopComponent: "table",
   showSpinner: false,
+  bottomBarExpanded: false
 };
 
 export const SettingsContext =
@@ -23,7 +24,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [desktopComponent, setDesktopComponent] = useState<DesktopComponent>(
     defaultContextValue.desktopComponent
   );
-  const [showSpinner, setShowSpinner] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(defaultContextValue.showSpinner);
+  const [bottomBarExpanded, setBottomBarExpanded] = useState(defaultContextValue.bottomBarExpanded);
 
   const router = useRouter();
 
@@ -52,6 +54,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         desktopComponent,
         setDesktopComponent,
         showSpinner,
+        bottomBarExpanded,
+        setBottomBarExpanded
       }}
     >
       <Component {...pageProps} />

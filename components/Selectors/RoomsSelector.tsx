@@ -1,9 +1,14 @@
-import { useState, useRef, RefObject, useEffect } from "react";
-import { ChevronDownIcon, ChevronUpIcon, LocationMarkerIcon } from "@heroicons/react/outline";
+import { useState, useRef, RefObject, useEffect, useContext } from "react";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  LocationMarkerIcon,
+} from "@heroicons/react/outline";
 import { ListItem } from "@wulkanowy/timetable-parser";
 import { SortedListItem } from "../../types/SortedListItem";
 import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
+import { SettingsContext } from "../../pages/_app";
 
 type RoomsSelectorProps = {
   rooms?: ListItem[];
@@ -28,9 +33,15 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
     else if (null !== ref.current) ref.current.style.maxHeight = "0";
     stateChangeFunction(!state);
   };
+  const { setBottomBarExpanded } = useContext(SettingsContext);
+
+  const handleLinkClick = () => {
+    if (setBottomBarExpanded) setBottomBarExpanded(false);
+  };
   useEffect(() => {
     if (rooms && rooms.length > 0) {
-      setSortedRooms(/*[
+      setSortedRooms(
+        /*[
         {
           char: "Piwnice",
           items: rooms
@@ -59,12 +70,13 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
             )
             .sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true})),
         },
-      ]*/[
-        {
-          char: "",
-          items: rooms
-        }
-      ]);
+      ]*/ [
+          {
+            char: "",
+            items: rooms,
+          },
+        ]
+      );
     }
   }, [rooms]);
   return (
@@ -101,7 +113,12 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
                       href={`/room/${item.value}`}
                     >
                       <a
-                        className={`mb-2 px-4 first:pt-4 last:pb-4 block ${router.asPath === `/room/${item.value}` ? "font-bold" : ""}`}
+                        className={`mb-2 px-4 first:pt-4 last:pb-4 block ${
+                          router.asPath === `/room/${item.value}`
+                            ? "font-bold"
+                            : ""
+                        }`}
+                        onClick={() => handleLinkClick()}
                       >
                         {item.name}
                       </a>
