@@ -109,7 +109,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                     {key[1].timeFrom} - {key[1].timeTo}
                   </span>
                 </div>
-                <div className="bg-gray-50 w-full px-4 py-1">
+                <div className="bg-gray-50 w-full px-4 py-1 overflow-hidden">
                   {selectedDayIndex !== undefined &&
                     timeTable.days[selectedDayIndex][index].length > 0 &&
                     timeTable.days[selectedDayIndex][index].map(
@@ -132,7 +132,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                               router.query.all[0] !== "class" &&
                               subject.className && (
                                 <div className="flex items-center mr-4">
-                                  <AcademicCapIcon className="h-3 w-3 mr-1" />
+                                  <AcademicCapIcon className="h-3 w-3 mr-1 shrink-0" />
                                   <Link
                                     href={`/class/${
                                       getClassData(subject.className)?.value
@@ -151,14 +151,14 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                             {router.query.all &&
                               router.query.all[0] !== "teacher" &&
                               subject.teacher && (
-                                <div className="flex items-center mr-4">
-                                  <UserGroupIcon className="h-3 w-3 mr-1" />
+                                <div className="flex items-center mr-4 w-3/5 xxs:w-auto">
+                                  <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
                                   <Link
                                     href={`/teacher/${
                                       getTeacherData(subject.teacher)?.value
                                     }`}
                                   >
-                                    <a className="text-elektronik-blue">
+                                    <a className="text-elektronik-blue truncate">
                                       {
                                         getTeacherData(
                                           subject.teacher
@@ -172,7 +172,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                               router.query.all[0] !== "room" &&
                               subject.room && (
                                 <div className="flex items-center">
-                                  <LocationMarkerIcon className="h-3 w-3 mr-1" />
+                                  <LocationMarkerIcon className="h-3 w-3 mr-1 shrink-0" />
                                   <Link
                                     href={`/room/${
                                       getRoomData(subject.room)?.value

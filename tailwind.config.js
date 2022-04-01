@@ -10,6 +10,7 @@ module.exports = {
         "elektronik-blue": "#5992ca",
       },
       screens: {
+        xxs: "420px",
         xs: "600px",
       },
     },
