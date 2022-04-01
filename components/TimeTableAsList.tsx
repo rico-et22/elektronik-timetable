@@ -59,6 +59,25 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
     [timeTableList.rooms]
   );
 
+  const isCurrentLesson = React.useCallback(
+    (startTime: string, endTime: string) => {
+      const startTimeSplit = startTime.split(":").map((n) => Number(n));
+      const endTimeSplit = endTime.split(":").map((n) => Number(n));
+      const currentDate = new Date();
+      const currentTimeSplit = [
+        currentDate.getHours(),
+        currentDate.getMinutes(),
+      ];
+      if (selectedDayIndex === new Date().getDay() - 1) return (
+        new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
+          new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
+        new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) <=
+          new Date().setHours(endTimeSplit[0], endTimeSplit[1])
+      ); else return false
+    },
+    [selectedDayIndex]
+  );
+
   const dayTrimData = React.useMemo(() => {
     return {
       firstNotEmptyIndex: timeTable.days.map((day) =>
@@ -101,7 +120,11 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
           )
             return (
               <div key={`hour-${key}`} className="shadow rounded mb-5 flex">
-                <div className="bg-elektronik-red text-white w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center">
+                <div className={`text-white w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center ${
+                    isCurrentLesson(key[1].timeFrom, key[1].timeTo)
+                      ? "bg-green-600"
+                      : "bg-elektronik-red"
+                  }`}>
                   <span className="block text-center font-bold mb-1">
                     {key[1].number}
                   </span>

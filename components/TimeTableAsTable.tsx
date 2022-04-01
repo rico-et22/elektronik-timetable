@@ -16,7 +16,6 @@ interface Props {
 }
 
 const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
-
   const shortDayNames = ["Pon.", "Wt.", "Śr.", "Czw.", "Pt."];
 
   const router = useRouter();
@@ -33,7 +32,8 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
   const getTeacherData = React.useCallback(
     (teacherCode: string | undefined) => {
       return timeTableList.teachers?.find(
-        (teacher) => teacher.name.replace(/\s+/g, ' ').split(" ")[1] === `(${teacherCode})`
+        (teacher) =>
+          teacher.name.replace(/\s+/g, " ").split(" ")[1] === `(${teacherCode})`
       );
     },
     [timeTableList.teachers]
@@ -46,6 +46,25 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
       );
     },
     [timeTableList.rooms]
+  );
+
+  const isCurrentLesson = React.useCallback(
+    (startTime: string, endTime: string) => {
+      const startTimeSplit = startTime.split(":").map((n) => Number(n));
+      const endTimeSplit = endTime.split(":").map((n) => Number(n));
+      const currentDate = new Date();
+      const currentTimeSplit = [
+        currentDate.getHours(),
+        currentDate.getMinutes(),
+      ];
+      return (
+        new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
+          new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
+        new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) <=
+          new Date().setHours(endTimeSplit[0], endTimeSplit[1])
+      );
+    },
+    []
   );
 
   const dayTrimData = React.useMemo(() => {
@@ -88,26 +107,34 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
         </thead>
         <tbody>
           {Object.entries(timeTable.hours).map((key, index) => {
-              return (
-                <tr key={`table-hour-${key}`} className="text-xs">
-                  <td
-                    className={`bg-red-200 text-center p-2 text-sm ${
-                      index === Object.entries(timeTable.hours).length - 1
-                        ? "rounded-bl-lg"
-                        : ""
-                    }`}
-                  >
-                    <span className="font-bold">{key[1].number}</span>
-                  </td>
-                  <td className="bg-red-200 text-center p-2">
-                    {key[1].timeFrom} - {key[1].timeTo}
-                  </td>
-                  {timeTable.dayNames.map((dayName, dayIndex) => (
-                    <React.Fragment
-                      key={`table-hour-${key}-dayName-${dayName}`}
-                    >
-                      <td
-                        className={`bg-gray-50 p-2 border
+            return (
+              <tr key={`table-hour-${key}`} className="text-xs">
+                <td
+                  className={`text-center p-2 text-sm ${
+                    index === Object.entries(timeTable.hours).length - 1
+                      ? "rounded-bl-lg"
+                      : ""
+                  } ${
+                    isCurrentLesson(key[1].timeFrom, key[1].timeTo)
+                      ? "bg-green-200"
+                      : "bg-red-200"
+                  }`}
+                >
+                  <span className="font-bold">{key[1].number}</span>
+                </td>
+                <td
+                  className={`text-center p-2 ${
+                    isCurrentLesson(key[1].timeFrom, key[1].timeTo)
+                      ? "bg-green-200"
+                      : "bg-red-200"
+                  }`}
+                >
+                  {key[1].timeFrom} - {key[1].timeTo}
+                </td>
+                {timeTable.dayNames.map((dayName, dayIndex) => (
+                  <React.Fragment key={`table-hour-${key}-dayName-${dayName}`}>
+                    <td
+                      className={`bg-gray-50 p-2 border
                                   ${
                                     index ===
                                       Object.entries(timeTable.hours).length -
@@ -116,93 +143,92 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
                                       ? "rounded-br-lg"
                                       : ""
                                   }`}
-                      >
-                        {timeTable.days[dayIndex][index].map(
-                          (subject, subjectIndex) => (
-                            <div
-                              key={`day-${dayIndex}-${index}-${subjectIndex}`}
-                              className={
-                                subjectIndex !==
-                                timeTable.days[dayIndex][index].length -
-                                  1
-                                  ? "mb-2"
-                                  : ""
-                              }
-                            >
-                              <p className="font-bold mb-1">
-                                {subject.subject}
-                                {subject.groupName && ` (${subject.groupName})`}
-                              </p>
-                              <div className="flex">
-                                {router.query.all &&
-                                  router.query.all[0] !== "class" &&
-                                  subject.className && (
-                                    <div className="flex items-center mr-4">
-                                      <AcademicCapIcon className="h-3 w-3 mr-1" />
-                                      <Link
-                                        href={`/class/${
-                                          getClassData(subject.className)?.value
-                                        }`}
-                                      >
-                                        <a className="text-elektronik-blue">
-                                          {
-                                            getClassData(
-                                              subject.className
-                                            )?.name.split(" ")[0]
-                                          }
-                                        </a>
-                                      </Link>
-                                    </div>
-                                  )}
-                                {router.query.all &&
-                                  router.query.all[0] !== "teacher" &&
-                                  subject.teacher && (
-                                    <div className="flex items-center mr-4 w-1/2">
-                                      <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
-                                      <Link
-                                        href={`/teacher/${
-                                          getTeacherData(subject.teacher)?.value
-                                        }`}
-                                      >
-                                        <a className="text-elektronik-blue truncate">
-                                          {
-                                            getTeacherData(
-                                              subject.teacher
-                                            )?.name.split(" ")[0]
-                                          }
-                                        </a>
-                                      </Link>
-                                    </div>
-                                  )}{" "}
-                                {router.query.all &&
-                                  router.query.all[0] !== "room" &&
-                                  subject.room && (
-                                    <div className="flex items-center">
-                                      <LocationMarkerIcon className="h-3 w-3 mr-1" />
-                                      <Link
-                                        href={`/room/${
-                                          getRoomData(subject.room)?.value
-                                        }`}
-                                      >
-                                        <a className="text-elektronik-blue">
-                                          {
-                                            getRoomData(
-                                              subject.room
-                                            )?.name.split(" ")[0]
-                                          }
-                                        </a>
-                                      </Link>
-                                    </div>
-                                  )}
-                              </div>
+                    >
+                      {timeTable.days[dayIndex][index].map(
+                        (subject, subjectIndex) => (
+                          <div
+                            key={`day-${dayIndex}-${index}-${subjectIndex}`}
+                            className={
+                              subjectIndex !==
+                              timeTable.days[dayIndex][index].length - 1
+                                ? "mb-2"
+                                : ""
+                            }
+                          >
+                            <p className="font-bold mb-1">
+                              {subject.subject}
+                              {subject.groupName && ` (${subject.groupName})`}
+                            </p>
+                            <div className="flex">
+                              {router.query.all &&
+                                router.query.all[0] !== "class" &&
+                                subject.className && (
+                                  <div className="flex items-center mr-4">
+                                    <AcademicCapIcon className="h-3 w-3 mr-1" />
+                                    <Link
+                                      href={`/class/${
+                                        getClassData(subject.className)?.value
+                                      }`}
+                                    >
+                                      <a className="text-elektronik-blue">
+                                        {
+                                          getClassData(
+                                            subject.className
+                                          )?.name.split(" ")[0]
+                                        }
+                                      </a>
+                                    </Link>
+                                  </div>
+                                )}
+                              {router.query.all &&
+                                router.query.all[0] !== "teacher" &&
+                                subject.teacher && (
+                                  <div className="flex items-center mr-4 w-1/2">
+                                    <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
+                                    <Link
+                                      href={`/teacher/${
+                                        getTeacherData(subject.teacher)?.value
+                                      }`}
+                                    >
+                                      <a className="text-elektronik-blue truncate">
+                                        {
+                                          getTeacherData(
+                                            subject.teacher
+                                          )?.name.split(" ")[0]
+                                        }
+                                      </a>
+                                    </Link>
+                                  </div>
+                                )}{" "}
+                              {router.query.all &&
+                                router.query.all[0] !== "room" &&
+                                subject.room && (
+                                  <div className="flex items-center">
+                                    <LocationMarkerIcon className="h-3 w-3 mr-1" />
+                                    <Link
+                                      href={`/room/${
+                                        getRoomData(subject.room)?.value
+                                      }`}
+                                    >
+                                      <a className="text-elektronik-blue">
+                                        {
+                                          getRoomData(subject.room)?.name.split(
+                                            " "
+                                          )[0]
+                                        }
+                                      </a>
+                                    </Link>
+                                  </div>
+                                )}
                             </div>
-                          )
-                        )}
-                      </td>
-                    </React.Fragment>
-                  ))}
-                </tr>
-              );
+                          </div>
+                        )
+                      )}
+                    </td>
+                  </React.Fragment>
+                ))}
+              </tr>
+            );
           })}
         </tbody>
       </table>
