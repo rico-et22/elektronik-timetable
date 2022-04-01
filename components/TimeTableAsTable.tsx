@@ -33,7 +33,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
   const getTeacherData = React.useCallback(
     (teacherCode: string | undefined) => {
       return timeTableList.teachers?.find(
-        (teacher) => teacher.name.split(" ")[1] === `(${teacherCode})`
+        (teacher) => teacher.name.replace(/\s+/g, ' ').split(" ")[1] === `(${teacherCode})`
       );
     },
     [timeTableList.teachers]
