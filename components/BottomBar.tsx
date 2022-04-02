@@ -1,11 +1,4 @@
-import {
-  useState,
-  useRef,
-  RefObject,
-  useEffect,
-  useMemo,
-  useContext,
-} from "react";
+import * as React from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 import { List } from "@wulkanowy/timetable-parser";
 import ClassesSelector from "./Selectors/ClassesSelector";
@@ -14,61 +7,27 @@ import RoomsSelector from "./Selectors/RoomsSelector";
 import { useRouter } from "next/dist/client/router";
 import Credits from "./Credits";
 import { SettingsContext } from "../pages/_app";
+import getRouteContext from "../helpers/getRouteContext";
 
 type BottomBarProps = {
   timeTableList: List;
-};
-
-type RouteContext = {
-  type: string | undefined;
-  typeName: string | undefined;
-  name: string | undefined;
 };
 
 const BottomBar = ({ timeTableList }: BottomBarProps) => {
   const { classes, rooms, teachers } = timeTableList;
   const router = useRouter();
   const { bottomBarExpanded, setBottomBarExpanded } =
-    useContext(SettingsContext);
+    React.useContext(SettingsContext);
 
-  const routeContext = useMemo(() => {
-    const returnedValue: RouteContext = {
-      type: undefined,
-      typeName: undefined,
-      name: undefined,
-    };
-    if (router.query.all && router.query.all.length > 1) {
-      returnedValue.type = router.query.all[0];
-      const value = router.query.all[1];
-      if (returnedValue.type === "class" && classes.length > 0) {
-        returnedValue.typeName = "Oddziały";
-        returnedValue.name = classes.find(
-          (singleClass) => singleClass.value === value
-        )?.name;
-      } else if (returnedValue.type === "room" && rooms && rooms.length > 0) {
-        returnedValue.typeName = "Sale";
-        returnedValue.name = rooms.find(
-          (singleRoom) => singleRoom.value === value
-        )?.name;
-      } else if (
-        returnedValue.type === "teacher" &&
-        teachers &&
-        teachers.length > 0
-      ) {
-        returnedValue.typeName = "Nauczyciele";
-        returnedValue.name = teachers.find(
-          (singleTeacher) => singleTeacher.value === value
-        )?.name;
-      }
-    }
-    return returnedValue;
-  }, [classes, rooms, router.query.all, teachers]);
+  const routeContext = React.useMemo(() => {
+    return getRouteContext(router, timeTableList);
+  }, [router, timeTableList]);
 
   const handleToggleButtonClick = () => {
     if (setBottomBarExpanded) setBottomBarExpanded(!bottomBarExpanded);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (bottomBarExpanded) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
   }, [bottomBarExpanded]);

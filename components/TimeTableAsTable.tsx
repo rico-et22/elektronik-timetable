@@ -8,6 +8,9 @@ import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import * as React from "react";
 import InlineSVG from "react-inlinesvg";
+import getClassDataByCode from "../helpers/getClassDataByCode";
+import getRoomDataByNumber from "../helpers/getRoomDataByNumber";
+import getTeacherDataByCode from "../helpers/getTeacherDataByCode";
 import { TimeTableData } from "../types/TimeTable";
 
 interface Props {
@@ -22,30 +25,23 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
 
   const getClassData = React.useCallback(
     (classCode: string | undefined) => {
-      return timeTableList.classes?.find(
-        (singleClass) => singleClass.name.split(" ")[0] === classCode
-      );
+      return getClassDataByCode(timeTableList, classCode)
     },
-    [timeTableList.classes]
+    [timeTableList]
   );
 
   const getTeacherData = React.useCallback(
     (teacherCode: string | undefined) => {
-      return timeTableList.teachers?.find(
-        (teacher) =>
-          teacher.name.replace(/\s+/g, " ").split(" ")[1] === `(${teacherCode})`
-      );
+      return getTeacherDataByCode(timeTableList, teacherCode)
     },
-    [timeTableList.teachers]
+    [timeTableList]
   );
 
   const getRoomData = React.useCallback(
     (roomNumber: string | undefined) => {
-      return timeTableList.rooms?.find(
-        (room) => room.name.split(" ")[0] === roomNumber
-      );
+      return getRoomDataByNumber(timeTableList, roomNumber)
     },
-    [timeTableList.rooms]
+    [timeTableList]
   );
 
   const isCurrentLesson = React.useCallback(
