@@ -16,7 +16,7 @@ const Home: NextPage<HomeProps> = (props) => {
   return (
     <>
       <Head>
-        <title>Plany lekcji</title>
+        <title>{"Elektronik - plan lekcji express"}</title>
       </Head>
       <Layout {...props} />
     </>

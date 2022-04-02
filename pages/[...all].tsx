@@ -1,3 +1,4 @@
+import * as React from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { List, Table, Timetable } from "@wulkanowy/timetable-parser";
@@ -10,8 +11,9 @@ import {
   TimeTableStatus,
 } from "../types/TimeTable";
 import fetchTimetable from "../helpers/fetchTimetable";
-import TimeTableAsList from "../components/TimeTableAsList";
 import Layout from "../components/Layout";
+import getRouteContext from "../helpers/getRouteContext";
+import { useRouter } from "next/router";
 
 interface TablePageProps {
   timeTableList: List;
@@ -21,10 +23,22 @@ interface TablePageProps {
 };
 
 const TablePage: NextPage<TablePageProps> = (props) => {
+  const router = useRouter()
+
+  const routeContext = React.useMemo(() => {
+    return getRouteContext(router, props.timeTableList);
+  }, [props.timeTableList, router]); 
+
+  const titleText = React.useMemo(() => {
+    if (routeContext.type === "class") return `Klasa ${routeContext.name}`
+    if (routeContext.type === "teacher") return `Nauczyciel ${routeContext.name}`
+    if (routeContext.type === "room") return `Sala ${routeContext.name}`
+  }, [routeContext.name, routeContext.type])
+
   return (
     <>
       <Head>
-        <title>Plany lekcji</title>
+        <title>{`${titleText} | Elektronik - plan lekcji express`}</title>
       </Head>
       <Layout {...props} />
     </>
