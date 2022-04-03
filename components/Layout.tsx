@@ -85,13 +85,13 @@ const Layout = ({
           {timeTable && (
             <>
               <TopBar timeTableList={timeTableList} />
-              {desktopComponent === "list" && (
+              {desktopComponent === "list" && timeTableStatus === "ok" && (
                 <TimeTableAsList
                   timeTable={timeTable}
                   timeTableList={timeTableList}
                 />
               )}
-              {desktopComponent === "table" && (
+              {desktopComponent === "table" && timeTableStatus === "ok" && (
                 <TimeTableAsTable
                   timeTable={timeTable}
                   timeTableList={timeTableList}
