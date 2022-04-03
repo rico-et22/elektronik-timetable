@@ -6,13 +6,30 @@
 - Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/wulkanowy/timetable-parser-js)
 - Technologies: React, Next.js, TypeScript, Tailwind CSS
 
-# Preparing the timetable to use with the app
+# Getting started & preparing the timetable to use with the app
+
+## Environment variables
+After cloning the repo, define the environment variables (.env), depending on the method below that you're going to use:
+
+`NEXT_PUBLIC_TIMETABLE_BASE_URL` - timetable base URL: all methods
 
 👉 A timetable base URL is a one that points to a folder in the server containing the timetable list - a "lista.html" file.
-## Method 2 - original website and CORS Anywhere proxy
+
+`NEXT_PUBLIC_PROXY_URL` - CORS Anywhere proxy URL - method 2 only
+
+## Method 1 - original website
 In this method we're going to use the original timetable hosted on your school's website.
 
-To get it working, you need to deploy a CORS Anywhere instance as timetable fetching won't work without it due to CORS issues. Optivum's CORS Policy can't be altered, but don't worry, there are no sensitive data passing through, it's just a timetable 😅. However if security is your #1 priority use method 2.
+Simply define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://elektronik.rzeszow.pl/plan-lekcji-2`.
+
+In some cases, the timetable may not fetch to this app due to CORS issues. This happens for Zespół Szkół Elektronicznych's timetable servers. Use method 2 then.
+
+## Method 2 - original website and CORS Anywhere proxy
+It's the same as method 1, but we're adding a CORS Anywhere proxy server to clear all CORS-related issues while fetching the timetable from the school servers. Don't worry, there are no sensitive data passing through, it's just a timetable 😅. However if security is your #1 priority use method 3.
+
+As in method 1 - define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://elektronik.rzeszow.pl/plan-lekcji-2`.
+
+Then deploy a CORS Anywhere instance.
 
 Before deploying your instance, set `requireHeader` in its config file to `[]`.
 
@@ -20,12 +37,14 @@ Check out if CORS Anywhere works by proxying your school's timetable base URL li
 
 You should see two frames with "Not Found" errors. That's okay.
 
-If there are problems with SSL, add `process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';` to the top of the config file and restart the instance.
+Then, define the `NEXT_PUBLIC_PROXY_URL` env variable with the proxy URL.
+
+If there are problems with SSL, add `process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';` to the top of the CORS Anywhere config file and restart the proxy instance.
 
 ## Method 3 - clone and self-serve on an external server
-You can also clone the whole timetable and host it on your own server.
+You can also clone the whole timetable and host it on your own server. Useful if you don't want to have automatic timetable updates or if you have CORS issues but the CORS proxy decreases the loading speed.
 
-This way you won't have to worry about CORS Anywhere proxying and related issues, provided if you set up proper CORS handling.
+This way you don't have to worry about CORS Anywhere proxying and related issues, provided if you set up proper CORS handling.
 
 However, you'll lose any automatic updates of the timetable. Be sure to check the original website frequently for any updates.
 
@@ -33,28 +52,14 @@ To clone the website, run `wget -mpEk <timetable_base_url> --no-check-certificat
 
 Example: `wget -mpEk https://www.elektronik.rzeszow.pl/plan-lekcji-2 --no-check-certificate`
 
-This way is also faster.
+Then, define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://dummy-server.dev/timetable-to-serve`.
 
-## Method 4 - clone and self-serve in this app
-What about hosting it inside the app itself?
-
-Simply use the power of Next.js and copy the cloned data to the /public folder!
-
-Follow the method 2, but paste the timetable files to a subfolder in /public folder in the app. The timetable base URL would be `<app_url>/<subfolder_name>`. If you need to commit to deploy, make sure to fork this repo first!
-
-# Getting started
-After cloning the repo, define the environment variables (.env):
-
-`NEXT_PUBLIC_PROXY_URL` - CORS Anywhere proxy URL - method 1 only
-
-`NEXT_PUBLIC_TIMETABLE_BASE_URL` - timetable base URL: original URL for method 2, self-hosted URL for method 3 and 4
-
-Example:
+## .env example
 ```
 NEXT_PUBLIC_PROXY_URL=http://localhost:8080
 NEXT_PUBLIC_TIMETABLE_BASE_URL=https://www.elektronik.rzeszow.pl/plan-lekcji
 ```
-
+## Startup
 Then you can install the packages & run the app:
 ```bash
 yarn
