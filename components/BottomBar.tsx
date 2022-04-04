@@ -8,6 +8,7 @@ import { useRouter } from "next/dist/client/router";
 import Credits from "./Credits";
 import { SettingsContext } from "../pages/_app";
 import getRouteContext from "../helpers/getRouteContext";
+import Search from "./Search";
 
 type BottomBarProps = {
   timeTableList: List;
@@ -40,7 +41,7 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
           : "h-[5.25rem] overflow-hidden"
       }`}
     >
-      <div className="sticky top-0 bg-gray-300 p-4">
+      <div className="sticky top-0 bg-gray-300 p-4 z-50">
         <button
           onClick={() => handleToggleButtonClick()}
           className={`bg-gray-100 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg`}
@@ -59,6 +60,7 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
         </button>
       </div>
       <div className="p-4">
+        <Search classes={classes} teachers={teachers} rooms={rooms} />
         <ClassesSelector classes={classes} />
         <TeachersSelector teachers={teachers} />
         <RoomsSelector rooms={rooms} />
