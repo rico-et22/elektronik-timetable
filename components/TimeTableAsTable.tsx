@@ -81,8 +81,8 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
   }, [timeTable.days]);
 
   return (
-    <div className="px-10 pb-16 mt-4">
-      <table className="w-full table-fixed border-separate border-0 shadow-lg rounded-lg border-spacing-0">
+    <div className="px-10 pb-16 mt-8">
+      <table className="w-full table-fixed border-separate border-0 shadow-lg rounded-lg border-spacing-0 ">
         <thead className="rounded">
           <tr className="bg-elektronik-red text-white text-sm rounded-t-lg">
             <th className="py-3 w-10 border border-gray-100/50 rounded-tl-lg">

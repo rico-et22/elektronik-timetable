@@ -83,7 +83,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
     <div className="mb-8">
       <button
         onClick={() => handleClick(open, setOpen, selectorRef)}
-        className={`bg-green-100 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
+        className={`bg-green-700 text-white bg-opacity-75 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
           open
         )}`}
       >
@@ -95,7 +95,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
         {open && <ChevronUpIcon className="h-5 w-5" />}
       </button>
       <div
-        className="bg-green-50 rounded-b-lg overflow-hidden transition-all"
+        className="bg-white rounded-b-lg overflow-hidden transition-all"
         style={{ maxHeight: 0 }}
         ref={selectorRef}
       >
@@ -113,9 +113,9 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
                       href={`/room/${item.value}`}
                     >
                       <a
-                        className={`mb-2 px-4 first:pt-4 last:pb-4 block ${
+                        className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-green-100 ${
                           router.asPath === `/room/${item.value}`
-                            ? "font-bold"
+                            ? "bg-green-200 hover:bg-green-200"
                             : ""
                         }`}
                         onClick={() => handleLinkClick()}

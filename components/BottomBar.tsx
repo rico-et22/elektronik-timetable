@@ -35,7 +35,7 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
 
   return (
     <div
-      className={`w-full fixed bottom-0 transition-all duration-500 transform-gpu ease-in-out bg-gray-300 filter drop-shadow-2xl flex flex-col ${
+      className={`w-full fixed bottom-0 transition-all duration-300 transform-gpu ease-out bg-gray-200 filter drop-shadow-2xl flex flex-col z-50 ${
         bottomBarExpanded
           ? "h-full overflow-y-auto"
           : "h-[5.25rem] overflow-hidden"

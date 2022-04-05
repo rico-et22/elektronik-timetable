@@ -13,7 +13,7 @@ const SideBar = ({ timeTableList }: BottomBarProps) => {
   const { classes, rooms, teachers } = timeTableList;
 
   return (
-    <div className="w-full transform-gpu bg-gray-300 filter drop-shadow-2xl h-[calc(100vh-4.5rem)] overflow-y-auto flex flex-col">
+    <div className="w-full transform-gpu bg-gray-200 filter drop-shadow-xl h-[calc(100vh-4.5rem)] overflow-y-auto flex flex-col">
       <div className="p-4">
         <Search classes={classes} teachers={teachers} rooms={rooms} />
         <ClassesSelector classes={classes} />

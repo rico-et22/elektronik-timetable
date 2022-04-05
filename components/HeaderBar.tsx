@@ -3,7 +3,7 @@ import InlineSVG from "react-inlinesvg";
 
 const HeaderBar = () => {
   return (
-    <div className="w-full bg-elektronik-red p-4 filter drop-shadow-2xl overflow-y-auto flex items-center flex-shrink-0">
+    <div className="w-full bg-elektronik-red p-4 flex items-center flex-shrink-0 relative z-10 filter drop-shadow-md">
       <div className="bg-white flex items-center justify-center p-1 mr-3 rounded">
         <InlineSVG src="/logo-zse-wektor.svg" className="w-8 h-8" />
       </div>

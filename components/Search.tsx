@@ -62,7 +62,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
         </div>
         <input
           type="text"
-          className={`bg-gray-100 w-full px-12 py-3 flex justify-between items-center transition-all duration-75 text-inherit placeholder:text-neutral-500 disabled:opacity-25 disabled:cursor-not-allowed ${roundedClass}`}
+          className={`bg-gray-100 w-full px-12 py-3 flex justify-between items-center transition-all duration-75 text-inherit border border-gray-400 placeholder:text-neutral-500 disabled:opacity-25 disabled:cursor-not-allowed ${roundedClass}`}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Szukaj..."
@@ -71,47 +71,52 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
           name="search-value"
         />
         {value.length > 0 && (
-          <button className="absolute top-0 right-0 h-full flex items-center mr-4" onClick={() => setValue("")}>
+          <button
+            className="absolute top-0 right-0 h-full flex items-center mr-4"
+            onClick={() => setValue("")}
+          >
             <XIcon className="h-5 w-5" />
           </button>
         )}
       </div>
       <div className="rounded-b-lg overflow-hidden">
-        <div className="bg-gray-50 transition-all max-h-[25vh] lg:max-h-[50vh] overflow-auto rounded-b-lg">
-          {filteredLinks &&
-            filteredLinks.length > 0 &&
-            filteredLinks.map((link) => {
-              return (
-                <Link
-                  key={`search-${link.type}-${link.value}`}
-                  href={`/${link.type}/${link.value}`}
-                >
-                  <a
-                    className={`mb-2 px-4 first:mt-4 last:mb-4 flex ${
-                      router.asPath === `/${link.type}/${link.value}`
-                        ? "font-bold"
-                        : ""
-                    }`}
-                    onClick={() => handleLinkClick()}
+        {value.length > 0 && (
+          <div className="bg-gray-50 transition-all max-h-[27vh] lg:max-h-[50vh] overflow-auto rounded-b-lg border border-gray-300 border-t-0">
+            {filteredLinks &&
+              filteredLinks.length > 0 &&
+              filteredLinks.map((link) => {
+                return (
+                  <Link
+                    key={`search-${link.type}-${link.value}`}
+                    href={`/${link.type}/${link.value}`}
                   >
-                    {link.type === "class" && (
-                      <AcademicCapIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
-                    )}
-                    {link.type === "teacher" && (
-                      <UserGroupIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
-                    )}
-                    {link.type === "room" && (
-                      <LocationMarkerIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
-                    )}
-                    {link.name}
-                  </a>
-                </Link>
-              );
-            })}
-          {filteredLinks && filteredLinks.length === 0 && value.length > 0 && (
-            <p className="text-center my-4">Nie znaleziono</p>
-          )}
-        </div>
+                    <a
+                      className={`mb-2 mx-4 first:mt-4 last:mb-4 px-1 py-px rounded transition duration-100 hover:bg-gray-100 flex ${
+                        router.asPath === `/${link.type}/${link.value}`
+                          ? "bg-gray-200 hover:bg-gray-200 font-bold"
+                          : ""
+                      }`}
+                      onClick={() => handleLinkClick()}
+                    >
+                      {link.type === "class" && (
+                        <AcademicCapIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
+                      )}
+                      {link.type === "teacher" && (
+                        <UserGroupIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
+                      )}
+                      {link.type === "room" && (
+                        <LocationMarkerIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
+                      )}
+                      {link.name}
+                    </a>
+                  </Link>
+                );
+              })}
+            {filteredLinks && filteredLinks.length === 0 && (
+              <p className="text-center my-4">Nie znaleziono</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

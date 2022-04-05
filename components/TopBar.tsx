@@ -23,7 +23,7 @@ const TopBar = ({ timeTableList }: TopBarProps) => {
   };
 
   return (
-    <div className="bg-gray-100 flex h-[4.5rem] px-10">
+    <div className="bg-gray-100 flex h-[4.5rem] px-10 filter drop-shadow-xl">
       <div className="w-full" />
       <div className=" w-full flex justify-center items-center">
         <h2 className="text-lg truncate">
@@ -33,11 +33,10 @@ const TopBar = ({ timeTableList }: TopBarProps) => {
           {routeContext.name && (
             <span className="font-medium">{routeContext.name}</span>
           )}
-          {!routeContext.name && "Wybierz z listy..."}
         </h2>
       </div>
       <div className="w-full flex items-center justify-end">
-        <div className="bg-gray-50 flex items-center rounded">
+        <div className="bg-gray-50 flex items-center rounded border border-gray-300">
           <button
             onClick={() => handleButtonClick("table")}
             aria-label="Tabela"

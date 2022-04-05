@@ -62,7 +62,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
     <div className="mb-8">
       <button
         onClick={() => handleClick(open, setOpen, selectorRef)}
-        className={`bg-red-100 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
+        className={`bg-elektronik-red text-white bg-opacity-75 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
           open
         )}`}
       >
@@ -74,7 +74,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
         {open && <ChevronUpIcon className="h-5 w-5" />}
       </button>
       <div
-        className="bg-red-50 rounded-b-lg overflow-hidden transition-all"
+        className="bg-white rounded-b-lg overflow-hidden transition-all"
         style={{ maxHeight: 0 }}
         ref={selectorRef}
       >
@@ -92,9 +92,9 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
                       href={`/teacher/${item.value}`}
                     >
                       <a
-                        className={`mb-2 px-4 first:pt-4 last:pb-4 block ${
+                        className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-red-100 ${
                           router.asPath === `/teacher/${item.value}`
-                            ? "font-bold"
+                            ? "bg-red-200 hover:bg-red-200"
                             : ""
                         }`}
                         onClick={() => handleLinkClick()}
