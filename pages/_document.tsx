@@ -35,6 +35,9 @@ class MyDocument extends Document {
             href="/favicon-16x16.png"
           />
           <meta name="theme-color" content="#D4293D" />
+          <meta name="description" content="Szybko sprawdź plan lekcji każdej klasy, a także nauczyciela czy sali." />
+          <meta property="og:description" content="Szybko sprawdź plan lekcji każdej klasy, a także nauczyciela czy sali." />
+          <meta property="og:image" content="/og-image.png" />
         </Head>
         <body>
           <Main />

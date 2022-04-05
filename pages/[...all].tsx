@@ -39,6 +39,7 @@ const TablePage: NextPage<TablePageProps> = (props) => {
     <>
       <Head>
         <title>{`${titleText} | Elektronik - plan lekcji express`}</title>
+        <meta property="og:title" content={`${titleText} | Elektronik - plan lekcji express`} />
       </Head>
       <Layout {...props} />
     </>

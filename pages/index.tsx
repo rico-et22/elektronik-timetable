@@ -17,6 +17,7 @@ const Home: NextPage<HomeProps> = (props) => {
     <>
       <Head>
         <title>{"Elektronik - plan lekcji express"}</title>
+        <meta property="og:title" content="Elektronik - plan lekcji express" />
       </Head>
       <Layout {...props} />
     </>
