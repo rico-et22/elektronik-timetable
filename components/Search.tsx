@@ -9,6 +9,7 @@ import { ListItem } from "@wulkanowy/timetable-parser";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
+import { SettingsContext } from "../pages/_app";
 
 type SearchProps = {
   classes: ListItem[];
@@ -46,6 +47,12 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
     if (value.length > 0) return "rounded-t-lg";
     else return "rounded-lg";
   }, [value]);
+
+  const { setBottomBarExpanded } = React.useContext(SettingsContext);
+
+  const handleLinkClick = () => {
+    if (setBottomBarExpanded) setBottomBarExpanded(false);
+  };
 
   return (
     <div className="mb-8">
@@ -85,6 +92,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
                         ? "font-bold"
                         : ""
                     }`}
+                    onClick={() => handleLinkClick()}
                   >
                     {link.type === "class" && (
                       <AcademicCapIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
