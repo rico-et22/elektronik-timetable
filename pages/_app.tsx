@@ -11,10 +11,85 @@ import {
 } from "../types/SettingsContext";
 import { useRouter } from "next/router";
 
+const shortHours = [
+  {
+    number: 1,
+    timeFrom: "7:10",
+    timeTo: "7:40",
+  },
+  {
+    number: 2,
+    timeFrom: "7:45",
+    timeTo: "8:15",
+  },
+  {
+    number: 3,
+    timeFrom: "8:20",
+    timeTo: "8:50",
+  },
+  {
+    number: 4,
+    timeFrom: "8:55",
+    timeTo: "9:25",
+  },
+  {
+    number: 5,
+    timeFrom: "9:45",
+    timeTo: "10:15",
+  },
+  {
+    number: 6,
+    timeFrom: "10:20",
+    timeTo: "10:50",
+  },
+  {
+    number: 7,
+    timeFrom: "10:55",
+    timeTo: "11:25",
+  },
+  {
+    number: 8,
+    timeFrom: "11:30",
+    timeTo: "12:00",
+  },
+  {
+    number: 9,
+    timeFrom: "12:05",
+    timeTo: "12:35",
+  },
+  {
+    number: 10,
+    timeFrom: "12:40",
+    timeTo: "13:10",
+  },
+  {
+    number: 11,
+    timeFrom: "13:15",
+    timeTo: "13:45",
+  },
+  {
+    number: 12,
+    timeFrom: "14:00",
+    timeTo: "14:30",
+  },
+  {
+    number: 13,
+    timeFrom: "14:35",
+    timeTo: "15:05",
+  },
+  {
+    number: 14,
+    timeFrom: "15:10",
+    timeTo: "15:40",
+  },
+];
+
 const defaultContextValue: SettingsContextType = {
   desktopComponent: "table",
   showSpinner: false,
-  bottomBarExpanded: false
+  bottomBarExpanded: false,
+  shortHours,
+  showShortHours: false,
 };
 
 export const SettingsContext =
@@ -24,9 +99,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [desktopComponent, setDesktopComponent] = useState<DesktopComponent>(
     defaultContextValue.desktopComponent
   );
-  const [showSpinner, setShowSpinner] = useState(defaultContextValue.showSpinner);
-  const [bottomBarExpanded, setBottomBarExpanded] = useState(defaultContextValue.bottomBarExpanded);
-
+  const [showSpinner, setShowSpinner] = useState(
+    defaultContextValue.showSpinner
+  );
+  const [bottomBarExpanded, setBottomBarExpanded] = useState(
+    defaultContextValue.bottomBarExpanded
+  );
+  const [showShortHours, setShowShortHours]
+ = useState(defaultContextValue.showShortHours)
   const router = useRouter();
 
   useEffect(() => {
@@ -55,7 +135,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         setDesktopComponent,
         showSpinner,
         bottomBarExpanded,
-        setBottomBarExpanded
+        setBottomBarExpanded,
+        shortHours,
+        showShortHours,
+        setShowShortHours
       }}
     >
       <Component {...pageProps} />

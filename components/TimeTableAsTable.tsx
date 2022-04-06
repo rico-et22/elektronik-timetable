@@ -9,8 +9,10 @@ import Link from "next/link";
 import * as React from "react";
 import InlineSVG from "react-inlinesvg";
 import getClassDataByCode from "../helpers/getClassDataByCode";
+import getHourData from "../helpers/getHourData";
 import getRoomDataByNumber from "../helpers/getRoomDataByNumber";
 import getTeacherDataByCode from "../helpers/getTeacherDataByCode";
+import { SettingsContext } from "../pages/_app";
 import { TimeTableData } from "../types/TimeTable";
 
 interface Props {
@@ -21,25 +23,27 @@ interface Props {
 const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
   const shortDayNames = ["Pon.", "Wt.", "Śr.", "Czw.", "Pt."];
 
+  const { showShortHours, shortHours } = React.useContext(SettingsContext);
+
   const router = useRouter();
 
   const getClassData = React.useCallback(
     (classCode: string | undefined) => {
-      return getClassDataByCode(timeTableList, classCode)
+      return getClassDataByCode(timeTableList, classCode);
     },
     [timeTableList]
   );
 
   const getTeacherData = React.useCallback(
     (teacherCode: string | undefined) => {
-      return getTeacherDataByCode(timeTableList, teacherCode)
+      return getTeacherDataByCode(timeTableList, teacherCode);
     },
     [timeTableList]
   );
 
   const getRoomData = React.useCallback(
     (roomNumber: string | undefined) => {
-      return getRoomDataByNumber(timeTableList, roomNumber)
+      return getRoomDataByNumber(timeTableList, roomNumber);
     },
     [timeTableList]
   );
@@ -80,6 +84,12 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
     };
   }, [timeTable.days]);
 
+  const hourData = React.useMemo(() => {
+    if (showShortHours)
+      return getHourData(timeTable.hours, shortHours)
+    else return timeTable.hours;
+  }, [shortHours, showShortHours, timeTable.hours]);
+
   return (
     <div className="px-10 pb-16 mt-8">
       <table className="w-full table-fixed border-separate border-0 shadow-lg rounded-lg border-spacing-0 ">
@@ -102,7 +112,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(timeTable.hours).map((key, index) => {
+          {Object.entries(hourData).map((key, index) => {
             return (
               <tr key={`table-hour-${key}`} className="text-xs">
                 <td

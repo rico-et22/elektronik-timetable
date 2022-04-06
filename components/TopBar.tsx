@@ -5,6 +5,7 @@ import * as React from "react";
 import getRouteContext from "../helpers/getRouteContext";
 import { SettingsContext } from "../pages/_app";
 import { DesktopComponent } from "../types/SettingsContext";
+import ShortHoursSwitcher from "./ShortHoursSwitcher";
 
 type TopBarProps = {
   timeTableList: List;
@@ -12,19 +13,22 @@ type TopBarProps = {
 
 const TopBar = ({ timeTableList }: TopBarProps) => {
   const router = useRouter();
-  const { desktopComponent, setDesktopComponent } = React.useContext(SettingsContext);
+  const { desktopComponent, setDesktopComponent } =
+    React.useContext(SettingsContext);
 
   const routeContext = React.useMemo(() => {
     return getRouteContext(router, timeTableList);
   }, [router, timeTableList]);
 
-  const handleButtonClick = (value: DesktopComponent) => {
+  const handleDesktopComponentButtonClick = (value: DesktopComponent) => {
     if (setDesktopComponent) setDesktopComponent(value);
   };
 
   return (
     <div className="bg-gray-100 flex h-[4.5rem] px-10 filter drop-shadow-xl">
-      <div className="w-full" />
+      <div className="w-full flex items-center">
+        <ShortHoursSwitcher />
+      </div>
       <div className=" w-full flex justify-center items-center">
         <h2 className="text-lg truncate">
           {routeContext.name && routeContext.typeName && (
@@ -38,16 +42,20 @@ const TopBar = ({ timeTableList }: TopBarProps) => {
       <div className="w-full flex items-center justify-end">
         <div className="bg-gray-50 flex items-center rounded border border-gray-300">
           <button
-            onClick={() => handleButtonClick("table")}
+            onClick={() => handleDesktopComponentButtonClick("table")}
             aria-label="Tabela"
-            className={`px-2 py-1 rounded-l ${desktopComponent === "table" ? "bg-blue-200" : ""}`}
+            className={`px-2 py-1 rounded-l ${
+              desktopComponent === "table" ? "bg-blue-200" : ""
+            }`}
           >
             <TableIcon className="h-8 text-gray-700" />
           </button>
           <button
-            onClick={() => handleButtonClick("list")}
+            onClick={() => handleDesktopComponentButtonClick("list")}
             aria-label="Lista"
-            className={`px-2 py-1 rounded-r ${desktopComponent === "list" ? "bg-blue-200" : ""}`}
+            className={`px-2 py-1 rounded-r ${
+              desktopComponent === "list" ? "bg-blue-200" : ""
+            }`}
           >
             <CollectionIcon className="h-8 text-gray-700" />
           </button>

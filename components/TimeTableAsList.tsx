@@ -9,8 +9,10 @@ import Link from "next/link";
 import * as React from "react";
 import InlineSVG from "react-inlinesvg";
 import getClassDataByCode from "../helpers/getClassDataByCode";
+import getHourData from "../helpers/getHourData";
 import getRoomDataByNumber from "../helpers/getRoomDataByNumber";
 import getTeacherDataByCode from "../helpers/getTeacherDataByCode";
+import { SettingsContext } from "../pages/_app";
 import { TimeTableData } from "../types/TimeTable";
 
 interface Props {
@@ -24,6 +26,8 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
   >();
 
   const shortDayNames = ["Pon.", "Wt.", "Śr.", "Czw.", "Pt."];
+
+  const { showShortHours, shortHours } = React.useContext(SettingsContext);
 
   const router = useRouter();
 
@@ -92,6 +96,12 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
     };
   }, [timeTable.days]);
 
+  const hourData = React.useMemo(() => {
+    if (showShortHours)
+      return getHourData(timeTable.hours, shortHours)
+    else return timeTable.hours;
+  }, [shortHours, showShortHours, timeTable.hours]);
+
   return (
     <div className="pb-24 lg:pb-4">
       <div className="bg-gray-200 flex justify-between px-6 mb-8 sticky top-0">
@@ -109,7 +119,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
         ))}
       </div>
       <div className="px-6">
-        {Object.entries(timeTable.hours).map((key, index) => {
+        {Object.entries(hourData).map((key, index) => {
           if (
             selectedDayIndex !== undefined &&
             index >= dayTrimData.firstNotEmptyIndex[selectedDayIndex] &&
