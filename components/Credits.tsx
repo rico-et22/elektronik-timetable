@@ -23,6 +23,14 @@ const Credits = () => {
           className="text-elektronik-blue"
         >
           Kamil Pawlak
+        </a> <br/>
+        <a
+          href="https://github.com/rico-et22/elektronik-timetable"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-elektronik-blue"
+        >
+          GitHub (AGPLv3)
         </a>
       </p>
     </div>
