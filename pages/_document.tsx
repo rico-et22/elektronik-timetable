@@ -38,6 +38,7 @@ class MyDocument extends Document {
           <meta name="description" content="Szybko sprawdź plan lekcji każdej klasy, a także nauczyciela czy sali." />
           <meta property="og:description" content="Szybko sprawdź plan lekcji każdej klasy, a także nauczyciela czy sali." />
           <meta property="og:image" content="/og-image.png" />
+          <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
           <Main />
