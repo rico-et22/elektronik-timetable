@@ -9,6 +9,11 @@ import Credits from "./Credits";
 import { SettingsContext } from "../pages/_app";
 import getRouteContext from "../helpers/getRouteContext";
 import Search from "./Search";
+import {
+  disableBodyScroll,
+  enableBodyScroll,
+  clearAllBodyScrollLocks,
+} from "body-scroll-lock";
 
 type BottomBarProps = {
   timeTableList: List;
@@ -29,8 +34,21 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
   };
 
   React.useEffect(() => {
-    if (bottomBarExpanded) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
+    const targetElement = document.querySelector("#bottomBar");
+    if (bottomBarExpanded && targetElement) {
+      // First, disable body scroll via body-scroll-lock library
+      disableBodyScroll(targetElement);
+      // Then, make CSS changes to fix body width & height issues caused by the library
+      document.body.style.width = "100%";
+      document.getElementsByTagName("html")[0].style.height = "100vh";
+    } else if (targetElement) {
+      enableBodyScroll(targetElement);
+      document.body.style.width = "";
+      document.getElementsByTagName("html")[0].style.height = "";
+    }
+    return function cleanup() {
+      if (targetElement) clearAllBodyScrollLocks()
+    }
   }, [bottomBarExpanded]);
 
   return (
@@ -40,6 +58,7 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
           ? "h-full overflow-y-auto"
           : "h-[5.25rem] overflow-hidden"
       }`}
+      id="bottomBar"
     >
       <div className="sticky top-0 bg-gray-300 p-4 z-50">
         <button
