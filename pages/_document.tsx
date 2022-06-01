@@ -15,7 +15,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="pl" className="text-neutral-800">
+      <Html lang="pl">
         <Head>
           <link
             rel="apple-touch-icon"
@@ -40,7 +40,7 @@ class MyDocument extends Document {
           <meta property="og:image" content="/og-image.png" />
           <link rel="manifest" href="/manifest.json" />
         </Head>
-        <body>
+        <body className="text-neutral-800">
           <Main />
           <NextScript />
         </body>
