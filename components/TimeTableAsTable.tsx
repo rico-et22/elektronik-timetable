@@ -123,7 +123,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
                   } ${
                     isCurrentLesson(key[1].timeFrom, key[1].timeTo)
                       ? "bg-green-200"
-                      : "bg-red-200"
+                      : "bg-gray-200"
                   }`}
                 >
                   <span className="font-bold">{key[1].number}</span>
@@ -132,7 +132,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
                   className={`text-center p-2 ${
                     isCurrentLesson(key[1].timeFrom, key[1].timeTo)
                       ? "bg-green-200"
-                      : "bg-red-200"
+                      : "bg-gray-200"
                   }`}
                 >
                   {key[1].timeFrom} - {key[1].timeTo}
