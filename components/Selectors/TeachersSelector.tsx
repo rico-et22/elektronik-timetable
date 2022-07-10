@@ -1,55 +1,55 @@
-import { useState, useRef, RefObject, useEffect, useContext } from "react";
+import * as React from 'react';
 import {
   ChevronDownIcon,
   ChevronUpIcon,
   UserGroupIcon,
-} from "@heroicons/react/outline";
-import { ListItem } from "@wulkanowy/timetable-parser";
-import { SortedListItem } from "../../types/SortedListItem";
-import Link from "next/link";
-import { useRouter } from "next/dist/client/router";
-import { SettingsContext } from "../../pages/_app";
+} from '@heroicons/react/outline';
+import { ListItem } from '@wulkanowy/timetable-parser';
+import Link from 'next/link';
+import { useRouter } from 'next/dist/client/router';
+import { SortedListItem } from '../../types/SortedListItem';
+import { SettingsContext } from '../../pages/_app';
 
 type TeachersSelectorProps = {
   teachers?: ListItem[];
 };
 
 const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
-  const [open, setOpen] = useState(false);
-  const [sortedTeachers, setSortedTeachers] = useState<SortedListItem[]>([]);
+  const [open, setOpen] = React.useState(false);
+  const [sortedTeachers, setSortedTeachers] = React.useState<SortedListItem[]>(
+    [],
+  );
   const router = useRouter();
   const getRoundedClass = (stateValue: boolean) => {
-    if (stateValue) return "rounded-t-lg";
-    else return "rounded-lg";
+    if (stateValue) return 'rounded-t-lg';
+    return 'rounded-lg';
   };
-  const selectorRef = useRef<HTMLDivElement>(null);
+  const selectorRef = React.useRef<HTMLDivElement>(null);
   const handleClick = (
     state: boolean,
     stateChangeFunction: Function,
-    ref: RefObject<HTMLDivElement>
+    ref: React.RefObject<HTMLDivElement>,
   ) => {
-    if (!state && ref && null !== ref.current)
+    if (!state && ref && ref.current !== null) {
       ref.current.style.maxHeight = `${ref.current.scrollHeight}px`;
-    else if (null !== ref.current) ref.current.style.maxHeight = "0";
+    } else if (ref.current !== null) ref.current.style.maxHeight = '0';
     stateChangeFunction(!state);
   };
-  const { setBottomBarExpanded } = useContext(SettingsContext);
+  const { setBottomBarExpanded } = React.useContext(SettingsContext);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (teachers && teachers.length > 0) {
       setSortedTeachers(
         Array.from(
-          new Set(teachers.map((singleTeacher) => singleTeacher.name[2]))
+          new Set(teachers.map((singleTeacher) => singleTeacher.name[2])),
         )
           .sort((a, b) => a.localeCompare(b))
-          .map((char) => {
-            return {
-              char,
-              items: teachers.filter(
-                (singleTeacher) => singleTeacher.name[2] === char
-              ),
-            };
-          })
+          .map((char) => ({
+            char,
+            items: teachers.filter(
+              (singleTeacher) => singleTeacher.name[2] === char,
+            ),
+          })),
       );
     }
   }, [teachers]);
@@ -61,9 +61,10 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
   return (
     <div className="mb-8">
       <button
+        type="button"
         onClick={() => handleClick(open, setOpen, selectorRef)}
         className={`bg-elektronik-red text-white bg-opacity-75 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
-          open
+          open,
         )}`}
       >
         <div className="flex items-center">
@@ -79,40 +80,40 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
         ref={selectorRef}
       >
         {sortedTeachers && sortedTeachers.length > 0 ? (
-          sortedTeachers.map((sortedItem) => {
-            return (
-              <div key={`bottomBar-teacher-letter-${sortedItem.char}`}>
-                <h3 className="text-xl mb-2 px-4 first:pt-4 last:pb-4 font-medium">
-                  {sortedItem.char}
-                </h3>
-                {sortedItem.items.map((item, index) => {
-                  return (
-                    <Link
-                      key={`bottomBar-teacher-letter-${sortedItem.char}-${index}`}
-                      href={`/teacher/${item.value}`}
-                    >
-                      <a
-                        className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-red-100 ${
-                          router.asPath === `/teacher/${item.value}`
-                            ? "bg-red-200 hover:bg-red-200"
-                            : ""
-                        }`}
-                        onClick={() => handleLinkClick()}
-                      >
-                        {item.name}
-                      </a>
-                    </Link>
-                  );
-                })}
-              </div>
-            );
-          })
+          sortedTeachers.map((sortedItem) => (
+            <div key={`bottomBar-teacher-letter-${sortedItem.char}`}>
+              <h3 className="text-xl mb-2 px-4 first:pt-4 last:pb-4 font-medium">
+                {sortedItem.char}
+              </h3>
+              {sortedItem.items.map((item) => (
+                <Link
+                  key={`bottomBar-teacher-letter-${sortedItem.char}-${item.value}`}
+                  href={`/teacher/${item.value}`}
+                >
+                  <a
+                    className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-red-100 ${
+                      router.asPath === `/teacher/${item.value}`
+                        ? 'bg-red-200 hover:bg-red-200'
+                        : ''
+                    }`}
+                    onClick={() => handleLinkClick()}
+                  >
+                    {item.name}
+                  </a>
+                </Link>
+              ))}
+            </div>
+          ))
         ) : (
           <p>Brak danych</p>
         )}
       </div>
     </div>
   );
+}
+
+TeachersSelector.defaultProps = {
+  teachers: undefined,
 };
 
 export default TeachersSelector;

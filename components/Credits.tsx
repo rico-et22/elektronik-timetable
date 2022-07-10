@@ -1,10 +1,9 @@
-import * as React from "react";
+import * as React from 'react';
 
-const Credits = () => {
-  return (
+const Credits = () => (
     <div>
       <p className="text-center text-xs text-gray-500 mb-4">
-        Źródło danych:{" "}
+        Źródło danych:{' '}
         <a
           href={process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}
           target="_blank"
@@ -15,7 +14,7 @@ const Credits = () => {
         </a>
       </p>
       <p className="text-center text-xs text-gray-500">
-        Frontend coded with ❤️ by {" "}
+        Frontend coded with ❤️ by{' '}
         <a
           href="https://kamilpawlak.com"
           target="_blank"
@@ -23,7 +22,8 @@ const Credits = () => {
           className="text-elektronik-blue"
         >
           Kamil Pawlak
-        </a> <br/>
+        </a>{' '}
+        <br />
         <a
           href="https://github.com/rico-et22/elektronik-timetable"
           target="_blank"
@@ -34,7 +34,6 @@ const Credits = () => {
         </a>
       </p>
     </div>
-  );
-};
+  )
 
 export default Credits;

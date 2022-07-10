@@ -1,4 +1,4 @@
-import { ListItem } from "@wulkanowy/timetable-parser";
+import { ListItem } from '@wulkanowy/timetable-parser';
 
 export interface SortedListItem {
   char: string;

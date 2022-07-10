@@ -1,9 +1,8 @@
-import { List } from "@wulkanowy/timetable-parser";
+import { List } from '@wulkanowy/timetable-parser';
 
-const getTeacherDataByCode = (timeTableList: List, teacherCode?: string) => {
-  return timeTableList.teachers?.find(
-    (teacher) => teacher.name.replace(/\s+/g, ' ').split(" ")[1] === `(${teacherCode})`
+const getTeacherDataByCode = (timeTableList: List, teacherCode?: string) => timeTableList.teachers?.find(
+    (teacher) =>
+      teacher.name.replace(/\s+/g, ' ').split(' ')[1] === `(${teacherCode})`,
   );
-}
 
-export default getTeacherDataByCode
+export default getTeacherDataByCode;

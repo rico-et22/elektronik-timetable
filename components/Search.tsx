@@ -4,12 +4,12 @@ import {
   SearchIcon,
   UserGroupIcon,
   XIcon,
-} from "@heroicons/react/outline";
-import { ListItem } from "@wulkanowy/timetable-parser";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import * as React from "react";
-import { SettingsContext } from "../pages/_app";
+} from '@heroicons/react/outline';
+import { ListItem } from '@wulkanowy/timetable-parser';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { SettingsContext } from '../pages/_app';
 
 type SearchProps = {
   classes: ListItem[];
@@ -20,32 +20,33 @@ type SearchProps = {
 const Search = ({ classes, teachers, rooms }: SearchProps) => {
   const router = useRouter();
 
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState('');
 
   const filteredLinks = React.useMemo(() => {
     if (value) {
       const filteredClasses = classes.map((singleClass) => ({
         ...singleClass,
-        type: "class",
+        type: 'class',
       }));
       const filteredTeachers = teachers
         ? teachers.map((singleTeacher) => ({
             ...singleTeacher,
-            type: "teacher",
+            type: 'teacher',
           }))
         : [];
       const filteredRooms = rooms
-        ? rooms.map((singleRoom) => ({ ...singleRoom, type: "room" }))
+        ? rooms.map((singleRoom) => ({ ...singleRoom, type: 'room' }))
         : [];
       return [...filteredClasses, ...filteredTeachers, ...filteredRooms].filter(
-        (link) => link.name.toLowerCase().includes(value.toLowerCase())
+        (link) => link.name.toLowerCase().includes(value.toLowerCase()),
       );
-    } else return [];
+    }
+    return [];
   }, [classes, rooms, teachers, value]);
 
   const roundedClass = React.useMemo(() => {
-    if (value.length > 0) return "rounded-t-lg";
-    else return "rounded-lg";
+    if (value.length > 0) return 'rounded-t-lg';
+    return 'rounded-lg';
   }, [value]);
 
   const { setBottomBarExpanded } = React.useContext(SettingsContext);
@@ -67,13 +68,14 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
           onChange={(e) => setValue(e.target.value)}
           placeholder="Szukaj..."
           autoComplete="off"
-          disabled={!!!(classes.length || teachers?.length || rooms?.length)}
+          disabled={!(classes.length || teachers?.length || rooms?.length)}
           name="search-value"
         />
         {value.length > 0 && (
           <button
+            type="button"
             className="absolute top-0 right-0 h-full flex items-center mr-4"
-            onClick={() => setValue("")}
+            onClick={() => setValue('')}
           >
             <XIcon className="h-5 w-5" />
           </button>
@@ -84,34 +86,32 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
           <div className="bg-gray-50 transition-all max-h-[27vh] lg:max-h-[50vh] overflow-auto rounded-b-lg border border-gray-300 border-t-0">
             {filteredLinks &&
               filteredLinks.length > 0 &&
-              filteredLinks.map((link) => {
-                return (
-                  <Link
-                    key={`search-${link.type}-${link.value}`}
-                    href={`/${link.type}/${link.value}`}
+              filteredLinks.map((link) => (
+                <Link
+                  key={`search-${link.type}-${link.value}`}
+                  href={`/${link.type}/${link.value}`}
+                >
+                  <a
+                    className={`mb-2 mx-4 first:mt-4 last:mb-4 px-1 py-px rounded transition duration-100 hover:bg-gray-100 flex ${
+                      router.asPath === `/${link.type}/${link.value}`
+                        ? 'bg-gray-200 hover:bg-gray-200 font-bold'
+                        : ''
+                    }`}
+                    onClick={() => handleLinkClick()}
                   >
-                    <a
-                      className={`mb-2 mx-4 first:mt-4 last:mb-4 px-1 py-px rounded transition duration-100 hover:bg-gray-100 flex ${
-                        router.asPath === `/${link.type}/${link.value}`
-                          ? "bg-gray-200 hover:bg-gray-200 font-bold"
-                          : ""
-                      }`}
-                      onClick={() => handleLinkClick()}
-                    >
-                      {link.type === "class" && (
-                        <AcademicCapIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
-                      )}
-                      {link.type === "teacher" && (
-                        <UserGroupIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
-                      )}
-                      {link.type === "room" && (
-                        <LocationMarkerIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
-                      )}
-                      {link.name}
-                    </a>
-                  </Link>
-                );
-              })}
+                    {link.type === 'class' && (
+                      <AcademicCapIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
+                    )}
+                    {link.type === 'teacher' && (
+                      <UserGroupIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
+                    )}
+                    {link.type === 'room' && (
+                      <LocationMarkerIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
+                    )}
+                    {link.name}
+                  </a>
+                </Link>
+              ))}
             {filteredLinks && filteredLinks.length === 0 && (
               <p className="text-center my-4">Nie znaleziono</p>
             )}
@@ -120,6 +120,11 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
       </div>
     </div>
   );
+}
+
+Search.defaultProps = {
+  teachers: undefined,
+  rooms: undefined,
 };
 
 export default Search;

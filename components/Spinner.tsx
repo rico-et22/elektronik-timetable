@@ -1,9 +1,6 @@
-import * as React from "react";
-import InlineSVG from "react-inlinesvg";
-import { SettingsContext } from "../pages/_app";
+import * as React from 'react';
 
-const Spinner = () => {
-  return (
+const Spinner = () => (
     <div className="absolute w-full h-full top-0 left-0 bg-slate-100/50 backdrop-blur flex items-center justify-center">
       <svg
         role="status"
@@ -22,6 +19,5 @@ const Spinner = () => {
         />
       </svg>
     </div>
-  );
-};
+  )
 export default Spinner;

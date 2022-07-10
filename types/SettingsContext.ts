@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
-import { ShortHour } from "./ShortHour";
+import { Dispatch, SetStateAction } from 'react';
+import { ShortHour } from './ShortHour';
 
-export type DesktopComponent = "table" | "list"
+export type DesktopComponent = 'table' | 'list';
 
 export interface SettingsContextType {
   desktopComponent: DesktopComponent;

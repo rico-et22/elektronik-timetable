@@ -1,9 +1,10 @@
-import { List } from "@wulkanowy/timetable-parser";
-import ClassesSelector from "./Selectors/ClassesSelector";
-import TeachersSelector from "./Selectors/TeachersSelector";
-import RoomsSelector from "./Selectors/RoomsSelector";
-import Credits from "./Credits";
-import Search from "./Search";
+import * as React from 'react';
+import { List } from '@wulkanowy/timetable-parser';
+import ClassesSelector from './Selectors/ClassesSelector';
+import TeachersSelector from './Selectors/TeachersSelector';
+import RoomsSelector from './Selectors/RoomsSelector';
+import Credits from './Credits';
+import Search from './Search';
 
 type BottomBarProps = {
   timeTableList: List;
@@ -25,6 +26,6 @@ const SideBar = ({ timeTableList }: BottomBarProps) => {
       </div>
     </div>
   );
-};
+}
 
 export default SideBar;

@@ -1,11 +1,11 @@
-import { CollectionIcon, TableIcon } from "@heroicons/react/outline";
-import { List } from "@wulkanowy/timetable-parser";
-import { useRouter } from "next/router";
-import * as React from "react";
-import getRouteContext from "../helpers/getRouteContext";
-import { SettingsContext } from "../pages/_app";
-import { DesktopComponent } from "../types/SettingsContext";
-import ShortHoursSwitcher from "./ShortHoursSwitcher";
+import { CollectionIcon, TableIcon } from '@heroicons/react/outline';
+import { List } from '@wulkanowy/timetable-parser';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import getRouteContext from '../helpers/getRouteContext';
+import { SettingsContext } from '../pages/_app';
+import { DesktopComponent } from '../types/SettingsContext';
+import ShortHoursSwitcher from './ShortHoursSwitcher';
 
 type TopBarProps = {
   timeTableList: List;
@@ -16,9 +16,10 @@ const TopBar = ({ timeTableList }: TopBarProps) => {
   const { desktopComponent, setDesktopComponent } =
     React.useContext(SettingsContext);
 
-  const routeContext = React.useMemo(() => {
-    return getRouteContext(router, timeTableList);
-  }, [router, timeTableList]);
+  const routeContext = React.useMemo(
+    () => getRouteContext(router, timeTableList),
+    [router, timeTableList],
+  );
 
   const handleDesktopComponentButtonClick = (value: DesktopComponent) => {
     if (setDesktopComponent) setDesktopComponent(value);
@@ -42,19 +43,21 @@ const TopBar = ({ timeTableList }: TopBarProps) => {
       <div className="w-full flex items-center justify-end">
         <div className="bg-gray-50 flex items-center rounded border border-gray-300">
           <button
-            onClick={() => handleDesktopComponentButtonClick("table")}
+            type="button"
+            onClick={() => handleDesktopComponentButtonClick('table')}
             aria-label="Tabela"
             className={`px-2 py-1 rounded-l ${
-              desktopComponent === "table" ? "bg-blue-200" : ""
+              desktopComponent === 'table' ? 'bg-blue-200' : ''
             }`}
           >
             <TableIcon className="h-8 text-gray-700" />
           </button>
           <button
-            onClick={() => handleDesktopComponentButtonClick("list")}
+            type="button"
+            onClick={() => handleDesktopComponentButtonClick('list')}
             aria-label="Lista"
             className={`px-2 py-1 rounded-r ${
-              desktopComponent === "list" ? "bg-blue-200" : ""
+              desktopComponent === 'list' ? 'bg-blue-200' : ''
             }`}
           >
             <CollectionIcon className="h-8 text-gray-700" />
