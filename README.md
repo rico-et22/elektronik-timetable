@@ -23,7 +23,7 @@ In this method we're going to use the original timetable hosted on your school's
 
 Simply define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://elektronik.rzeszow.pl/plan-lekcji-2`.
 
-In some cases, the timetable may not fetch to this app due to CORS issues. This happens for Zespół Szkół Elektronicznych's timetable servers. Use method 2 then.
+In some cases, the timetable may not fetch to this app due to CORS issues. Use method 2 then.
 
 ## Method 2 - original website and CORS Anywhere proxy
 It's the same as method 1, but we're adding a CORS Anywhere proxy server to clear all CORS-related issues while fetching the timetable from the school servers. Don't worry, there are no sensitive data passing through, it's just a timetable 😅. However if security is your #1 priority use method 3.
