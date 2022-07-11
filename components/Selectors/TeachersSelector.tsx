@@ -110,7 +110,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
       </div>
     </div>
   );
-}
+};
 
 TeachersSelector.defaultProps = {
   teachers: undefined,

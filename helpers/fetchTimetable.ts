@@ -16,6 +16,6 @@ const fetchTimetable = async (id: string) => {
       timeTableData = data;
     });
   return { data: timeTableData, ok: timeTableOk };
-}
+};
 
-export default fetchTimetable
+export default fetchTimetable;

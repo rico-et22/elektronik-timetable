@@ -33,7 +33,7 @@ const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
     if (routeContext.type === 'teacher')
       return `Nauczyciel ${routeContext.name}`;
     if (routeContext.type === 'room') return `Sala ${routeContext.name}`;
-    return ''
+    return '';
   }, [routeContext.name, routeContext.type]);
 
   return (

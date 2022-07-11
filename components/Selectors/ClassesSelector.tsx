@@ -16,7 +16,9 @@ type ClassesSelectorProps = {
 
 const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
   const [open, setOpen] = React.useState(false);
-  const [sortedClasses, setSortedClasses] = React.useState<SortedListItem[]>([]);
+  const [sortedClasses, setSortedClasses] = React.useState<SortedListItem[]>(
+    [],
+  );
   const router = useRouter();
   const getRoundedClass = (stateValue: boolean) => {
     if (stateValue) return 'rounded-t-lg';
@@ -28,7 +30,8 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
     stateChangeFunction: Function,
     ref: React.RefObject<HTMLDivElement>,
   ) => {
-    if (!state && ref && ref.current !== null) ref.current.style.maxHeight = `${ref.current.scrollHeight}px`;
+    if (!state && ref && ref.current !== null)
+      ref.current.style.maxHeight = `${ref.current.scrollHeight}px`;
     else if (ref.current !== null) ref.current.style.maxHeight = '0';
     stateChangeFunction(!state);
   };
@@ -105,6 +108,6 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default ClassesSelector;

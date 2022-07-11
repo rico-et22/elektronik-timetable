@@ -131,7 +131,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
       </div>
     </div>
   );
-}
+};
 
 RoomsSelector.defaultProps = {
   rooms: undefined,

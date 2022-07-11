@@ -1,4 +1,4 @@
- const fetchTimetableList = async () => {
+const fetchTimetableList = async () => {
   let timeTableData = '';
   let timeTableOk = false;
   await fetch(
@@ -16,6 +16,6 @@
       timeTableData = data;
     });
   return { data: timeTableData, ok: timeTableOk };
-}
+};
 
-export default fetchTimetableList
+export default fetchTimetableList;
