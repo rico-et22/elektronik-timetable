@@ -120,7 +120,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
       </div>
     </div>
   );
-}
+};
 
 Search.defaultProps = {
   teachers: undefined,

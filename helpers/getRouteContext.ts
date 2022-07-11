@@ -10,7 +10,7 @@ const getRouteContext = (router: NextRouter, timeTableList: List) => {
     name: undefined,
   };
   if (router.query.all && router.query.all.length > 1) {
-    const [firstQueryParam] = router.query.all
+    const [firstQueryParam] = router.query.all;
     returnedValue.type = firstQueryParam;
     const value = router.query.all[1];
     if (returnedValue.type === 'class' && classes.length > 0) {

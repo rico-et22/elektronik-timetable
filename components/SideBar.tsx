@@ -26,6 +26,6 @@ const SideBar = ({ timeTableList }: BottomBarProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default SideBar;

@@ -91,6 +91,6 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default BottomBar;
