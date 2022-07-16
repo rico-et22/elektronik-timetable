@@ -1,0 +1,15 @@
+# dependencies
+/node_modules
+/yarn.lock
+/package-lock.json
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+/.history
+public

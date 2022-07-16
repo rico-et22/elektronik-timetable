@@ -27,5 +27,14 @@ yarn check-format ||
     false;
 )
 
+echo '\n🤔🤔 ... Alright... Code looks good to me... Trying to build now.\n'
+
+yarn build ||
+(
+    echo '\n❌👷 Better call someone who can write in React... Because your build failed.
+            Next build failed: View the errors above to see why.'
+    false;
+)
+
 # If everything passes... Now we can commit
 echo '\n✅✅ You win this time... I am committing this now.\n'
