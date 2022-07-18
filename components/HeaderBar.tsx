@@ -1,6 +1,6 @@
 import * as React from 'react';
 import InlineSVG from 'react-inlinesvg';
-import ShortHoursSwitcher from './ShortHoursSwitcher';
+import ShortHoursSwitcher from 'components/ShortHoursSwitcher';
 
 const HeaderBar = () => (
   <div className="w-full bg-elektronik-red p-4 relative flex items-center justify-between z-10 filter drop-shadow-md">

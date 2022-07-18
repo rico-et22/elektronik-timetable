@@ -1,6 +1,6 @@
 import { List } from '@wulkanowy/timetable-parser';
 import { NextRouter } from 'next/router';
-import { RouteContext } from '../types/RouteContext';
+import { RouteContext } from 'types/RouteContext';
 
 const getRouteContext = (router: NextRouter, timeTableList: List) => {
   const { classes, rooms, teachers } = timeTableList;

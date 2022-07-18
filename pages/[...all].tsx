@@ -7,10 +7,10 @@ import {
   TimeTableData,
   TimeTableListResponse,
   TimeTableStatus,
-} from '../types/TimeTable';
-import fetchTimetable from '../helpers/fetchTimetable';
-import Layout from '../components/Layout';
-import getRouteContext from '../helpers/getRouteContext';
+} from 'types/TimeTable';
+import fetchTimetable from 'helpers/fetchTimetable';
+import Layout from 'components/Layout';
+import getRouteContext from 'helpers/getRouteContext';
 
 interface TablePageProps {
   timeTableList: List;

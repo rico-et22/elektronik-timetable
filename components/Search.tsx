@@ -9,7 +9,7 @@ import { ListItem } from '@wulkanowy/timetable-parser';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SettingsContext } from '../pages/_app';
+import { SettingsContext } from 'pages/_app';
 
 type SearchProps = {
   classes: ListItem[];

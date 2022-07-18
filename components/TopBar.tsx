@@ -2,10 +2,10 @@ import { CollectionIcon, TableIcon } from '@heroicons/react/outline';
 import { List } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import getRouteContext from '../helpers/getRouteContext';
-import { SettingsContext } from '../pages/_app';
-import { DesktopComponent } from '../types/SettingsContext';
-import ShortHoursSwitcher from './ShortHoursSwitcher';
+import getRouteContext from 'helpers/getRouteContext';
+import { SettingsContext } from 'pages/_app';
+import { DesktopComponent } from 'types/SettingsContext';
+import ShortHoursSwitcher from 'components/ShortHoursSwitcher';
 
 type TopBarProps = {
   timeTableList: List;

@@ -1,6 +1,6 @@
 import { EmojiSadIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import * as React from 'react';
-import { TimeTableStatus } from '../types/TimeTable';
+import { TimeTableStatus } from 'types/TimeTable';
 
 interface Props {
   status: TimeTableStatus;

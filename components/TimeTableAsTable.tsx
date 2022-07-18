@@ -7,12 +7,12 @@ import { List } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import * as React from 'react';
-import getClassDataByCode from '../helpers/getClassDataByCode';
-import getHourData from '../helpers/getHourData';
-import getRoomDataByNumber from '../helpers/getRoomDataByNumber';
-import getTeacherDataByCode from '../helpers/getTeacherDataByCode';
-import { SettingsContext } from '../pages/_app';
-import { TimeTableData } from '../types/TimeTable';
+import getClassDataByCode from 'helpers/getClassDataByCode';
+import getHourData from 'helpers/getHourData';
+import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
+import getTeacherDataByCode from 'helpers/getTeacherDataByCode';
+import { SettingsContext } from 'pages/_app';
+import { TimeTableData } from 'types/TimeTable';
 
 interface Props {
   timeTable: TimeTableData;

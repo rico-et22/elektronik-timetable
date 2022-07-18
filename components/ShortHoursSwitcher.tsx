@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SettingsContext } from '../pages/_app';
+import { SettingsContext } from 'pages/_app';
 
 interface Props {
   small?: boolean;

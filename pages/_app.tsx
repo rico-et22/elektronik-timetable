@@ -1,16 +1,13 @@
 import * as React from 'react';
-import '../styles/globals.css';
+import 'styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
 import { TimetableList } from '@wulkanowy/timetable-parser';
 import App from 'next/app';
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-  DesktopComponent,
-  SettingsContextType,
-} from '../types/SettingsContext';
-import fetchTimetableList from '../helpers/fetchTimetableList';
-import { TimeTableListResponse, TimeTableStatus } from '../types/TimeTable';
+import { DesktopComponent, SettingsContextType } from 'types/SettingsContext';
+import fetchTimetableList from 'helpers/fetchTimetableList';
+import { TimeTableListResponse, TimeTableStatus } from 'types/TimeTable';
 
 const shortHours = [
   {

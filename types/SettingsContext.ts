@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ShortHour } from './ShortHour';
+import { ShortHour } from 'types/ShortHour';
 
 export type DesktopComponent = 'table' | 'list';
 
