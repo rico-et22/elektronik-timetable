@@ -23,6 +23,15 @@ const Credits = () => (
       >
         Kamil Pawlak
       </a>{' '}
+      &{' '}
+      <a
+        href="https://olekbaran.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-elektronik-blue"
+      >
+        Olek Baran
+      </a>
       <br />
       <a
         href="https://github.com/rico-et22/elektronik-timetable"
