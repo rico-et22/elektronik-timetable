@@ -1,5 +1,5 @@
 import { TableHour } from '@wulkanowy/timetable-parser';
-import { ShortHour } from '../types/ShortHour';
+import { ShortHour } from 'types/ShortHour';
 
 const getHourData = (
   timeTableHours: Record<number, TableHour>,

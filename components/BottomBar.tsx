@@ -7,13 +7,13 @@ import {
   enableBodyScroll,
   clearAllBodyScrollLocks,
 } from 'body-scroll-lock';
-import ClassesSelector from './Selectors/ClassesSelector';
-import TeachersSelector from './Selectors/TeachersSelector';
-import RoomsSelector from './Selectors/RoomsSelector';
-import Credits from './Credits';
-import { SettingsContext } from '../pages/_app';
-import getRouteContext from '../helpers/getRouteContext';
-import Search from './Search';
+import ClassesSelector from 'components/Selectors/ClassesSelector';
+import TeachersSelector from 'components/Selectors/TeachersSelector';
+import RoomsSelector from 'components/Selectors/RoomsSelector';
+import Credits from 'components/Credits';
+import { SettingsContext } from 'pages/_app';
+import getRouteContext from 'helpers/getRouteContext';
+import Search from 'components/Search';
 
 type BottomBarProps = {
   timeTableList: List;

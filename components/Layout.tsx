@@ -1,16 +1,16 @@
 import { List } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { TimeTableData, TimeTableStatus } from '../types/TimeTable';
-import BottomBar from './BottomBar';
-import NoTimeTableError from './NoTimeTableError';
-import SideBar from './SideBar';
-import TimeTableAsList from './TimeTableAsList';
-import TimeTableAsTable from './TimeTableAsTable';
-import HeaderBar from './HeaderBar';
-import TopBar from './TopBar';
-import { SettingsContext } from '../pages/_app';
-import Spinner from './Spinner';
+import { TimeTableData, TimeTableStatus } from 'types/TimeTable';
+import BottomBar from 'components/BottomBar';
+import NoTimeTableError from 'components/NoTimeTableError';
+import SideBar from 'components/SideBar';
+import TimeTableAsList from 'components/TimeTableAsList';
+import TimeTableAsTable from 'components/TimeTableAsTable';
+import HeaderBar from 'components/HeaderBar';
+import TopBar from 'components/TopBar';
+import { SettingsContext } from 'pages/_app';
+import Spinner from 'components/Spinner';
 
 interface Props {
   timeTableList: List;

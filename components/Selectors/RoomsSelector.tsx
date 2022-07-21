@@ -7,8 +7,8 @@ import {
 import { ListItem } from '@wulkanowy/timetable-parser';
 import Link from 'next/link';
 import { useRouter } from 'next/dist/client/router';
-import { SortedListItem } from '../../types/SortedListItem';
-import { SettingsContext } from '../../pages/_app';
+import { SortedListItem } from 'types/SortedListItem';
+import { SettingsContext } from 'pages/_app';
 
 type RoomsSelectorProps = {
   rooms?: ListItem[];
