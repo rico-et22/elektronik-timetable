@@ -38,7 +38,14 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
         ? rooms.map((singleRoom) => ({ ...singleRoom, type: 'room' }))
         : [];
       return [...filteredClasses, ...filteredTeachers, ...filteredRooms].filter(
-        (link) => link.name.toLowerCase().includes(value.toLowerCase()),
+        (link) =>
+          link.name.toLowerCase().includes(value.toLowerCase()) ||
+          link.name
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Match all unicode character modifiers from decomposited string. Example: ś => s (U+0073) + (U+0301)
+            .replace(/\u0142/g, 'l') // Match ł character manually since it doesn't get decomposited into l
+            .includes(value.toLowerCase()),
       );
     }
     return [];
