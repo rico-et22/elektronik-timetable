@@ -70,15 +70,17 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
     <div className="px-10 pb-16 mt-8">
       <table className="w-full table-fixed border-separate border-0 shadow-lg rounded-lg border-spacing-0 ">
         <thead className="rounded">
-          <tr className="bg-elektronik-red text-white text-sm rounded-t-lg">
-            <th className="py-3 w-10 border border-gray-100/50 rounded-tl-lg">
+          <tr className="text-white text-sm rounded-t-lg">
+            <th className="py-3 w-10 border border-gray-100/50 bg-elektronik-red rounded-tl-lg">
               Nr
             </th>
-            <th className="py-3 w-24 border border-gray-100/50">Godz.</th>
+            <th className="py-3 w-24 border bg-elektronik-red border-gray-100/50">
+              Godz.
+            </th>
             {timeTable.dayNames.map((dayName, index) => (
               <th
                 key={`table-dayName-${dayName}`}
-                className={`py-3 border border-gray-100/50  ${
+                className={`py-3 border bg-elektronik-red border-gray-100/50  ${
                   index === timeTable.dayNames.length - 1 ? 'rounded-tr-lg' : ''
                 }`}
               >
