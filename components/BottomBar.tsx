@@ -55,9 +55,7 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
   return (
     <div
       className={`w-full fixed bottom-0 transition-all duration-300 transform-gpu ease-out bg-gray-200 filter drop-shadow-2xl flex flex-col z-50 ${
-        bottomBarExpanded
-          ? 'h-full overflow-y-auto'
-          : 'h-[5.25rem] overflow-hidden'
+        bottomBarExpanded ? 'h-full' : 'h-[5.25rem]'
       }`}
       id="bottomBar"
     >
@@ -80,14 +78,20 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
           {!bottomBarExpanded && <ChevronUpIcon className="h-5 w-5" />}
         </button>
       </div>
-      <div className="p-4">
-        <Search classes={classes} teachers={teachers} rooms={rooms} />
-        <ClassesSelector classes={classes} />
-        <TeachersSelector teachers={teachers} />
-        <RoomsSelector rooms={rooms} />
-      </div>
-      <div className="px-4 mb-5 mt-auto">
-        <Credits />
+      <div
+        className={`h-full p-4 flex flex-col justify-between ${
+          bottomBarExpanded && 'overflow-auto'
+        }`}
+      >
+        <div>
+          <Search classes={classes} teachers={teachers} rooms={rooms} />
+          <ClassesSelector classes={classes} />
+          <TeachersSelector teachers={teachers} />
+          <RoomsSelector rooms={rooms} />
+        </div>
+        <div className="px-4 mb-5">
+          <Credits />
+        </div>
       </div>
     </div>
   );
