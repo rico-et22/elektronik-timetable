@@ -3,9 +3,9 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import { List } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
 import {
+  clearAllBodyScrollLocks,
   disableBodyScroll,
   enableBodyScroll,
-  clearAllBodyScrollLocks,
 } from 'body-scroll-lock';
 import ClassesSelector from 'components/Selectors/ClassesSelector';
 import TeachersSelector from 'components/Selectors/TeachersSelector';
@@ -55,9 +55,7 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
   return (
     <div
       className={`w-full fixed bottom-0 transition-all duration-300 transform-gpu ease-out bg-gray-200 filter drop-shadow-2xl flex flex-col z-50 ${
-        bottomBarExpanded
-          ? 'h-full overflow-y-auto'
-          : 'h-[5.25rem] overflow-hidden'
+        bottomBarExpanded ? 'h-full overflow-auto' : 'h-[5.25rem]'
       }`}
       id="bottomBar"
     >
