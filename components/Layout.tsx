@@ -28,6 +28,7 @@ const Layout = ({
   const router = useRouter();
   const { desktopComponent, showSpinner } = React.useContext(SettingsContext);
   const desktopLayoutRef = React.useRef<HTMLDivElement>(null);
+  const printRef = React.useRef<HTMLDivElement>(null);
 
   const lastPathKey = 'elektronik-timetable-last-path';
 
@@ -127,8 +128,8 @@ const Layout = ({
           ref={desktopLayoutRef}
         >
           {timeTable && (
-            <>
-              <TopBar timeTableList={timeTableList} />
+            <div ref={printRef}>
+              <TopBar timeTableList={timeTableList} printRef={printRef} />
               {desktopComponent === 'list' && timeTableStatus === 'ok' && (
                 <TimeTableAsList
                   timeTable={timeTable}
@@ -141,7 +142,7 @@ const Layout = ({
                   timeTableList={timeTableList}
                 />
               )}
-            </>
+            </div>
           )}{' '}
           {timeTableStatus && timeTableStatus !== 'ok' && (
             <NoTimeTableError status={timeTableStatus} />
