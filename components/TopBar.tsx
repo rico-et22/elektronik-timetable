@@ -1,5 +1,10 @@
-import { CollectionIcon, TableIcon } from '@heroicons/react/outline';
+import {
+  CollectionIcon,
+  TableIcon,
+  PrinterIcon,
+} from '@heroicons/react/outline';
 import { List } from '@wulkanowy/timetable-parser';
+import { useReactToPrint } from 'react-to-print';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import getRouteContext from 'helpers/getRouteContext';
@@ -9,9 +14,10 @@ import ShortHoursSwitcher from 'components/ShortHoursSwitcher';
 
 type TopBarProps = {
   timeTableList: List;
+  printRef: React.RefObject<HTMLDivElement>;
 };
 
-const TopBar = ({ timeTableList }: TopBarProps) => {
+const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
   const router = useRouter();
   const { desktopComponent, setDesktopComponent } =
     React.useContext(SettingsContext);
@@ -24,6 +30,11 @@ const TopBar = ({ timeTableList }: TopBarProps) => {
   const handleDesktopComponentButtonClick = (value: DesktopComponent) => {
     if (setDesktopComponent) setDesktopComponent(value);
   };
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: `${routeContext.name} - Plan lekcji express`,
+  });
 
   return (
     <div className="bg-gray-100 flex h-[4.5rem] px-10 filter drop-shadow-xl">
@@ -40,7 +51,15 @@ const TopBar = ({ timeTableList }: TopBarProps) => {
           )}
         </h2>
       </div>
-      <div className="w-full flex items-center justify-end">
+      <div className="w-full flex items-center justify-end print:invisible">
+        <button
+          type="button"
+          onClick={handlePrint}
+          aria-label="Drukuj"
+          className="bg-gray-50 mr-4 px-2 py-1 rounded border border-gray-300"
+        >
+          <PrinterIcon className="h-8 text-gray-700" />
+        </button>
         <div className="bg-gray-50 flex items-center rounded border border-gray-300">
           <button
             type="button"

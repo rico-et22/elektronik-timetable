@@ -68,7 +68,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
 
   return (
     <div className="px-10 pb-16 mt-8">
-      <table className="w-full table-fixed border-separate border-0 shadow-lg rounded-lg border-spacing-0 ">
+      <table className="w-full table-fixed border-separate border-0 drop-shadow-lg rounded-lg border-spacing-0 ">
         <thead className="rounded">
           <tr className="text-white text-sm rounded-t-lg">
             <th className="py-3 w-10 border border-gray-100/50 bg-elektronik-red rounded-tl-lg">
