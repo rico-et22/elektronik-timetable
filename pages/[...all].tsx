@@ -1,7 +1,7 @@
 import * as React from 'react';
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import { List, Table } from '@wulkanowy/timetable-parser';
+import { List, Table, TimetableList } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/router';
 import {
   TimeTableData,
@@ -11,6 +11,7 @@ import {
 import fetchTimetable from 'helpers/fetchTimetable';
 import Layout from 'components/Layout';
 import getRouteContext from 'helpers/getRouteContext';
+import fetchTimetableList from '../helpers/fetchTimetableList';
 
 interface TablePageProps {
   timeTableList: List;
@@ -50,7 +51,25 @@ const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const list = await fetchTimetableList();
+  const tableList = new TimetableList(list.data);
+
+  const { classes, teachers, rooms } = tableList.getList();
+  const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
+  const teachersPaths = teachers?.map(
+    (teacherItem) => `/teacher/${teacherItem.value}`,
+  );
+  const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
+  if (!classesPaths || !teachersPaths || !roomsPaths)
+    throw Error('Unable to obtain all paths');
+  return {
+    paths: [...classesPaths, ...teachersPaths, ...roomsPaths],
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
   let timeTableResponse: TimeTableListResponse = {
     data: '',
     ok: false,
@@ -88,6 +107,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
       timeTableStatus,
     },
+    revalidate: 60,
   };
 };
 
