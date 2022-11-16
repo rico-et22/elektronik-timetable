@@ -17,9 +17,10 @@ import Search from 'components/Search';
 
 type BottomBarProps = {
   timeTableList: List;
+  generatedDate: string | undefined;
 };
 
-const BottomBar = ({ timeTableList }: BottomBarProps) => {
+const BottomBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
   const { classes, rooms, teachers } = timeTableList;
   const router = useRouter();
   const { bottomBarExpanded, setBottomBarExpanded } =
@@ -85,6 +86,11 @@ const BottomBar = ({ timeTableList }: BottomBarProps) => {
         <RoomsSelector rooms={rooms} />
       </div>
       <div className="px-4 mb-5 mt-auto">
+        {generatedDate && (
+          <p className="text-xs text-center text-gray-500 mb-4">
+            Wygenerowano {generatedDate}
+          </p>
+        )}
         <Credits />
       </div>
     </div>
