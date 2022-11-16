@@ -11,4 +11,5 @@ export interface TimeTableData {
   dayNames: string[];
   days: TableLesson[][][];
   hours: Record<number, TableHour>;
+  generatedDate: string;
 }

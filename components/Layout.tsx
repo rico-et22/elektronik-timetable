@@ -108,7 +108,10 @@ const Layout = ({
           {showSpinner && <Spinner />}
         </div>
         {timeTableListStatus === 'ok' && (
-          <BottomBar timeTableList={timeTableList} />
+          <BottomBar
+            timeTableList={timeTableList}
+            generatedDate={timeTable?.generatedDate}
+          />
         )}
         {timeTableStatus && timeTableStatus !== 'ok' && (
           <NoTimeTableError status={timeTableStatus} />
@@ -118,7 +121,10 @@ const Layout = ({
         <div className="w-1/4 relative h-screen">
           <HeaderBar />
           {timeTableListStatus === 'ok' && (
-            <SideBar timeTableList={timeTableList} />
+            <SideBar
+              timeTableList={timeTableList}
+              generatedDate={timeTable?.generatedDate}
+            />
           )}
         </div>
         <div

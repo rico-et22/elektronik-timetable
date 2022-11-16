@@ -66,6 +66,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     timeTableResponse = response;
   });
   const timeTable: Table | null = new Table(timeTableResponse.data);
+  const tableCellText: string = timeTable
+    .$('.op  table:nth-child(1) tr:nth-child(1) > td:nth-child(1)')
+    .text();
+  const date: string | undefined = tableCellText
+    .trim()
+    .split('\n')[0]
+    .split(' ')
+    .pop();
   if (timeTableResponse?.ok) {
     timeTableStatus = 'ok';
   } else timeTableStatus = 'error';
@@ -76,6 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         days: timeTable.getDays(),
         dayNames: timeTable.getDayNames(),
         hours: timeTable.getHours(),
+        generatedDate: date,
       },
       timeTableStatus,
     },
