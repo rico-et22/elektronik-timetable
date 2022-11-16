@@ -25,12 +25,12 @@ const Credits = () => (
       </a>{' '}
       &{' '}
       <a
-        href="https://olekbaran.com"
+        href="https://github.com/rico-et22/elektronik-timetable/graphs/contributors"
         target="_blank"
         rel="noopener noreferrer"
         className="text-elektronik-blue"
       >
-        Olek Baran
+        contributors
       </a>
       <br />
       <a
