@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SettingsContext } from 'pages/_app';
+import useKeyPress from 'hooks/useKeyPress';
 
 type SearchProps = {
   classes: ListItem[];
@@ -17,9 +18,25 @@ type SearchProps = {
   rooms?: ListItem[];
 };
 
+type ReducerState = {
+  selectedIndex: number;
+};
+
+enum ActionKind {
+  arrowUp = 'arrowUp',
+  arrowDown = 'arrowDown',
+  select = 'select',
+}
+
+type ReducerAction = {
+  type: ActionKind;
+  payload: number;
+};
+
 const Search = ({ classes, teachers, rooms }: SearchProps) => {
   const router = useRouter();
 
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const [value, setValue] = React.useState('');
 
   const filteredLinks = React.useMemo(() => {
@@ -56,10 +73,63 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
     return 'rounded-lg';
   }, [value]);
 
+  const initialState: ReducerState = { selectedIndex: 0 };
+
+  const reducer = (state: ReducerState, action: ReducerAction) => {
+    switch (action.type) {
+      case ActionKind.arrowUp:
+        return {
+          selectedIndex:
+            state.selectedIndex !== 0
+              ? state.selectedIndex - 1
+              : filteredLinks.length - 1,
+        };
+      case ActionKind.arrowDown:
+        if (inputRef.current === document.activeElement) {
+          return {
+            selectedIndex: 0,
+          };
+        }
+        return {
+          selectedIndex:
+            state.selectedIndex !== filteredLinks.length - 1
+              ? state.selectedIndex + 1
+              : 0,
+        };
+      case ActionKind.select:
+        return { selectedIndex: action.payload };
+      default:
+        throw new Error();
+    }
+  };
+
+  const arrowUpPressed = useKeyPress('ArrowUp');
+  const arrowDownPressed = useKeyPress('ArrowDown');
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  React.useEffect(() => {
+    if (arrowUpPressed && filteredLinks.length > 0) {
+      dispatch({ type: ActionKind.arrowUp, payload: 0 });
+    }
+  }, [arrowUpPressed, filteredLinks]);
+
+  React.useEffect(() => {
+    if (arrowDownPressed && filteredLinks.length > 0) {
+      dispatch({ type: ActionKind.arrowDown, payload: 0 });
+    }
+  }, [arrowDownPressed, filteredLinks]);
+
+  React.useEffect(() => {
+    document.getElementById(`link-${state.selectedIndex}`)?.focus();
+  }, [state]);
+
   const { setBottomBarExpanded } = React.useContext(SettingsContext);
 
-  const handleLinkClick = () => {
-    if (setBottomBarExpanded) setBottomBarExpanded(false);
+  const handleLinkClick = (index: number) => {
+    if (setBottomBarExpanded) {
+      setBottomBarExpanded(false);
+    }
+    dispatch({ type: ActionKind.select, payload: index });
   };
 
   return (
@@ -77,6 +147,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
           autoComplete="off"
           disabled={!(classes.length || teachers?.length || rooms?.length)}
           name="search-value"
+          ref={inputRef}
         />
         {value.length > 0 && (
           <button
@@ -93,18 +164,19 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
           <div className="bg-gray-50 transition-all max-h-[27vh] lg:max-h-[50vh] overflow-auto rounded-b-lg border border-gray-300 border-t-0">
             {filteredLinks &&
               filteredLinks.length > 0 &&
-              filteredLinks.map((link) => (
+              filteredLinks.map((link, index) => (
                 <Link
                   key={`search-${link.type}-${link.value}`}
                   href={`/${link.type}/${link.value}`}
                 >
                   <a
-                    className={`mb-2 mx-4 first:mt-4 last:mb-4 px-1 py-px rounded transition duration-100 hover:bg-gray-100 flex ${
+                    id={`link-${index}`}
+                    className={`mb-2 mx-4 first:mt-4 last:mb-4 px-1 py-px rounded transition duration-100 hover:bg-gray-100 focus:bg-gray-100 flex ${
                       router.asPath === `/${link.type}/${link.value}`
-                        ? 'bg-gray-200 hover:bg-gray-200 font-bold'
+                        ? 'bg-gray-200 hover:bg-gray-200 focus:bg-gray-200 font-bold'
                         : ''
                     }`}
-                    onClick={() => handleLinkClick()}
+                    onClick={() => handleLinkClick(index)}
                   >
                     {link.type === 'class' && (
                       <AcademicCapIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
