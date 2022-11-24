@@ -55,6 +55,7 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
         <button
           type="button"
           onClick={handlePrint}
+          title="Drukuj"
           aria-label="Drukuj"
           className="bg-gray-50 mr-4 px-2 py-1 rounded border border-gray-300"
         >
@@ -64,6 +65,7 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
           <button
             type="button"
             onClick={() => handleDesktopComponentButtonClick('table')}
+            title="Tabela"
             aria-label="Tabela"
             className={`px-2 py-1 rounded-l ${
               desktopComponent === 'table' ? 'bg-blue-200' : ''
@@ -74,6 +76,7 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
           <button
             type="button"
             onClick={() => handleDesktopComponentButtonClick('list')}
+            title="Lista"
             aria-label="Lista"
             className={`px-2 py-1 rounded-r ${
               desktopComponent === 'list' ? 'bg-blue-200' : ''
