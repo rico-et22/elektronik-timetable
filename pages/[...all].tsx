@@ -107,7 +107,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       },
       timeTableStatus,
     },
-    revalidate: 60,
+    revalidate: 12 * 3600,
   };
 };
 
