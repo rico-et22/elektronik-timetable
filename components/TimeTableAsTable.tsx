@@ -51,12 +51,14 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
         currentDate.getHours(),
         currentDate.getMinutes(),
       ];
-      return (
-        new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
-          new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
-        new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) <=
-          new Date().setHours(endTimeSplit[0], endTimeSplit[1])
-      );
+      if (typeof window !== 'undefined')
+        return (
+          new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
+            new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
+          new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) <=
+            new Date().setHours(endTimeSplit[0], endTimeSplit[1])
+        );
+      return false;
     },
     [],
   );

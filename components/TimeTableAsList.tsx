@@ -65,7 +65,10 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
         currentDate.getHours(),
         currentDate.getMinutes(),
       ];
-      if (selectedDayIndex === new Date().getDay() - 1)
+      if (
+        selectedDayIndex === new Date().getDay() - 1 &&
+        typeof window !== 'undefined'
+      )
         return (
           new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
             new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
