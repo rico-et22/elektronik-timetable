@@ -30,6 +30,14 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
 
   const router = useRouter();
 
+  const [isClientSide, setIsClientSide] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsClientSide(true);
+    }
+  }, []);
+
   React.useEffect(() => {
     if (timeTable?.dayNames?.length > 0) {
       const dayNumber = new Date().getDay();
@@ -65,10 +73,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
         currentDate.getHours(),
         currentDate.getMinutes(),
       ];
-      if (
-        selectedDayIndex === new Date().getDay() - 1 &&
-        typeof window !== 'undefined'
-      )
+      if (selectedDayIndex === new Date().getDay() - 1 && isClientSide)
         return (
           new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
             new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
@@ -77,7 +82,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
         );
       return false;
     },
-    [selectedDayIndex],
+    [selectedDayIndex, isClientSide],
   );
 
   const dayTrimData = React.useMemo(

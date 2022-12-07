@@ -22,6 +22,14 @@ interface Props {
 const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
   const { showShortHours, shortHours } = React.useContext(SettingsContext);
 
+  const [isClientSide, setIsClientSide] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsClientSide(true);
+    }
+  }, []);
+
   const router = useRouter();
 
   const getClassData = React.useCallback(
@@ -51,7 +59,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
         currentDate.getHours(),
         currentDate.getMinutes(),
       ];
-      if (typeof window !== 'undefined')
+      if (isClientSide)
         return (
           new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
             new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
@@ -60,7 +68,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
         );
       return false;
     },
-    [],
+    [isClientSide],
   );
 
   const hourData = React.useMemo(() => {
