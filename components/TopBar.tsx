@@ -11,6 +11,7 @@ import getRouteContext from 'helpers/getRouteContext';
 import { SettingsContext } from 'pages/_app';
 import { DesktopComponent } from 'types/SettingsContext';
 import ShortHoursSwitcher from 'components/ShortHoursSwitcher';
+import ThemeSwitcher from 'components/ThemeSwitcher';
 
 type TopBarProps = {
   timeTableList: List;
@@ -57,11 +58,11 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
           onClick={handlePrint}
           title="Drukuj"
           aria-label="Drukuj"
-          className="bg-gray-50 mr-4 px-2 py-1 rounded border border-gray-300"
+          className="bg-gray-50 px-2 py-1 rounded border border-gray-300"
         >
           <PrinterIcon className="h-8 text-gray-700" />
         </button>
-        <div className="bg-gray-50 flex items-center rounded border border-gray-300">
+        <div className="bg-gray-50 mx-4 flex items-center rounded border border-gray-300">
           <button
             type="button"
             onClick={() => handleDesktopComponentButtonClick('table')}
@@ -85,6 +86,7 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
             <CollectionIcon className="h-8 text-gray-700" />
           </button>
         </div>
+        <ThemeSwitcher />
       </div>
     </div>
   );
