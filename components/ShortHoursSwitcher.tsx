@@ -15,7 +15,7 @@ const ShortHoursSwitcher = ({ small }: Props) => {
 
   return (
     <div
-      className={`bg-gray-50 flex items-center rounded border border-gray-300 ${
+      className={`bg-gray-50 dark:bg-gray-800 flex items-center rounded border border-gray-300 dark:border-gray-700 ${
         small ? 'text-xs' : ''
       }`}
     >
@@ -25,7 +25,9 @@ const ShortHoursSwitcher = ({ small }: Props) => {
         title="Normalne lekcje - 45 minut"
         aria-label="Normalne lekcje - 45 minut"
         className={`px-2 py-1 rounded-l ${
-          !showShortHours ? 'bg-blue-200' : ''
+          !showShortHours
+            ? 'bg-blue-200 dark:text-gray-700'
+            : 'dark:text-gray-300'
         }`}
       >
         45’
@@ -35,7 +37,11 @@ const ShortHoursSwitcher = ({ small }: Props) => {
         onClick={() => handleShortHoursButtonClick(true)}
         title="Skrócone lekcje - 30 minut"
         aria-label="Skrócone lekcje - 30 minut"
-        className={`px-2 py-1 rounded-r ${showShortHours ? 'bg-blue-200' : ''}`}
+        className={`px-2 py-1 rounded-r ${
+          showShortHours
+            ? 'bg-blue-200 dark:text-gray-700'
+            : 'dark:text-gray-300'
+        }`}
       >
         30’
       </button>

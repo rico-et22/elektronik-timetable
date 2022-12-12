@@ -96,7 +96,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
         {open && <ChevronUpIcon className="h-5 w-5" />}
       </button>
       <div
-        className="bg-white rounded-b-lg overflow-hidden transition-all"
+        className="bg-white dark:bg-gray-900 rounded-b-lg overflow-hidden transition-all"
         style={{ maxHeight: 0 }}
         ref={selectorRef}
       >
@@ -112,9 +112,9 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
                   href={`/room/${item.value}`}
                 >
                   <a
-                    className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-green-100 ${
+                    className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-green-100 dark:hover:text-gray-700 ${
                       router.asPath === `/room/${item.value}`
-                        ? 'bg-green-200 hover:bg-green-200'
+                        ? 'bg-green-200 dark:text-gray-700 hover:bg-green-200 font-bold'
                         : ''
                     }`}
                     onClick={() => handleLinkClick()}

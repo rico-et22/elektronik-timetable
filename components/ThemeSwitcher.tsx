@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { DesktopComputerIcon, ChevronDownIcon } from '@heroicons/react/outline';
+import {
+  DesktopComputerIcon,
+  SunIcon,
+  MoonIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/outline';
 
 enum Themes {
   system = 'system',
@@ -29,10 +34,6 @@ const themeSwitcherItems: ThemeSwitcherItems[] = [
 
 const ThemeSwitcher = () => {
   const [selected, setSelected] = React.useState<Themes>(Themes.system);
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelected(event.target.value as Themes);
-  };
 
   React.useEffect(() => {
     const theme = window.localStorage.getItem('theme');
@@ -75,11 +76,19 @@ const ThemeSwitcher = () => {
 
   return (
     <div className="flex items-center relative">
-      <DesktopComputerIcon className="h-8 left-2 absolute text-gray-700 pointer-events-none" />
+      {selected === Themes.system && (
+        <DesktopComputerIcon className="h-8 left-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
+      )}
+      {selected === Themes.light && (
+        <SunIcon className="h-8 left-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
+      )}
+      {selected === Themes.dark && (
+        <MoonIcon className="h-8 left-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
+      )}
       <select
-        onChange={handleChange}
+        onChange={(event) => setSelected(event.target.value as Themes)}
         value={selected}
-        className="appearance-none px-12 py-2 bg-gray-50 rounded border border-gray-300 cursor-pointer"
+        className="appearance-none px-12 py-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 cursor-pointer"
       >
         {themeSwitcherItems.map((item) => (
           <option value={item.name} key={item.name}>
@@ -87,7 +96,7 @@ const ThemeSwitcher = () => {
           </option>
         ))}
       </select>
-      <ChevronDownIcon className="h-6 right-2 absolute text-gray-700 pointer-events-none" />
+      <ChevronDownIcon className="h-6 right-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
     </div>
   );
 };

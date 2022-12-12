@@ -110,7 +110,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
 
   return (
     <div className="pb-24 lg:pb-4">
-      <div className="bg-gray-200 flex justify-between px-6 mb-8 sticky top-0">
+      <div className="bg-gray-200 dark:bg-gray-700 flex justify-between px-6 mb-8 sticky top-0">
         {timeTable.dayNames.map((dayName, index) => (
           <button
             type="button"
@@ -133,7 +133,10 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
             index <= dayTrimData.lastNotEmptyIndex[selectedDayIndex]
           )
             return (
-              <div key={`hour-${key}`} className="shadow rounded mb-5 flex">
+              <div
+                key={`hour-${key}`}
+                className="shadow dark:shadow-none mb-5 flex"
+              >
                 <div
                   className={`text-white w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center ${
                     isCurrentLesson(key[1].timeFrom, key[1].timeTo)
@@ -148,7 +151,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                     {key[1].timeFrom} - {key[1].timeTo}
                   </span>
                 </div>
-                <div className="bg-gray-50 w-full px-4 py-1 overflow-hidden">
+                <div className="rounded-r bg-gray-50 dark:bg-gray-800 dark:border-r dark:border-t dark:border-b dark:border-gray-700 w-full px-4 py-1 overflow-hidden">
                   {selectedDayIndex !== undefined &&
                     timeTable.days[selectedDayIndex][index].length > 0 &&
                     timeTable.days[selectedDayIndex][index].map(

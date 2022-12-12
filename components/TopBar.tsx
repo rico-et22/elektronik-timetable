@@ -38,14 +38,16 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
   });
 
   return (
-    <div className="bg-gray-100 flex h-[4.5rem] px-10 filter drop-shadow-xl">
+    <div className="bg-gray-100 dark:bg-gray-900 flex h-[4.5rem] px-10 filter drop-shadow-xl dark:drop-shadow-none dark:border-b dark:border-gray-700">
       <div className="w-full flex items-center">
         <ShortHoursSwitcher />
       </div>
       <div className=" w-full flex justify-center items-center">
         <h2 className="text-lg truncate">
           {routeContext.name && routeContext.typeName && (
-            <span className="text-gray-500">{routeContext.typeName} / </span>
+            <span className="text-gray-500 dark:text-gray-400">
+              {routeContext.typeName} /{' '}
+            </span>
           )}
           {routeContext.name && (
             <span className="font-medium">{routeContext.name}</span>
@@ -58,11 +60,11 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
           onClick={handlePrint}
           title="Drukuj"
           aria-label="Drukuj"
-          className="bg-gray-50 px-2 py-1 rounded border border-gray-300"
+          className="bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded border border-gray-300 dark:border-gray-700"
         >
-          <PrinterIcon className="h-8 text-gray-700" />
+          <PrinterIcon className="h-8 text-gray-700 dark:text-gray-300" />
         </button>
-        <div className="bg-gray-50 mx-4 flex items-center rounded border border-gray-300">
+        <div className="bg-gray-50 dark:bg-gray-800 mx-4 flex items-center rounded border border-gray-300 dark:border-gray-700">
           <button
             type="button"
             onClick={() => handleDesktopComponentButtonClick('table')}
@@ -72,7 +74,13 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
               desktopComponent === 'table' ? 'bg-blue-200' : ''
             }`}
           >
-            <TableIcon className="h-8 text-gray-700" />
+            <TableIcon
+              className={`h-8 ${
+                desktopComponent === 'table'
+                  ? 'dark:text-gray-700'
+                  : 'text-gray-700 dark:text-gray-300'
+              }`}
+            />
           </button>
           <button
             type="button"
@@ -83,7 +91,13 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
               desktopComponent === 'list' ? 'bg-blue-200' : ''
             }`}
           >
-            <CollectionIcon className="h-8 text-gray-700" />
+            <CollectionIcon
+              className={`h-8 ${
+                desktopComponent === 'list'
+                  ? 'dark:text-gray-700'
+                  : 'text-gray-700 dark:text-gray-300'
+              }`}
+            />
           </button>
         </div>
         <ThemeSwitcher />

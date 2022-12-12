@@ -47,7 +47,7 @@ class MyDocument extends Document {
           <meta property="og:image" content="/og-image.png" />
           <link rel="manifest" href="/manifest.json" />
         </Head>
-        <body className="text-neutral-800">
+        <body className="text-neutral-800 dark:text-neutral-200">
           <Main />
           <NextScript />
         </body>
