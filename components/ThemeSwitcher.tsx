@@ -77,7 +77,7 @@ const ThemeSwitcher = () => {
   };
 
   return (
-    <div className="w-24 flex items-center relative bg-gray-50 dark:lg:bg-zinc-800 dark:bg-zinc-900 rounded border border-gray-300 dark:border-zinc-700">
+    <div className="w-20 flex items-center relative bg-gray-50 dark:lg:bg-zinc-800 dark:bg-zinc-900 rounded border border-gray-300 dark:border-zinc-700">
       {theme === Themes.system && (
         <DesktopComputerIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
       )}
@@ -88,6 +88,7 @@ const ThemeSwitcher = () => {
         <MoonIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
       )}
       <select
+        title="Motyw"
         onChange={handleChange}
         value={theme}
         className="appearance-none py-2 w-full opacity-0 cursor-pointer"
