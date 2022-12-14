@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const Credits = () => (
   <div>
-    <p className="text-center text-xs text-gray-500 dark:text-gray-400 mb-4">
+    <p className="text-center text-xs text-gray-500 dark:text-zinc-400 mb-4">
       Źródło danych:{' '}
       <a
         href={process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}
@@ -13,7 +13,7 @@ const Credits = () => (
         {process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}
       </a>
     </p>
-    <p className="text-center text-xs text-gray-500 dark:text-gray-400">
+    <p className="text-center text-xs text-gray-500 dark:text-zinc-400">
       Frontend coded with ❤️ by{' '}
       <a
         href="https://kamilpawlak.com"

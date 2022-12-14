@@ -75,7 +75,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
         {open && <ChevronUpIcon className="h-5 w-5" />}
       </button>
       <div
-        className="bg-white dark:bg-gray-900 rounded-b-lg overflow-hidden transition-all"
+        className="bg-white dark:bg-zinc-900 rounded-b-lg overflow-hidden transition-all"
         style={{ maxHeight: 0 }}
         ref={selectorRef}
       >
@@ -93,7 +93,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
                   <a
                     className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-red-100 dark:hover:text-gray-700 ${
                       router.asPath === `/teacher/${item.value}`
-                        ? 'bg-red-200 dark:text-gray-700 hover:bg-red-200 font-bold'
+                        ? 'bg-red-200 dark:text-zinc-700 hover:bg-red-200 font-bold'
                         : ''
                     }`}
                     onClick={() => handleLinkClick()}

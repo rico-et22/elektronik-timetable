@@ -95,7 +95,7 @@ const Layout = ({
       >
         <HeaderBar />
         <div
-          className={`relative min-h-[calc(100vh-4.5rem)] dark:bg-gray-900 ${
+          className={`relative min-h-[calc(100vh-4.5rem)] dark:bg-zinc-900 ${
             showSpinner ? 'h-[calc(100vh-9.75rem)] overflow-hidden' : ''
           }`}
         >
@@ -118,7 +118,7 @@ const Layout = ({
         )}
       </div>
       <div className="hidden lg:flex">
-        <div className="w-1/4 relative h-screen dark:bg-gray-800">
+        <div className="w-1/4 relative h-screen dark:bg-zinc-800">
           <HeaderBar />
           {timeTableListStatus === 'ok' && (
             <SideBar
@@ -128,7 +128,7 @@ const Layout = ({
           )}
         </div>
         <div
-          className={`w-3/4 h-screen relative dark:bg-gray-900 ${
+          className={`w-3/4 h-screen relative dark:bg-zinc-900 ${
             showSpinner ? 'overflow-hidden' : 'overflow-y-auto'
           }`}
           ref={desktopLayoutRef}

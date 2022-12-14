@@ -5,7 +5,11 @@ import { TimetableList } from '@wulkanowy/timetable-parser';
 import App from 'next/app';
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { DesktopComponent, SettingsContextType } from 'types/SettingsContext';
+import {
+  DesktopComponent,
+  SettingsContextType,
+  Themes,
+} from 'types/SettingsContext';
 import fetchTimetableList from 'helpers/fetchTimetableList';
 import { TimeTableListResponse, TimeTableStatus } from 'types/TimeTable';
 
@@ -88,6 +92,7 @@ const defaultContextValue: SettingsContextType = {
   bottomBarExpanded: false,
   shortHours,
   showShortHours: false,
+  theme: Themes.system,
 };
 
 export const SettingsContext =
@@ -106,6 +111,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const [showShortHours, setShowShortHours] = useState(
     defaultContextValue.showShortHours,
   );
+  const [theme, setTheme] = useState(defaultContextValue.theme);
   const router = useRouter();
 
   useEffect(() => {
@@ -137,8 +143,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       shortHours,
       showShortHours,
       setShowShortHours,
+      theme,
+      setTheme,
     }),
-    [bottomBarExpanded, desktopComponent, showShortHours, showSpinner],
+    [bottomBarExpanded, desktopComponent, showShortHours, showSpinner, theme],
   );
 
   return (

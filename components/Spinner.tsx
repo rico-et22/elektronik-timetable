@@ -4,7 +4,7 @@ const Spinner = () => (
   <div className="absolute w-full h-full top-0 left-0 bg-slate-100/25 backdrop-blur flex items-center justify-center">
     <svg
       role="status"
-      className="inline mr-2 w-12 h-12 text-red-200 dark:text-gray-800 animate-spin fill-elektronik-red"
+      className="inline mr-2 w-12 h-12 text-red-200 dark:text-zinc-800 animate-spin fill-elektronik-red"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

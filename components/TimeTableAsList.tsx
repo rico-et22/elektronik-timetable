@@ -110,7 +110,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
 
   return (
     <div className="pb-24 lg:pb-4">
-      <div className="bg-gray-200 dark:bg-gray-700 flex justify-between px-6 mb-8 sticky top-0">
+      <div className="bg-gray-200 dark:bg-zinc-700 flex justify-between px-6 mb-8 sticky top-0">
         {timeTable.dayNames.map((dayName, index) => (
           <button
             type="button"
@@ -151,7 +151,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                     {key[1].timeFrom} - {key[1].timeTo}
                   </span>
                 </div>
-                <div className="rounded-r bg-gray-50 dark:bg-gray-800 dark:border-r dark:border-t dark:border-b dark:border-gray-700 w-full px-4 py-1 overflow-hidden">
+                <div className="rounded-r bg-gray-50 dark:bg-zinc-800 dark:border-r dark:border-t dark:border-b dark:border-zinc-700 w-full px-4 py-1 overflow-hidden">
                   {selectedDayIndex !== undefined &&
                     timeTable.days[selectedDayIndex][index].length > 0 &&
                     timeTable.days[selectedDayIndex][index].map(

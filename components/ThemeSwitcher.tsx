@@ -5,19 +5,15 @@ import {
   MoonIcon,
   ChevronDownIcon,
 } from '@heroicons/react/outline';
+import { Themes } from 'types/SettingsContext';
+import { SettingsContext } from 'pages/_app';
 
-enum Themes {
-  system = 'system',
-  light = 'light',
-  dark = 'dark',
-}
-
-type ThemeSwitcherItems = {
+type ThemeSwitcherItem = {
   name: Themes;
   text: string;
 };
 
-const themeSwitcherItems: ThemeSwitcherItems[] = [
+const themeSwitcherItems: ThemeSwitcherItem[] = [
   {
     name: Themes.system,
     text: 'Systemowy',
@@ -33,62 +29,68 @@ const themeSwitcherItems: ThemeSwitcherItems[] = [
 ];
 
 const ThemeSwitcher = () => {
-  const [selected, setSelected] = React.useState<Themes>(Themes.system);
+  const { theme, setTheme } = React.useContext(SettingsContext);
 
   React.useEffect(() => {
-    const theme = window.localStorage.getItem('theme');
-    if (theme) {
-      setSelected(JSON.parse(theme) as Themes);
+    const localTheme = window.localStorage.getItem('theme');
+    if (localTheme && setTheme) {
+      setTheme(JSON.parse(localTheme) as Themes);
     } else {
       window.localStorage.setItem('theme', JSON.stringify(Themes.system));
     }
-  }, []);
+  }, [setTheme]);
 
   React.useEffect(() => {
-    window.localStorage.setItem('theme', JSON.stringify(selected));
+    window.localStorage.setItem('theme', JSON.stringify(theme));
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const root = window.document.documentElement;
 
     if (
-      selected === Themes.dark ||
-      (selected === Themes.system && mediaQuery.matches)
+      theme === Themes.dark ||
+      (theme === Themes.system && mediaQuery.matches)
     ) {
       root.classList.add(Themes.dark);
     } else {
       root.classList.remove(Themes.dark);
     }
 
-    const setTheme = () => {
-      if (selected === Themes.system && mediaQuery.matches) {
+    const setClass = () => {
+      if (theme === Themes.system && mediaQuery.matches) {
         root.classList.add(Themes.dark);
-      } else if (selected === Themes.system && !mediaQuery.matches) {
+      } else if (theme === Themes.system && !mediaQuery.matches) {
         root.classList.remove(Themes.dark);
       }
     };
 
-    mediaQuery.addEventListener('change', setTheme);
+    mediaQuery.addEventListener('change', setClass);
 
     return () => {
-      mediaQuery.removeEventListener('change', setTheme);
+      mediaQuery.removeEventListener('change', setClass);
     };
-  }, [selected]);
+  }, [theme]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (setTheme) {
+      setTheme(event.target.value as Themes);
+    }
+  };
 
   return (
-    <div className="flex items-center relative">
-      {selected === Themes.system && (
-        <DesktopComputerIcon className="h-8 left-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
+    <div className="w-24 flex items-center relative bg-gray-50 dark:lg:bg-zinc-800 dark:bg-zinc-900 rounded border border-gray-300 dark:border-zinc-700">
+      {theme === Themes.system && (
+        <DesktopComputerIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
       )}
-      {selected === Themes.light && (
-        <SunIcon className="h-8 left-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
+      {theme === Themes.light && (
+        <SunIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
       )}
-      {selected === Themes.dark && (
-        <MoonIcon className="h-8 left-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
+      {theme === Themes.dark && (
+        <MoonIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
       )}
       <select
-        onChange={(event) => setSelected(event.target.value as Themes)}
-        value={selected}
-        className="appearance-none px-12 py-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 cursor-pointer"
+        onChange={handleChange}
+        value={theme}
+        className="appearance-none py-2 w-full opacity-0 cursor-pointer"
       >
         {themeSwitcherItems.map((item) => (
           <option value={item.name} key={item.name}>
@@ -96,7 +98,7 @@ const ThemeSwitcher = () => {
           </option>
         ))}
       </select>
-      <ChevronDownIcon className="h-6 right-2 absolute text-gray-700 dark:text-gray-300 pointer-events-none" />
+      <ChevronDownIcon className="h-6 right-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
     </div>
   );
 };

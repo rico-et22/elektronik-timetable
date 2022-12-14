@@ -7,7 +7,7 @@ interface Props {
 }
 
 const NoTimeTableError = ({ status: timeTableStatus }: Props) => (
-  <div className="flex flex-col items-center text-gray-500 dark:text-gray-300 mt-20">
+  <div className="flex flex-col items-center text-gray-500 dark:text-zinc-300 mt-20">
     {timeTableStatus === 'empty' && (
       <>
         <EmojiSadIcon className="w-20 h-20" />

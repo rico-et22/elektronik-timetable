@@ -3,6 +3,12 @@ import { ShortHour } from 'types/ShortHour';
 
 export type DesktopComponent = 'table' | 'list';
 
+export enum Themes {
+  system = 'system',
+  light = 'light',
+  dark = 'dark',
+}
+
 export interface SettingsContextType {
   desktopComponent: DesktopComponent;
   setDesktopComponent?: Dispatch<SetStateAction<DesktopComponent>>;
@@ -12,4 +18,6 @@ export interface SettingsContextType {
   shortHours: ShortHour[];
   showShortHours: boolean;
   setShowShortHours?: Dispatch<SetStateAction<boolean>>;
+  theme: Themes;
+  setTheme?: Dispatch<SetStateAction<Themes>>;
 }
