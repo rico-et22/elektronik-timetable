@@ -78,19 +78,19 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
 
   return (
     <div className="px-10 pb-16 mt-8">
-      <table className="w-full table-fixed border-separate border-0 drop-shadow-lg rounded-lg border-spacing-0 ">
+      <table className="w-full table-fixed border-separate border-0 drop-shadow-lg dark:drop-shadow-none rounded-lg border-spacing-0 ">
         <thead className="rounded">
           <tr className="text-white text-sm rounded-t-lg">
-            <th className="py-3 w-10 border border-gray-100/50 bg-elektronik-red rounded-tl-lg">
+            <th className="py-3 w-10 border border-gray-100/50 dark:border-zinc-700/50 bg-elektronik-red rounded-tl-lg">
               Nr
             </th>
-            <th className="py-3 w-24 border bg-elektronik-red border-gray-100/50">
+            <th className="py-3 w-24 border bg-elektronik-red border-gray-100/50 dark:border-zinc-700/50">
               Godz.
             </th>
             {timeTable.dayNames.map((dayName, index) => (
               <th
                 key={`table-dayName-${dayName}`}
-                className={`py-3 border bg-elektronik-red border-gray-100/50  ${
+                className={`py-3 border bg-elektronik-red border-gray-100/50 dark:border-zinc-700/50 ${
                   index === timeTable.dayNames.length - 1 ? 'rounded-tr-lg' : ''
                 }`}
               >
@@ -109,8 +109,8 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
                     : ''
                 } ${
                   isCurrentLesson(key[1].timeFrom, key[1].timeTo)
-                    ? 'bg-green-200'
-                    : 'bg-gray-200'
+                    ? 'bg-green-200 dark:text-zinc-700'
+                    : 'bg-gray-200 dark:bg-zinc-700'
                 }`}
               >
                 <span className="font-bold">{key[1].number}</span>
@@ -118,8 +118,8 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
               <td
                 className={`text-center p-2 ${
                   isCurrentLesson(key[1].timeFrom, key[1].timeTo)
-                    ? 'bg-green-200'
-                    : 'bg-gray-200'
+                    ? 'bg-green-200 dark:text-zinc-700'
+                    : 'bg-gray-200 dark:bg-zinc-700'
                 }`}
               >
                 {key[1].timeFrom} - {key[1].timeTo}
@@ -127,7 +127,7 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
               {timeTable.dayNames.map((dayName, dayIndex) => (
                 <React.Fragment key={`table-hour-${key}-dayName-${dayName}`}>
                   <td
-                    className={`bg-gray-50 p-2 border
+                    className={`bg-gray-50 dark:bg-zinc-800 p-2 border dark:border-zinc-700
                                   ${
                                     index ===
                                       Object.entries(timeTable.hours).length -

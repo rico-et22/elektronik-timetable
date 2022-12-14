@@ -3,7 +3,7 @@ import InlineSVG from 'react-inlinesvg';
 import ShortHoursSwitcher from 'components/ShortHoursSwitcher';
 
 const HeaderBar = () => (
-  <div className="w-full bg-elektronik-red p-4 relative flex items-center justify-between z-10 filter drop-shadow-md">
+  <div className="w-full bg-elektronik-red p-4 relative flex items-center justify-between z-10 filter drop-shadow-md dark:drop-shadow-none">
     <div className="flex items-center flex-shrink-0">
       <div className="bg-white flex items-center justify-center p-1 mr-3 rounded">
         <InlineSVG src="/logo-zse-wektor.svg" className="w-8 h-8" />

@@ -140,7 +140,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
         </div>
         <input
           type="text"
-          className={`bg-gray-100 w-full px-12 py-3 flex justify-between items-center transition-all duration-75 text-inherit border border-gray-400 placeholder:text-neutral-500 disabled:opacity-25 disabled:cursor-not-allowed ${roundedClass}`}
+          className={`bg-gray-100 dark:bg-zinc-900 w-full px-12 py-3 flex justify-between items-center transition-all duration-75 text-inherit border border-gray-400 dark:border-zinc-600 placeholder:text-neutral-500 placeholder:dark:text-neutral-400 disabled:opacity-25 disabled:cursor-not-allowed ${roundedClass}`}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Szukaj..."
@@ -161,7 +161,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
       </div>
       <div className="rounded-b-lg overflow-hidden">
         {value.length > 0 && (
-          <div className="bg-gray-50 transition-all max-h-[27vh] lg:max-h-[50vh] overflow-auto rounded-b-lg border border-gray-300 border-t-0">
+          <div className="bg-gray-50 dark:bg-zinc-900 transition-all max-h-[27vh] lg:max-h-[50vh] overflow-auto rounded-b-lg border border-gray-300 dark:border-zinc-700 border-t-0">
             {filteredLinks &&
               filteredLinks.length > 0 &&
               filteredLinks.map((link, index) => (
@@ -171,9 +171,9 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
                 >
                   <a
                     id={`link-${index}`}
-                    className={`mb-2 mx-4 first:mt-4 last:mb-4 px-1 py-px rounded transition duration-100 hover:bg-gray-100 focus:bg-gray-100 flex ${
+                    className={`mb-2 mx-4 first:mt-4 last:mb-4 px-1 py-px rounded transition duration-100 hover:bg-gray-100 hover:dark:bg-zinc-800 focus:bg-gray-100 focus:dark:bg-zinc-800 flex ${
                       router.asPath === `/${link.type}/${link.value}`
-                        ? 'bg-gray-200 hover:bg-gray-200 focus:bg-gray-200 font-bold'
+                        ? 'bg-gray-200 dark:bg-zinc-700 hover:bg-gray-200 hover:dark:bg-zinc-700 focus:bg-gray-200 focus:dark:bg-zinc-700 font-bold'
                         : ''
                     }`}
                     onClick={() => handleLinkClick(index)}

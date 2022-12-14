@@ -14,6 +14,7 @@ import Credits from 'components/Credits';
 import { SettingsContext } from 'pages/_app';
 import getRouteContext from 'helpers/getRouteContext';
 import Search from 'components/Search';
+import ThemeSwitcher from 'components/ThemeSwitcher';
 
 type BottomBarProps = {
   timeTableList: List;
@@ -55,20 +56,30 @@ const BottomBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
 
   return (
     <div
-      className={`w-full fixed bottom-0 transition-all duration-300 transform-gpu ease-out bg-gray-200 filter drop-shadow-2xl flex flex-col z-50 ${
+      className={`w-full fixed bottom-0 transition-all duration-300 transform-gpu ease-out bg-gray-200 dark:bg-zinc-800 filter drop-shadow-2xl flex flex-col z-50 ${
         bottomBarExpanded ? 'h-full overflow-auto' : 'h-[5.25rem]'
       }`}
       id="bottomBar"
     >
-      <div className="sticky top-0 bg-gray-300 p-4 z-50">
+      <div
+        className={`sticky top-0 bg-gray-300 p-4 z-50 dark:border-zinc-700 ${
+          bottomBarExpanded
+            ? 'dark:bg-zinc-900 dark:border-b'
+            : 'dark:bg-zinc-800 dark:border-t'
+        }`}
+      >
         <button
           type="button"
           onClick={() => handleToggleButtonClick()}
-          className="bg-gray-100 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg"
+          className={`bg-gray-100 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg ${
+            bottomBarExpanded ? 'dark:bg-zinc-800' : 'dark:bg-zinc-900'
+          }`}
         >
           <h2 className="text-lg truncate">
             {routeContext.name && routeContext.typeName && (
-              <span className="text-gray-500">{routeContext.typeName} / </span>
+              <span className="text-gray-500 dark:text-zinc-400">
+                {routeContext.typeName} /{' '}
+              </span>
             )}
             {routeContext.name && (
               <span className="font-medium">{routeContext.name}</span>
@@ -86,8 +97,11 @@ const BottomBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
         <RoomsSelector rooms={rooms} />
       </div>
       <div className="px-4 mb-5 mt-auto">
+        <div className="mb-4 flex justify-center">
+          <ThemeSwitcher />
+        </div>
         {generatedDate && (
-          <p className="text-xs text-center text-gray-500 mb-4">
+          <p className="text-xs text-center text-gray-500 dark:text-zinc-400 mb-4">
             Wygenerowano {generatedDate}
           </p>
         )}
