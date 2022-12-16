@@ -94,7 +94,11 @@ const ThemeSwitcher = () => {
         className="appearance-none py-2 w-full opacity-0 cursor-pointer"
       >
         {themeSwitcherItems.map((item) => (
-          <option value={item.name} key={item.name}>
+          <option
+            value={item.name}
+            key={item.name}
+            className="dark:text-gray-700 px-2"
+          >
             {item.text}
           </option>
         ))}
