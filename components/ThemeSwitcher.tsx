@@ -50,16 +50,16 @@ const ThemeSwitcher = () => {
       theme === Themes.dark ||
       (theme === Themes.system && mediaQuery.matches)
     ) {
-      root.classList.add(Themes.dark);
+      root.classList.add(Themes.dark, 'color-scheme-dark');
     } else {
-      root.classList.remove(Themes.dark);
+      root.classList.remove(Themes.dark, 'color-scheme-dark');
     }
 
     const setClass = () => {
       if (theme === Themes.system && mediaQuery.matches) {
-        root.classList.add(Themes.dark);
+        root.classList.add(Themes.dark, 'color-scheme-dark');
       } else if (theme === Themes.system && !mediaQuery.matches) {
-        root.classList.remove(Themes.dark);
+        root.classList.remove(Themes.dark, 'color-scheme-dark');
       }
     };
 

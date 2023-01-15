@@ -25,3 +25,7 @@ a {
 .border-spacing-0 {
   border-spacing: 0;
 }
+
+.color-scheme-dark {
+  color-scheme: dark;
+}
