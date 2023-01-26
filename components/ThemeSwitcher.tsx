@@ -97,7 +97,7 @@ const ThemeSwitcher = () => {
           <option
             value={item.name}
             key={item.name}
-            className="dark:text-gray-700 px-2"
+            className="text-gray-700 dark:text-zinc-300 px-2"
           >
             {item.text}
           </option>
