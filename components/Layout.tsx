@@ -60,9 +60,9 @@ const Layout = ({
           isCorrect = true;
         }
       }
-      if (isCorrect) router.push(parsedPath);
+      if (isCorrect) router.replace(parsedPath);
       else if (timeTableList.classes.length > 0) {
-        router.push(`/class/${timeTableList.classes[0].value}`);
+        router.replace(`/class/${timeTableList.classes[0].value}`);
       }
     }
   }, [
