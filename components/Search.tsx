@@ -1,10 +1,10 @@
 import {
   AcademicCapIcon,
-  LocationMarkerIcon,
-  SearchIcon,
+  MapPinIcon,
+  MagnifyingGlassIcon,
   UserGroupIcon,
-  XIcon,
-} from '@heroicons/react/outline';
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import { ListItem } from '@wulkanowy/timetable-parser';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -136,7 +136,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
     <div className="mb-8">
       <div className="relative">
         <div className="absolute top-0 left-0 h-full flex items-center ml-4">
-          <SearchIcon className="h-5 w-5" />
+          <MagnifyingGlassIcon className="h-5 w-5" />
         </div>
         <input
           type="text"
@@ -155,7 +155,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
             className="absolute top-0 right-0 h-full flex items-center mr-4"
             onClick={() => setValue('')}
           >
-            <XIcon className="h-5 w-5" />
+            <XMarkIcon className="h-5 w-5" />
           </button>
         )}
       </div>
@@ -185,7 +185,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
                       <UserGroupIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
                     )}
                     {link.type === 'room' && (
-                      <LocationMarkerIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
+                      <MapPinIcon className="h-4 w-4 mr-2 mt-1 shrink-0" />
                     )}
                     {link.name}
                   </a>

@@ -3,7 +3,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   UserGroupIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import { ListItem } from '@wulkanowy/timetable-parser';
 import Link from 'next/link';
 import { useRouter } from 'next/dist/client/router';

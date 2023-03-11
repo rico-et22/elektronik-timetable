@@ -2,8 +2,8 @@ import * as React from 'react';
 import {
   ChevronDownIcon,
   ChevronUpIcon,
-  LocationMarkerIcon,
-} from '@heroicons/react/outline';
+  MapPinIcon,
+} from '@heroicons/react/24/outline';
 import { ListItem } from '@wulkanowy/timetable-parser';
 import Link from 'next/link';
 import { useRouter } from 'next/dist/client/router';
@@ -89,7 +89,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
         )}`}
       >
         <div className="flex items-center">
-          <LocationMarkerIcon className="h-5 w-5 mr-2" />
+          <MapPinIcon className="h-5 w-5 mr-2" />
           <h2 className="text-lg font-medium">Sale</h2>
         </div>
         {!open && <ChevronDownIcon className="h-5 w-5" />}

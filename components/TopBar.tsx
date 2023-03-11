@@ -1,8 +1,8 @@
 import {
-  CollectionIcon,
-  TableIcon,
+  RectangleStackIcon,
+  TableCellsIcon,
   PrinterIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import { List } from '@wulkanowy/timetable-parser';
 import { useReactToPrint } from 'react-to-print';
 import { useRouter } from 'next/router';
@@ -74,7 +74,7 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
               desktopComponent === 'table' ? 'bg-blue-200' : ''
             }`}
           >
-            <TableIcon
+            <TableCellsIcon
               className={`h-8 ${
                 desktopComponent === 'table'
                   ? 'dark:text-zinc-700'
@@ -91,7 +91,7 @@ const TopBar = ({ timeTableList, printRef }: TopBarProps) => {
               desktopComponent === 'list' ? 'bg-blue-200' : ''
             }`}
           >
-            <CollectionIcon
+            <RectangleStackIcon
               className={`h-8 ${
                 desktopComponent === 'list'
                   ? 'dark:text-zinc-700'

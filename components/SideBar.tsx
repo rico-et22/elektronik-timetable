@@ -5,6 +5,7 @@ import TeachersSelector from 'components/Selectors/TeachersSelector';
 import RoomsSelector from 'components/Selectors/RoomsSelector';
 import Credits from 'components/Credits';
 import Search from 'components/Search';
+import ReplacementsButton from './ReplacementsButton';
 
 type BottomBarProps = {
   timeTableList: List;
