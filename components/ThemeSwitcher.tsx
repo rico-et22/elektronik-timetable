@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
-  DesktopComputerIcon,
+  ComputerDesktopIcon,
   SunIcon,
   MoonIcon,
   ChevronDownIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import { Themes } from 'types/SettingsContext';
 import { SettingsContext } from 'pages/_app';
 
@@ -79,7 +79,7 @@ const ThemeSwitcher = () => {
   return (
     <div className="w-20 flex items-center relative bg-gray-50 dark:lg:bg-zinc-800 dark:bg-zinc-900 rounded border border-gray-300 dark:border-zinc-700">
       {theme === Themes.system && (
-        <DesktopComputerIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
+        <ComputerDesktopIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
       )}
       {theme === Themes.light && (
         <SunIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />

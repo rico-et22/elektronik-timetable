@@ -1,8 +1,8 @@
 import {
   AcademicCapIcon,
-  LocationMarkerIcon,
+  MapPinIcon,
   UserGroupIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import { List } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
@@ -215,7 +215,7 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
                               router.query.all[0] !== 'room' &&
                               subject.room && (
                                 <div className="flex items-center">
-                                  <LocationMarkerIcon className="h-3 w-3 mr-1 shrink-0" />
+                                  <MapPinIcon className="h-3 w-3 mr-1 shrink-0" />
                                   <Link
                                     href={`/room/${
                                       getRoomData(subject.room)?.value
