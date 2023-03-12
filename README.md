@@ -7,6 +7,7 @@
 - Mobile-first design made to match the school's website one
 - Can run for many other Optivum-based school timetables too!
 - Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/wulkanowy/timetable-parser-js)
+- Teacher replacements view based on Zespół Szkół Elektronicznych w Rzeszowie's own API
 - Technologies: React, Next.js, TypeScript, Tailwind CSS
 
 # Getting started & preparing the timetable to use with the app
@@ -60,6 +61,11 @@ To clone the website, run `wget -mpEk <timetable_base_url> --no-check-certificat
 Example: `wget -mpEk https://www.elektronik.rzeszow.pl/plan-lekcji-2 --no-check-certificate`
 
 Then, define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://dummy-server.dev/timetable-to-serve`.
+
+## Extra feature - replacements view
+
+Compatible only with [Zespół Szkół Elektronicznych w Rzeszowie's own API.](https://www.elektronik.rzeszow.pl/api/replacements.json)
+To enable, add `NEXT_PUBLIC_REPLACEMENTS_API_URL=https://www.elektronik.rzeszow.pl/api/replacements.json` to env.
 
 ## .env example
 

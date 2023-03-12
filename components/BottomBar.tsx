@@ -15,13 +15,19 @@ import { SettingsContext } from 'pages/_app';
 import getRouteContext from 'helpers/getRouteContext';
 import Search from 'components/Search';
 import ThemeSwitcher from 'components/ThemeSwitcher';
+import ReplacementsButton from './ReplacementsButton';
 
 type BottomBarProps = {
   timeTableList: List;
   generatedDate: string | undefined;
+  hasReplacements: boolean;
 };
 
-const BottomBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
+const BottomBar = ({
+  timeTableList,
+  generatedDate,
+  hasReplacements,
+}: BottomBarProps) => {
   const { classes, rooms, teachers } = timeTableList;
   const router = useRouter();
   const { bottomBarExpanded, setBottomBarExpanded } =
@@ -76,15 +82,21 @@ const BottomBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
           }`}
         >
           <h2 className="text-lg truncate">
-            {routeContext.name && routeContext.typeName && (
-              <span className="text-gray-500 dark:text-zinc-400">
-                {routeContext.typeName} /{' '}
-              </span>
+            {!hasReplacements ? (
+              <>
+                {routeContext.name && routeContext.typeName && (
+                  <span className="text-gray-500 dark:text-zinc-400">
+                    {routeContext.typeName} /{' '}
+                  </span>
+                )}
+                {routeContext.name && (
+                  <span className="font-medium">{routeContext.name}</span>
+                )}
+                {!routeContext.name && 'Wybierz z listy...'}
+              </>
+            ) : (
+              'Lista zastępstw'
             )}
-            {routeContext.name && (
-              <span className="font-medium">{routeContext.name}</span>
-            )}
-            {!routeContext.name && 'Wybierz z listy...'}
           </h2>
           {bottomBarExpanded && <ChevronDownIcon className="h-5 w-5" />}
           {!bottomBarExpanded && <ChevronUpIcon className="h-5 w-5" />}
@@ -95,6 +107,7 @@ const BottomBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
         <ClassesSelector classes={classes} />
         <TeachersSelector teachers={teachers} />
         <RoomsSelector rooms={rooms} />
+        {process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL && <ReplacementsButton />}
       </div>
       <div className="px-4 mb-5 mt-auto">
         <div className="mb-4 flex justify-center">

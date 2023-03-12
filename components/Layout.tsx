@@ -11,12 +11,16 @@ import HeaderBar from 'components/HeaderBar';
 import TopBar from 'components/TopBar';
 import { SettingsContext } from 'pages/_app';
 import Spinner from 'components/Spinner';
+import { Replacements } from 'types/Replacements';
+import ReplacementsTable from './ReplacementsTable';
+import ReplacementsInfo from './ReplacementsInfo';
 
 interface Props {
   timeTableList: List;
   timeTableListStatus: TimeTableStatus;
   timeTable?: TimeTableData;
   timeTableStatus?: TimeTableStatus;
+  replacements?: Replacements;
 }
 
 const Layout = ({
@@ -24,6 +28,7 @@ const Layout = ({
   timeTableListStatus,
   timeTable,
   timeTableStatus,
+  replacements,
 }: Props) => {
   const router = useRouter();
   const { desktopComponent, showSpinner } = React.useContext(SettingsContext);
@@ -93,7 +98,7 @@ const Layout = ({
           timeTableStatus === 'ok' ? '' : 'h-screen flex flex-col '
         } lg:hidden`}
       >
-        <HeaderBar />
+        <HeaderBar hasReplacements={!!replacements} />
         <div
           className={`relative min-h-[calc(100vh-4.5rem)] dark:bg-zinc-900 ${
             showSpinner ? 'h-[calc(100vh-9.75rem)] overflow-hidden' : ''
@@ -105,12 +110,19 @@ const Layout = ({
               timeTableList={timeTableList}
             />
           )}
+          {replacements && (
+            <>
+              <ReplacementsInfo date={replacements.date} />
+              <ReplacementsTable replacements={replacements} />
+            </>
+          )}
           {showSpinner && <Spinner />}
         </div>
         {timeTableListStatus === 'ok' && (
           <BottomBar
             timeTableList={timeTableList}
             generatedDate={timeTable?.generatedDate}
+            hasReplacements={!!replacements}
           />
         )}
         {timeTableStatus && timeTableStatus !== 'ok' && (
@@ -119,7 +131,7 @@ const Layout = ({
       </div>
       <div className="hidden lg:flex">
         <div className="w-1/4 relative h-screen dark:bg-zinc-800">
-          <HeaderBar />
+          <HeaderBar hasReplacements={!!replacements} />
           {timeTableListStatus === 'ok' && (
             <SideBar
               timeTableList={timeTableList}
@@ -135,21 +147,42 @@ const Layout = ({
         >
           {timeTable && (
             <div ref={printRef}>
-              <TopBar timeTableList={timeTableList} printRef={printRef} />
-              {desktopComponent === 'list' && timeTableStatus === 'ok' && (
-                <TimeTableAsList
-                  timeTable={timeTable}
-                  timeTableList={timeTableList}
-                />
-              )}
-              {desktopComponent === 'table' && timeTableStatus === 'ok' && (
-                <TimeTableAsTable
-                  timeTable={timeTable}
-                  timeTableList={timeTableList}
-                />
+              <TopBar
+                timeTableList={timeTableList}
+                printRef={printRef}
+                hasReplacements={!!replacements}
+              />
+              {timeTable && (
+                <>
+                  {desktopComponent === 'list' && timeTableStatus === 'ok' && (
+                    <TimeTableAsList
+                      timeTable={timeTable}
+                      timeTableList={timeTableList}
+                    />
+                  )}
+                  {desktopComponent === 'table' && timeTableStatus === 'ok' && (
+                    <TimeTableAsTable
+                      timeTable={timeTable}
+                      timeTableList={timeTableList}
+                    />
+                  )}
+                </>
               )}
             </div>
-          )}{' '}
+          )}
+          {replacements && (
+            <div ref={printRef}>
+              <TopBar
+                timeTableList={timeTableList}
+                hasReplacements={!!replacements}
+                printRef={printRef}
+              />
+              <ReplacementsInfo date={replacements.date} />
+              {desktopComponent === 'table' && (
+                <ReplacementsTable replacements={replacements} />
+              )}
+            </div>
+          )}
           {timeTableStatus && timeTableStatus !== 'ok' && (
             <NoTimeTableError status={timeTableStatus} />
           )}
@@ -163,6 +196,7 @@ const Layout = ({
 Layout.defaultProps = {
   timeTable: undefined,
   timeTableStatus: undefined,
+  replacements: undefined,
 };
 
 export default Layout;

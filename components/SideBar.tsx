@@ -22,6 +22,7 @@ const SideBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
         <ClassesSelector classes={classes} />
         <TeachersSelector teachers={teachers} />
         <RoomsSelector rooms={rooms} />
+        {process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL && <ReplacementsButton />}
       </div>
       <div className="px-4 mb-5 mt-auto">
         {generatedDate && (
