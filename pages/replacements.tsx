@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { GetStaticProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { List } from '@wulkanowy/timetable-parser';
 import { TimeTableStatus } from 'types/TimeTable';
@@ -35,7 +35,7 @@ const ReplacementsPage: NextPage<ReplacementsPageProps> = (
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const url = process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL;
   if (url) {
     const replacements = await fetch(url).then((response) => response.json());
