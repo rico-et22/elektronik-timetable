@@ -6,7 +6,7 @@ interface Props {
 }
 
 const ReplacementsTable = ({ replacements }: Props) => (
-  <div className="px-4 lg:px-10 pb-24 lg:pb-16 overflow-x-auto">
+  <div className="px-4 lg:px-10 pb-24 lg:pb-16 overflow-x-auto dark:bg-zinc-900">
     <table className="w-full border-separate border-0 drop-shadow-lg dark:drop-shadow-none rounded-lg border-spacing-0">
       <thead className="rounded">
         <tr className="text-white text-sm rounded-t-lg">
