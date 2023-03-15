@@ -15,7 +15,7 @@ const ReplacementsButton = () => {
     <div className="mb-8">
       <Link href="/replacements" passHref>
         <a
-          className="bg-gray-700 text-white w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg"
+          className="bg-gray-600 text-white w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg"
           onClick={() => handleLinkClick()}
           onKeyPress={() => handleLinkClick()}
           role="button"
