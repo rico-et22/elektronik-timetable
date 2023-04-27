@@ -62,7 +62,7 @@ const BottomBar = ({
 
   return (
     <div
-      className={`w-full fixed bottom-0 transition-all duration-300 transform-gpu ease-out bg-gray-200 dark:bg-zinc-800 filter drop-shadow-2xl flex flex-col z-50 ${
+      className={`w-full fixed bottom-0 transition-all duration-300 transform-gpu ease-out bg-gray-200 dark:bg-zinc-800 shadow-2xl flex flex-col z-50 ${
         bottomBarExpanded ? 'h-full overflow-auto' : 'h-[5.25rem]'
       }`}
       id="bottomBar"
