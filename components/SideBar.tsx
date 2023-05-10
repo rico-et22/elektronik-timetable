@@ -6,6 +6,7 @@ import RoomsSelector from 'components/Selectors/RoomsSelector';
 import Credits from 'components/Credits';
 import Search from 'components/Search';
 import ReplacementsButton from './ReplacementsButton';
+import PWAInstallButton from './PWAInstallButton';
 
 type BottomBarProps = {
   timeTableList: List;
@@ -23,6 +24,7 @@ const SideBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
         <TeachersSelector teachers={teachers} />
         <RoomsSelector rooms={rooms} />
         {process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL && <ReplacementsButton />}
+        <PWAInstallButton />
       </div>
       <div className="px-4 mb-5 mt-auto">
         {generatedDate && (

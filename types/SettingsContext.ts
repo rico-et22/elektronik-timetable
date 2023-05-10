@@ -20,4 +20,6 @@ export interface SettingsContextType {
   setShowShortHours?: Dispatch<SetStateAction<boolean>>;
   theme: Themes;
   setTheme?: Dispatch<SetStateAction<Themes>>;
+  supportsPWA: boolean;
+  promptInstall?: Event | null;
 }

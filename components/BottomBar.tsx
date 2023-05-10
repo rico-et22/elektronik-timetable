@@ -16,6 +16,7 @@ import getRouteContext from 'helpers/getRouteContext';
 import Search from 'components/Search';
 import ThemeSwitcher from 'components/ThemeSwitcher';
 import ReplacementsButton from './ReplacementsButton';
+import PWAInstallButton from './PWAInstallButton';
 
 type BottomBarProps = {
   timeTableList: List;
@@ -108,6 +109,7 @@ const BottomBar = ({
         <TeachersSelector teachers={teachers} />
         <RoomsSelector rooms={rooms} />
         {process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL && <ReplacementsButton />}
+        <PWAInstallButton />
       </div>
       <div className="px-4 mb-5 mt-auto">
         <div className="mb-4 flex justify-center">

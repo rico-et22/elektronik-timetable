@@ -3,7 +3,6 @@ import 'styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
 import { TimetableList } from '@wulkanowy/timetable-parser';
 import App from 'next/app';
-import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   DesktopComponent,
@@ -93,28 +92,42 @@ const defaultContextValue: SettingsContextType = {
   shortHours,
   showShortHours: false,
   theme: Themes.system,
+  supportsPWA: false,
 };
 
 export const SettingsContext =
-  createContext<SettingsContextType>(defaultContextValue);
+  React.createContext<SettingsContextType>(defaultContextValue);
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const [desktopComponent, setDesktopComponent] = useState<DesktopComponent>(
-    defaultContextValue.desktopComponent,
-  );
-  const [showSpinner, setShowSpinner] = useState(
+  const [desktopComponent, setDesktopComponent] =
+    React.useState<DesktopComponent>(defaultContextValue.desktopComponent);
+  const [showSpinner, setShowSpinner] = React.useState(
     defaultContextValue.showSpinner,
   );
-  const [bottomBarExpanded, setBottomBarExpanded] = useState(
+  const [bottomBarExpanded, setBottomBarExpanded] = React.useState(
     defaultContextValue.bottomBarExpanded,
   );
-  const [showShortHours, setShowShortHours] = useState(
+  const [showShortHours, setShowShortHours] = React.useState(
     defaultContextValue.showShortHours,
   );
-  const [theme, setTheme] = useState(defaultContextValue.theme);
+  const [theme, setTheme] = React.useState(defaultContextValue.theme);
+  const [supportsPWA, setSupportsPWA] = React.useState(false);
+  const [promptInstall, setPromptInstall] = React.useState<Event | null>(null);
+
   const router = useRouter();
 
-  useEffect(() => {
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setSupportsPWA(true);
+      setPromptInstall(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  React.useEffect(() => {
     const startLoading = () => {
       setShowSpinner(true);
     };
@@ -145,8 +158,18 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       setShowShortHours,
       theme,
       setTheme,
+      supportsPWA,
+      promptInstall,
     }),
-    [bottomBarExpanded, desktopComponent, showShortHours, showSpinner, theme],
+    [
+      bottomBarExpanded,
+      desktopComponent,
+      promptInstall,
+      showShortHours,
+      showSpinner,
+      supportsPWA,
+      theme,
+    ],
   );
 
   return (
