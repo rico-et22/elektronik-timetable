@@ -80,7 +80,7 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
               onClick={() => handleDesktopComponentButtonClick('table')}
               title="Tabela"
               aria-label="Tabela"
-              className={`px-2 py-1 rounded-l ${
+              className={`px-2 py-1 rounded-l-0_18 ${
                 desktopComponent === 'table' ? 'bg-blue-200' : ''
               }`}
             >
@@ -97,7 +97,7 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
               onClick={() => handleDesktopComponentButtonClick('list')}
               title="Lista"
               aria-label="Lista"
-              className={`px-2 py-1 rounded-r ${
+              className={`px-2 py-1 rounded-r-0_18 ${
                 desktopComponent === 'list' ? 'bg-blue-200' : ''
               }`}
             >

@@ -24,7 +24,7 @@ const ShortHoursSwitcher = ({ small }: Props) => {
         onClick={() => handleShortHoursButtonClick(false)}
         title="Normalne lekcje - 45 minut"
         aria-label="Normalne lekcje - 45 minut"
-        className={`px-2 py-1 rounded-l ${
+        className={`px-2 py-1 rounded-l-0_18 ${
           !showShortHours
             ? 'bg-blue-200 dark:text-zinc-700'
             : 'dark:text-zinc-300'
@@ -37,7 +37,7 @@ const ShortHoursSwitcher = ({ small }: Props) => {
         onClick={() => handleShortHoursButtonClick(true)}
         title="Skrócone lekcje - 30 minut"
         aria-label="Skrócone lekcje - 30 minut"
-        className={`px-2 py-1 rounded-r ${
+        className={`px-2 py-1 rounded-r-0_18 ${
           showShortHours
             ? 'bg-blue-200 dark:text-zinc-700'
             : 'dark:text-zinc-300'

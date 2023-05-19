@@ -29,3 +29,10 @@ a {
 .dark {
   color-scheme: dark;
 }
+
+.rounded-l-0_18 {
+  border-radius: 0.18rem 0 0 0.18rem;
+}
+.rounded-r-0_18 {
+  border-radius: 0 0.18rem 0.18rem 0;
+}
