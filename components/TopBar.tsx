@@ -12,6 +12,7 @@ import { SettingsContext } from 'pages/_app';
 import { DesktopComponent } from 'types/SettingsContext';
 import ShortHoursSwitcher from 'components/ShortHoursSwitcher';
 import ThemeSwitcher from 'components/ThemeSwitcher';
+import { Tooltip } from 'react-tooltip';
 
 type TopBarProps = {
   timeTableList: List;
@@ -65,11 +66,11 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
         <button
           type="button"
           onClick={handlePrint}
-          title="Drukuj"
           aria-label="Drukuj"
-          className={`bg-gray-50 dark:bg-zinc-800 px-2 py-1 rounded border border-gray-300 dark:border-zinc-700 ${
+          className={`bg-gray-50 dark:bg-zinc-800 px-2 py-1 rounded border border-gray-300 dark:border-zinc-700 topbar-tooltip ${
             hasReplacements ? 'mr-4' : ''
           }`}
+          data-tooltip-content="Drukuj"
         >
           <PrinterIcon className="h-8 text-gray-700 dark:text-zinc-300" />
         </button>
@@ -78,11 +79,11 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
             <button
               type="button"
               onClick={() => handleDesktopComponentButtonClick('table')}
-              title="Tabela"
               aria-label="Tabela"
-              className={`px-2 py-1 rounded-l-0_18 ${
+              className={`px-2 py-1 rounded-l-0_18 topbar-tooltip ${
                 desktopComponent === 'table' ? 'bg-blue-200' : ''
               }`}
+              data-tooltip-content="Tabela"
             >
               <TableCellsIcon
                 className={`h-8 ${
@@ -95,11 +96,11 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
             <button
               type="button"
               onClick={() => handleDesktopComponentButtonClick('list')}
-              title="Lista"
               aria-label="Lista"
-              className={`px-2 py-1 rounded-r-0_18 ${
+              className={`px-2 py-1 rounded-r-0_18 topbar-tooltip ${
                 desktopComponent === 'list' ? 'bg-blue-200' : ''
               }`}
+              data-tooltip-content="Lista"
             >
               <RectangleStackIcon
                 className={`h-8 ${
@@ -112,6 +113,7 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
           </div>
         )}
         <ThemeSwitcher />
+        <Tooltip anchorSelect=".topbar-tooltip" />
       </div>
     </div>
   );
