@@ -1,5 +1,5 @@
 import { TimeTableStatus, TimeTableListResponse } from 'types/TimeTable';
-import { List, Table, TimetableList } from '@wulkanowy/timetable-parser';
+import { List, TimetableList } from '@wulkanowy/timetable-parser';
 
 function isTimetableListEmpty(timetableList: TimetableList) {
   const list: List = timetableList.getList();

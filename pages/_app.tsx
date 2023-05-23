@@ -1,7 +1,6 @@
 import * as React from 'react';
 import 'styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
-import { TimetableList } from '@wulkanowy/timetable-parser';
 import App from 'next/app';
 import { useRouter } from 'next/router';
 import {
@@ -10,7 +9,7 @@ import {
   Themes,
 } from 'types/SettingsContext';
 import fetchTimeTableList from 'helpers/fetchTimetableList';
-import { TimeTableListResponse, TimeTableStatus } from 'types/TimeTable';
+import { TimeTableListResponse } from 'types/TimeTable';
 
 const shortHours = [
   {

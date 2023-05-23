@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Layout from 'components/Layout';
 import getRouteContext from 'helpers/getRouteContext';
 
-import { List, Table, TimetableList } from '@wulkanowy/timetable-parser';
+import { List } from '@wulkanowy/timetable-parser';
 import {
   TimeTableData,
   TimeTableResponse,
@@ -92,7 +92,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     .split(' ')
     .pop();
 
-  const replacements = await fetchReplacements();
+  // const replacements = await fetchReplacements();
 
   return {
     props: {
