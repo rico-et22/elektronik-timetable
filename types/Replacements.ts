@@ -1,3 +1,5 @@
+export interface ReplacementsStatus {}
+
 export interface Replacements {
   date: string;
   generated: string;

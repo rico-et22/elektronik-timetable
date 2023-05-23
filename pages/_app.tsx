@@ -9,7 +9,7 @@ import {
   SettingsContextType,
   Themes,
 } from 'types/SettingsContext';
-import fetchTimetableList from 'helpers/fetchTimetableList';
+import fetchTimeTableList from 'helpers/fetchTimetableList';
 import { TimeTableListResponse, TimeTableStatus } from 'types/TimeTable';
 
 const shortHours = [
@@ -180,27 +180,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 };
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
-  let timeTableResponse: TimeTableListResponse = {
-    data: '',
-    ok: false,
-  };
-  let timeTableListStatus: TimeTableStatus | null = null;
-  await fetchTimetableList().then((response) => {
-    timeTableResponse = response;
-  });
-  const timeTableList: TimetableList | null = new TimetableList(
-    timeTableResponse.data,
-  );
-  if (
-    timeTableResponse?.ok &&
-    (timeTableList.getList().classes.length > 0 ||
-      timeTableList.getList().teachers?.length ||
-      timeTableList.getList().rooms?.length)
-  ) {
-    timeTableListStatus = 'ok';
-  } else if (timeTableResponse?.ok) {
-    timeTableListStatus = 'empty';
-  } else timeTableListStatus = 'error';
+  const { timeTableList, status: timeTableListStatus }: TimeTableListResponse =
+    await fetchTimeTableList();
 
   const appProps = await App.getInitialProps(appContext);
 

@@ -6,6 +6,7 @@ import { TimeTableStatus } from 'types/TimeTable';
 import Layout from 'components/Layout';
 import { useRouter } from 'next/router';
 import { Replacements } from 'types/Replacements';
+import fetchReplacements from 'helpers/fetchReplacements';
 
 interface ReplacementsPageProps {
   timeTableList: List;
@@ -36,18 +37,11 @@ const ReplacementsPage: NextPage<ReplacementsPageProps> = (
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const url = process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL;
-  if (url) {
-    const replacements = await fetch(url).then((response) => response.json());
-    return {
-      props: {
-        replacements,
-      },
-    };
-  }
+  const replacements = await fetchReplacements();
   return {
     props: {
-      replacements: null,
+      replacements,
+      isReplacements: true, // helper variable
     },
   };
 };

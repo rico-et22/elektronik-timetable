@@ -98,7 +98,7 @@ const Layout = ({
           timeTableStatus === 'ok' ? '' : 'h-screen flex flex-col '
         } lg:hidden`}
       >
-        <HeaderBar hasReplacements={!!replacements} />
+        <HeaderBar hideHoursSwitcher={!!replacements} />
         <div
           className={`relative min-h-[calc(100vh-4.5rem)] dark:bg-zinc-900 ${
             showSpinner ? 'h-[calc(100vh-9.75rem)] overflow-hidden' : ''
@@ -131,7 +131,7 @@ const Layout = ({
       </div>
       <div className="hidden lg:flex">
         <div className="w-1/4 relative h-screen dark:bg-zinc-800">
-          <HeaderBar hasReplacements={!!replacements} />
+          <HeaderBar hideHoursSwitcher={!!replacements} />
           {timeTableListStatus === 'ok' && (
             <SideBar
               timeTableList={timeTableList}
@@ -152,15 +152,15 @@ const Layout = ({
                 printRef={printRef}
                 hasReplacements={!!replacements}
               />
-              {timeTable && (
+              {timeTableStatus === 'ok' && (
                 <>
-                  {desktopComponent === 'list' && timeTableStatus === 'ok' && (
+                  {desktopComponent === 'list' && (
                     <TimeTableAsList
                       timeTable={timeTable}
                       timeTableList={timeTableList}
                     />
                   )}
-                  {desktopComponent === 'table' && timeTableStatus === 'ok' && (
+                  {desktopComponent === 'table' && (
                     <TimeTableAsTable
                       timeTable={timeTable}
                       timeTableList={timeTableList}
@@ -178,9 +178,7 @@ const Layout = ({
                 printRef={printRef}
               />
               <ReplacementsInfo date={replacements.date} />
-              {desktopComponent === 'table' && (
-                <ReplacementsTable replacements={replacements} />
-              )}
+              <ReplacementsTable replacements={replacements} />
             </div>
           )}
           {timeTableStatus && timeTableStatus !== 'ok' && (

@@ -1,10 +1,20 @@
-import { TableHour, TableLesson } from '@wulkanowy/timetable-parser';
+import {
+  Table,
+  TableHour,
+  TableLesson,
+  TimetableList,
+} from '@wulkanowy/timetable-parser';
 
 export type TimeTableStatus = 'ok' | 'empty' | 'error';
 
+export interface TimeTableResponse {
+  timeTable: Table;
+  status: TimeTableStatus;
+}
+
 export interface TimeTableListResponse {
-  data: string;
-  ok: boolean;
+  timeTableList: TimetableList;
+  status: TimeTableStatus;
 }
 
 export interface TimeTableData {

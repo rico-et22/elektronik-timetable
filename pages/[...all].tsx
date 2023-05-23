@@ -1,17 +1,19 @@
 import * as React from 'react';
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import { List, Table, TimetableList } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/router';
+import Layout from 'components/Layout';
+import getRouteContext from 'helpers/getRouteContext';
+
+import { List, Table, TimetableList } from '@wulkanowy/timetable-parser';
 import {
   TimeTableData,
-  TimeTableListResponse,
+  TimeTableResponse,
   TimeTableStatus,
 } from 'types/TimeTable';
 import fetchTimetable from 'helpers/fetchTimetable';
-import Layout from 'components/Layout';
-import getRouteContext from 'helpers/getRouteContext';
-import fetchTimetableList from '../helpers/fetchTimetableList';
+import fetchTimeTableList from 'helpers/fetchTimetableList';
+import fetchReplacements from 'helpers/fetchReplacements';
 
 interface TablePageProps {
   timeTableList: List;
@@ -52,10 +54,9 @@ const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const list = await fetchTimetableList();
-  const tableList = new TimetableList(list.data);
+  const { timeTableList } = await fetchTimeTableList();
 
-  const { classes, teachers, rooms } = tableList.getList();
+  const { classes, teachers, rooms } = timeTableList.getList();
   const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
   const teachersPaths = teachers?.map(
     (teacherItem) => `/teacher/${teacherItem.value}`,
@@ -70,21 +71,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  let timeTableResponse: TimeTableListResponse = {
-    data: '',
-    ok: false,
-  };
-  let timeTableStatus: TimeTableStatus | null = null;
   let id = '';
+
   if (context.params?.all) {
+    // if someone wondered what all is https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes#catch-all-segments
     if (context.params.all[0] === 'class') id = `o${context.params.all[1]}`;
     if (context.params.all[0] === 'teacher') id = `n${context.params.all[1]}`;
     if (context.params.all[0] === 'room') id = `s${context.params.all[1]}`;
   }
-  await fetchTimetable(id).then((response) => {
-    timeTableResponse = response;
-  });
-  const timeTable: Table | null = new Table(timeTableResponse.data);
+
+  const { timeTable, status: timeTableStatus }: TimeTableResponse =
+    await fetchTimetable(id);
+
   const tableCellText: string = timeTable
     .$('.op  table:nth-child(1) tr:nth-child(1) > td:nth-child(1)')
     .text();
@@ -93,9 +91,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
     .split('\n')[0]
     .split(' ')
     .pop();
-  if (timeTableResponse?.ok) {
-    timeTableStatus = 'ok';
-  } else timeTableStatus = 'error';
+
+  const replacements = await fetchReplacements();
 
   return {
     props: {
@@ -106,6 +103,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         generatedDate: date,
       },
       timeTableStatus,
+      // replacements,
     },
     revalidate: 12 * 3600,
   };

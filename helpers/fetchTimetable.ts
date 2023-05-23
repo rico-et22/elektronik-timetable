@@ -1,21 +1,19 @@
-const fetchTimetable = async (id: string) => {
-  let timeTableData = '';
-  let timeTableOk = false;
-  await fetch(
+import { Table } from '@wulkanowy/timetable-parser';
+import { TimeTableResponse } from 'types/TimeTable';
+
+async function fetchTimetable(id: string): Promise<TimeTableResponse> {
+  const response = await fetch(
     `${
       process.env.NEXT_PUBLIC_PROXY_URL
         ? `${process.env.NEXT_PUBLIC_PROXY_URL}/`
         : ''
     }${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/plany/${id}.html`,
-  )
-    .then((response) => {
-      timeTableOk = response.ok;
-      return response.text();
-    })
-    .then((data) => {
-      timeTableData = data;
-    });
-  return { data: timeTableData, ok: timeTableOk };
-};
+  );
+
+  const timeTable = new Table(await response.text());
+  const status = response.ok ? 'ok' : 'error';
+
+  return { timeTable, status };
+}
 
 export default fetchTimetable;
