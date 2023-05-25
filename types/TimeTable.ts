@@ -1,8 +1,8 @@
 import {
+  List,
   Table,
   TableHour,
   TableLesson,
-  TimetableList,
 } from '@wulkanowy/timetable-parser';
 
 export type TimeTableStatus = 'ok' | 'empty' | 'error';
@@ -13,7 +13,7 @@ export interface TimeTableResponse {
 }
 
 export interface TimeTableListResponse {
-  timeTableList: TimetableList;
+  timeTableList: List;
   status: TimeTableStatus;
 }
 

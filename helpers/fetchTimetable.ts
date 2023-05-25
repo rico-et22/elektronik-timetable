@@ -13,7 +13,7 @@ async function fetchTimetable(id: string): Promise<TimeTableResponse> {
   const timeTable = new Table(await response.text());
   const status = response.ok ? 'ok' : 'error';
 
-  return { timeTable, status };
+  return { timeTable, status }; // TODO: Uzupełnij tą tabelkę wartościami z TimeTableList
 }
 
 export default fetchTimetable;

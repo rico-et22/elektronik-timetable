@@ -40,12 +40,7 @@ const ReplacementsTable = ({ replacements }: Props) => (
               {row.teacher}
             </td>
             <td className="bg-gray-50 dark:bg-zinc-800 p-2 border dark:border-zinc-700">
-              {row.classgroup.map(
-                (x, classGroupIndex) =>
-                  `${x} ${
-                    classGroupIndex !== row.classgroup.length - 1 ? '- ' : ''
-                  }`,
-              )}
+              {row.classgroup.join(' - ')}
             </td>
             <td className="bg-gray-50 dark:bg-zinc-800 p-2 border dark:border-zinc-700">
               {row.subject}

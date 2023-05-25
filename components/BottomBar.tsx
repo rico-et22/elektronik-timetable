@@ -21,13 +21,13 @@ import PWAInstallButton from './PWAInstallButton';
 type BottomBarProps = {
   timeTableList: List;
   generatedDate: string | undefined;
-  hasReplacements: boolean;
+  showReplacements: boolean;
 };
 
 const BottomBar = ({
   timeTableList,
   generatedDate,
-  hasReplacements,
+  showReplacements,
 }: BottomBarProps) => {
   const { classes, rooms, teachers } = timeTableList;
   const router = useRouter();
@@ -83,7 +83,7 @@ const BottomBar = ({
           }`}
         >
           <h2 className="text-lg truncate">
-            {!hasReplacements ? (
+            {!showReplacements ? (
               <>
                 {routeContext.name && routeContext.typeName && (
                   <span className="text-gray-500 dark:text-zinc-400">

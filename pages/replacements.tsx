@@ -31,19 +31,19 @@ const ReplacementsPage: NextPage<ReplacementsPageProps> = (
           content="Zastępstwa | Elektronik - plan lekcji express"
         />
       </Head>
-      <Layout {...props} />
+      <Layout {...props} showReplacements />
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const replacements = await fetchReplacements();
-  return {
-    props: {
-      replacements,
-      isReplacements: true, // helper variable
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const replacements = await fetchReplacements();
+//   return {
+//     props: {
+//       replacements,
+//       isReplacements: true, // helper variable
+//     },
+//   };
+// };
 
 export default ReplacementsPage;

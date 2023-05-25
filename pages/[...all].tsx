@@ -13,13 +13,14 @@ import {
 } from 'types/TimeTable';
 import fetchTimetable from 'helpers/fetchTimetable';
 import fetchTimeTableList from 'helpers/fetchTimetableList';
-import fetchReplacements from 'helpers/fetchReplacements';
+import { Replacements } from 'types/Replacements';
 
 interface TablePageProps {
   timeTableList: List;
   timeTableListStatus: TimeTableStatus;
   timeTable: TimeTableData;
   timeTableStatus: TimeTableStatus;
+  replacements: Replacements;
 }
 
 const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
@@ -48,7 +49,7 @@ const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
           content={`${titleText} | Elektronik - plan lekcji express`}
         />
       </Head>
-      <Layout {...props} />
+      <Layout {...props} showReplacements={false} />
     </>
   );
 };
@@ -56,7 +57,7 @@ const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const { timeTableList } = await fetchTimeTableList();
 
-  const { classes, teachers, rooms } = timeTableList.getList();
+  const { classes, teachers, rooms } = timeTableList;
   const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
   const teachersPaths = teachers?.map(
     (teacherItem) => `/teacher/${teacherItem.value}`,
@@ -74,10 +75,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   let id = '';
 
   if (context.params?.all) {
-    // if someone wondered what all is https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes#catch-all-segments
-    if (context.params.all[0] === 'class') id = `o${context.params.all[1]}`;
-    if (context.params.all[0] === 'teacher') id = `n${context.params.all[1]}`;
-    if (context.params.all[0] === 'room') id = `s${context.params.all[1]}`;
+    if (context.params.all[0] === 'class') id = `o${context.params.all[1]}`; // oddział
+    if (context.params.all[0] === 'teacher') id = `n${context.params.all[1]}`; // nauczyciel
+    if (context.params.all[0] === 'room') id = `s${context.params.all[1]}`; // sala
   }
 
   const { timeTable, status: timeTableStatus }: TimeTableResponse =
@@ -92,8 +92,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     .split(' ')
     .pop();
 
-  // const replacements = await fetchReplacements();
-
   return {
     props: {
       timeTable: {
@@ -103,7 +101,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         generatedDate: date,
       },
       timeTableStatus,
-      // replacements,
     },
     revalidate: 12 * 3600,
   };

@@ -9,6 +9,7 @@ import {
   Themes,
 } from 'types/SettingsContext';
 import fetchTimeTableList from 'helpers/fetchTimetableList';
+import fetchReplacements from 'helpers/fetchReplacements';
 import { TimeTableListResponse } from 'types/TimeTable';
 
 const shortHours = [
@@ -183,12 +184,17 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
     await fetchTimeTableList();
 
   const appProps = await App.getInitialProps(appContext);
+  const { replacements, status: replacementsStatus } =
+    await fetchReplacements();
 
   return {
     ...appProps,
     pageProps: {
-      timeTableList: timeTableList.getList(),
+      timeTableList,
       timeTableListStatus,
+
+      replacements,
+      replacementsStatus,
     },
   };
 };

@@ -13,13 +13,16 @@ import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
 import getTeacherDataByCode from 'helpers/getTeacherDataByCode';
 import { SettingsContext } from 'pages/_app';
 import { TimeTableData } from 'types/TimeTable';
+import { Replacements } from 'types/Replacements';
+import findReplacement from 'helpers/findReplacement';
 
 interface Props {
   timeTable: TimeTableData;
   timeTableList: List;
+  replacements: Replacements;
 }
 
-const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
+const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
   const [selectedDayIndex, setSelectedDayIndex] = React.useState<
     number | undefined
   >();
@@ -126,118 +129,120 @@ const TimeTableAsList = ({ timeTable, timeTableList }: Props) => {
         ))}
       </div>
       <div className="px-6">
-        {Object.entries(hourData).map((key, index) => {
+        {Object.entries(hourData).map((hour, hourIndex) => {
           if (
             selectedDayIndex !== undefined &&
-            index >= dayTrimData.firstNotEmptyIndex[selectedDayIndex] &&
-            index <= dayTrimData.lastNotEmptyIndex[selectedDayIndex]
-          )
+            hourIndex >= dayTrimData.firstNotEmptyIndex[selectedDayIndex] &&
+            hourIndex <= dayTrimData.lastNotEmptyIndex[selectedDayIndex]
+          ) {
+            const lessonHour = timeTable.days[selectedDayIndex][hourIndex];
             return (
               <div
-                key={`hour-${key}`}
+                key={`hour-${hour}`}
                 className="shadow dark:shadow-none mb-5 flex"
               >
                 <div
                   className={`text-white w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center ${
-                    isCurrentLesson(key[1].timeFrom, key[1].timeTo)
+                    isCurrentLesson(hour[1].timeFrom, hour[1].timeTo)
                       ? 'bg-green-600'
                       : 'bg-elektronik-red'
                   }`}
                 >
                   <span className="block text-center font-bold mb-1">
-                    {key[1].number}
+                    {hour[1].number}
                   </span>
                   <span className="block text-center text-sm">
-                    {key[1].timeFrom} - {key[1].timeTo}
+                    {hour[1].timeFrom} - {hour[1].timeTo}
                   </span>
                 </div>
                 <div className="rounded-r bg-gray-50 dark:bg-zinc-800 dark:border-r dark:border-t dark:border-b dark:border-zinc-700 w-full px-4 py-1 overflow-hidden">
-                  {selectedDayIndex !== undefined &&
-                    timeTable.days[selectedDayIndex][index].length > 0 &&
-                    timeTable.days[selectedDayIndex][index].map(
-                      (subject, subjectIndex) => (
-                        <div
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={`day-${selectedDayIndex}-${index}-${subjectIndex}`}
-                          className={
-                            subjectIndex !==
-                            timeTable.days[selectedDayIndex][index].length - 1
-                              ? 'mb-2'
-                              : ''
-                          }
-                        >
-                          <p className="font-bold mb-1">
-                            {subject.subject}
-                            {subject.groupName && ` (${subject.groupName})`}
-                          </p>
-                          <div className="text-sm flex">
-                            {router.query.all &&
-                              router.query.all[0] !== 'class' &&
-                              subject.className && (
-                                <div className="flex items-center mr-4">
-                                  <AcademicCapIcon className="h-3 w-3 mr-1 shrink-0" />
-                                  <Link
-                                    href={`/class/${
-                                      getClassData(subject.className)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue">
-                                      {
-                                        getClassData(
-                                          subject.className,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}
-                            {router.query.all &&
-                              router.query.all[0] !== 'teacher' &&
-                              subject.teacher && (
-                                <div className="flex items-center mr-4 w-3/5 xxs:w-auto">
-                                  <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
-                                  <Link
-                                    href={`/teacher/${
-                                      getTeacherData(subject.teacher)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue truncate">
-                                      {
-                                        getTeacherData(
-                                          subject.teacher,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}{' '}
-                            {router.query.all &&
-                              router.query.all[0] !== 'room' &&
-                              subject.room && (
-                                <div className="flex items-center">
-                                  <MapPinIcon className="h-3 w-3 mr-1 shrink-0" />
-                                  <Link
-                                    href={`/room/${
-                                      getRoomData(subject.room)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue">
-                                      {
-                                        getRoomData(subject.room)?.name.split(
-                                          ' ',
-                                        )[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}
-                          </div>
+                  {lessonHour.map((lesson, lessonIndex) => {
+                    findReplacement(replacements, lesson, hourIndex);
+                    return (
+                      <div
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={`day-${selectedDayIndex}-${hourIndex}-${lessonIndex}`}
+                        className={
+                          lessonIndex !==
+                          timeTable.days[selectedDayIndex][hourIndex].length - 1
+                            ? 'mb-2'
+                            : ''
+                        }
+                      >
+                        <p className="font-bold mb-1">
+                          {lesson.subject}
+                          {lesson.groupName && ` (${lesson.groupName})`}
+                        </p>
+                        <div className="text-sm flex">
+                          {router.query.all &&
+                            router.query.all[0] !== 'class' &&
+                            lesson.className && (
+                              <div className="flex items-center mr-4">
+                                <AcademicCapIcon className="h-3 w-3 mr-1 shrink-0" />
+                                <Link
+                                  href={`/class/${
+                                    getClassData(lesson.className)?.value
+                                  }`}
+                                >
+                                  <a className="text-elektronik-blue">
+                                    {
+                                      getClassData(
+                                        lesson.className,
+                                      )?.name.split(' ')[0]
+                                    }
+                                  </a>
+                                </Link>
+                              </div>
+                            )}
+                          {router.query.all &&
+                            router.query.all[0] !== 'teacher' &&
+                            lesson.teacher && (
+                              <div className="flex items-center mr-4 w-3/5 xxs:w-auto">
+                                <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
+                                <Link
+                                  href={`/teacher/${
+                                    getTeacherData(lesson.teacher)?.value
+                                  }`}
+                                >
+                                  <a className="text-elektronik-blue truncate">
+                                    {
+                                      getTeacherData(
+                                        lesson.teacher,
+                                      )?.name.split(' ')[0]
+                                    }
+                                  </a>
+                                </Link>
+                              </div>
+                            )}{' '}
+                          {router.query.all &&
+                            router.query.all[0] !== 'room' &&
+                            lesson.room && (
+                              <div className="flex items-center">
+                                <MapPinIcon className="h-3 w-3 mr-1 shrink-0" />
+                                <Link
+                                  href={`/room/${
+                                    getRoomData(lesson.room)?.value
+                                  }`}
+                                >
+                                  <a className="text-elektronik-blue">
+                                    {
+                                      getRoomData(lesson.room)?.name.split(
+                                        ' ',
+                                      )[0]
+                                    }
+                                  </a>
+                                </Link>
+                              </div>
+                            )}
                         </div>
-                      ),
-                    )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );
+          }
+
           return null;
         })}
       </div>

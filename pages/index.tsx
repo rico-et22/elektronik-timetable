@@ -4,10 +4,13 @@ import Head from 'next/head';
 import { List } from '@wulkanowy/timetable-parser';
 import { TimeTableStatus } from 'types/TimeTable';
 import Layout from 'components/Layout';
+import { Replacements } from 'types/Replacements';
 
 type HomeProps = {
   timeTableList: List;
   timeTableListStatus: TimeTableStatus;
+  replacements: Replacements;
+  showReplacements: boolean;
 };
 
 const Home: NextPage<HomeProps> = (props: HomeProps) => (

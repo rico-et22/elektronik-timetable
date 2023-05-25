@@ -20,7 +20,8 @@ interface Props {
   timeTableListStatus: TimeTableStatus;
   timeTable?: TimeTableData;
   timeTableStatus?: TimeTableStatus;
-  replacements?: Replacements;
+  replacements: Replacements;
+  showReplacements: boolean;
 }
 
 const Layout = ({
@@ -29,6 +30,7 @@ const Layout = ({
   timeTable,
   timeTableStatus,
   replacements,
+  showReplacements,
 }: Props) => {
   const router = useRouter();
   const { desktopComponent, showSpinner } = React.useContext(SettingsContext);
@@ -98,7 +100,7 @@ const Layout = ({
           timeTableStatus === 'ok' ? '' : 'h-screen flex flex-col '
         } lg:hidden`}
       >
-        <HeaderBar hideHoursSwitcher={!!replacements} />
+        <HeaderBar hideHoursSwitcher={showReplacements} />
         <div
           className={`relative min-h-[calc(100vh-4.5rem)] dark:bg-zinc-900 ${
             showSpinner ? 'h-[calc(100vh-9.75rem)] overflow-hidden' : ''
@@ -108,9 +110,10 @@ const Layout = ({
             <TimeTableAsList
               timeTable={timeTable}
               timeTableList={timeTableList}
+              replacements={replacements}
             />
           )}
-          {replacements && (
+          {showReplacements && replacements && (
             <>
               <ReplacementsInfo date={replacements.date} />
               <ReplacementsTable replacements={replacements} />
@@ -122,7 +125,7 @@ const Layout = ({
           <BottomBar
             timeTableList={timeTableList}
             generatedDate={timeTable?.generatedDate}
-            hasReplacements={!!replacements}
+            showReplacements={showReplacements}
           />
         )}
         {timeTableStatus && timeTableStatus !== 'ok' && (
@@ -131,7 +134,7 @@ const Layout = ({
       </div>
       <div className="hidden lg:flex">
         <div className="w-1/4 relative h-screen dark:bg-zinc-800">
-          <HeaderBar hideHoursSwitcher={!!replacements} />
+          <HeaderBar hideHoursSwitcher={showReplacements} />
           {timeTableListStatus === 'ok' && (
             <SideBar
               timeTableList={timeTableList}
@@ -150,7 +153,7 @@ const Layout = ({
               <TopBar
                 timeTableList={timeTableList}
                 printRef={printRef}
-                hasReplacements={!!replacements}
+                showReplacements={showReplacements}
               />
               {timeTableStatus === 'ok' && (
                 <>
@@ -158,6 +161,7 @@ const Layout = ({
                     <TimeTableAsList
                       timeTable={timeTable}
                       timeTableList={timeTableList}
+                      replacements={replacements}
                     />
                   )}
                   {desktopComponent === 'table' && (
@@ -170,11 +174,11 @@ const Layout = ({
               )}
             </div>
           )}
-          {replacements && (
+          {showReplacements && replacements && (
             <div ref={printRef}>
               <TopBar
                 timeTableList={timeTableList}
-                hasReplacements={!!replacements}
+                showReplacements={showReplacements}
                 printRef={printRef}
               />
               <ReplacementsInfo date={replacements.date} />
@@ -194,7 +198,6 @@ const Layout = ({
 Layout.defaultProps = {
   timeTable: undefined,
   timeTableStatus: undefined,
-  replacements: undefined,
 };
 
 export default Layout;
