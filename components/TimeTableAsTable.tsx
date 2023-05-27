@@ -71,27 +71,6 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
     [isClientSide],
   );
 
-  // const isCurrentLesson = React.useCallback(
-  //   (startTime: string, endTime: string) => {
-  //     const startTimeSplit = startTime.split(':').map((n) => Number(n));
-  //     const endTimeSplit = endTime.split(':').map((n) => Number(n));
-  //     const currentDate = new Date();
-  //     const currentTimeSplit = [
-  //       currentDate.getHours(),
-  //       currentDate.getMinutes(),
-  //     ];
-  //     if (isClientSide)
-  //       return (
-  //         new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) >=
-  //           new Date().setHours(startTimeSplit[0], startTimeSplit[1]) &&
-  //         new Date().setHours(currentTimeSplit[0], currentTimeSplit[1]) <=
-  //           new Date().setHours(endTimeSplit[0], endTimeSplit[1])
-  //       );
-  //     return false;
-  //   },
-  //   [isClientSide],
-  // );
-
   const hourData = React.useMemo(() => {
     if (showShortHours) return getHourData(timeTable.hours, shortHours);
     return timeTable.hours;
@@ -175,45 +154,43 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
                             {subject.groupName && ` (${subject.groupName})`}
                           </p>
                           <div className="flex">
-                            {router.query.all?.[0] !== 'class' &&
-                              subject.className && (
-                                <div className="flex items-center mr-4">
-                                  <AcademicCapIcon className="h-3 w-3 mr-1" />
-                                  <Link
-                                    href={`/class/${
-                                      getClassData(subject.className)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue">
-                                      {
-                                        getClassData(
-                                          subject.className,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}
-                            {router.query.all?.[0] !== 'teacher' &&
-                              subject.teacher && (
-                                <div className="flex items-center mr-4 w-1/2">
-                                  <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
-                                  <Link
-                                    href={`/teacher/${
-                                      getTeacherData(subject.teacher)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue truncate">
-                                      {
-                                        getTeacherData(
-                                          subject.teacher,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}{' '}
-                            {router.query.all?.[0] !== 'room' && subject.room && (
+                            {subject.className && (
+                              <div className="flex items-center mr-4">
+                                <AcademicCapIcon className="h-3 w-3 mr-1" />
+                                <Link
+                                  href={`/class/${
+                                    getClassData(subject.className)?.value
+                                  }`}
+                                >
+                                  <a className="text-elektronik-blue">
+                                    {
+                                      getClassData(
+                                        subject.className,
+                                      )?.name.split(' ')[0]
+                                    }
+                                  </a>
+                                </Link>
+                              </div>
+                            )}
+                            {subject.teacher && (
+                              <div className="flex items-center mr-4 w-1/2">
+                                <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
+                                <Link
+                                  href={`/teacher/${
+                                    getTeacherData(subject.teacher)?.value
+                                  }`}
+                                >
+                                  <a className="text-elektronik-blue truncate">
+                                    {
+                                      getTeacherData(
+                                        subject.teacher,
+                                      )?.name.split(' ')[0]
+                                    }
+                                  </a>
+                                </Link>
+                              </div>
+                            )}{' '}
+                            {subject.room && (
                               <div className="flex items-center">
                                 <MapPinIcon className="h-3 w-3 mr-1" />
                                 <Link

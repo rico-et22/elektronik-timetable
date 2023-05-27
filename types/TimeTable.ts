@@ -1,25 +1,19 @@
-import {
-  List,
-  Table,
-  TableHour,
-  TableLesson,
-} from '@wulkanowy/timetable-parser';
+import { List, TableHour, TableLesson } from '@wulkanowy/timetable-parser';
 
-export type TimeTableStatus = 'ok' | 'empty' | 'error';
+export interface TimeTableData {
+  type: 'class' | 'teacher' | 'room';
+  id: number;
+  status: 'ok' | 'empty' | 'error';
 
-export interface TimeTableResponse {
-  timeTable: Table;
-  status: TimeTableStatus;
+  title: string;
+  generatedDate?: string;
+
+  dayNames: string[];
+  days: TableLesson[][][];
+  hours: Record<number, TableHour>;
 }
 
 export interface TimeTableListResponse {
   timeTableList: List;
-  status: TimeTableStatus;
-}
-
-export interface TimeTableData {
-  dayNames: string[];
-  days: TableLesson[][][];
-  hours: Record<number, TableHour>;
-  generatedDate: string;
+  status: TimeTableData['status'];
 }

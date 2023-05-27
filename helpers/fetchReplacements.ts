@@ -1,41 +1,28 @@
-import {
-  ReplacementsResponse,
-  Replacements,
-  ReplacementsStatus,
-} from 'types/Replacements';
+import { Replacements } from 'types/Replacements';
 
-const fetchReplacements = async (): Promise<ReplacementsResponse> => {
-  let replacements: Replacements;
-  let status: ReplacementsStatus = 'ok';
+export default async function fetchReplacements(): Promise<Replacements> {
+  const replacements: Replacements = {
+    status: 'not configured',
+    date: '',
+    generated: '',
+    cols: [],
+    rows: [],
+  };
 
   const url = process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL;
   if (url) {
     try {
       const response = await fetch(url);
-      replacements = await response.json();
+      Object.assign(replacements, await response.json());
+      replacements.status = 'ok';
     } catch (e) {
       console.error(
         "Couldn't fetch replacements (zastępstwa) api. Are you sure you have configured the right link?",
         e,
       );
-      status = 'error';
+      replacements.status = 'error';
     }
-  } else {
-    status = 'not configured';
   }
 
-  if (!replacements!) {
-    replacements = {
-      date: status,
-      generated: status,
-      cols: [],
-      rows: [],
-    };
-  }
-  return {
-    replacements,
-    status,
-  };
-};
-
-export default fetchReplacements;
+  return replacements;
+}

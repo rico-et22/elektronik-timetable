@@ -1,8 +1,8 @@
-import { TimeTableStatus, TimeTableListResponse } from 'types/TimeTable';
+import { TimeTableListResponse } from 'types/TimeTable';
 import { List, TimetableList } from '@wulkanowy/timetable-parser';
 
 function isTimetableListEmpty(list: List) {
-  return !list.classes?.length || !list.teachers?.length || !list.rooms?.length;
+  return !list.classes.length || !list.teachers?.length || !list.rooms?.length;
 }
 
 async function fetchTimeTableList(): Promise<TimeTableListResponse> {
@@ -16,7 +16,7 @@ async function fetchTimeTableList(): Promise<TimeTableListResponse> {
 
   const timeTableList = new TimetableList(await response.text()).getList();
 
-  let status: TimeTableStatus; // this V looks better than Conditional (ternary) operator
+  let status: TimeTableListResponse['status'];
 
   if (response.ok) {
     status = 'ok';
@@ -27,7 +27,7 @@ async function fetchTimeTableList(): Promise<TimeTableListResponse> {
     status = 'error';
   }
 
-  console.log(timeTableList);
+  // console.log(timeTableList);
 
   return { timeTableList, status };
 }

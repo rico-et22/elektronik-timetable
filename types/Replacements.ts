@@ -1,6 +1,5 @@
-export type ReplacementsStatus = 'ok' | 'not configured' | 'error';
-
 export interface Replacements {
+  status: 'ok' | 'not configured' | 'error';
   date: string;
   generated: string;
   cols: {
@@ -16,9 +15,4 @@ export interface Replacements {
     subject: string;
     teacher: string;
   }[];
-}
-
-export interface ReplacementsResponse {
-  replacements: Replacements;
-  status: ReplacementsStatus;
 }

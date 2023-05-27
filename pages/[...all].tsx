@@ -6,25 +6,21 @@ import Layout from 'components/Layout';
 import getRouteContext from 'helpers/getRouteContext';
 
 import { List } from '@wulkanowy/timetable-parser';
-import {
-  TimeTableData,
-  TimeTableResponse,
-  TimeTableStatus,
-} from 'types/TimeTable';
-import fetchTimetable from 'helpers/fetchTimetable';
+import { TimeTableData, TimeTableListResponse } from 'types/TimeTable';
+import fetchTimetableData from 'helpers/fetchTimetable';
 import fetchTimeTableList from 'helpers/fetchTimetableList';
 import { Replacements } from 'types/Replacements';
 
 interface TablePageProps {
   timeTableList: List;
-  timeTableListStatus: TimeTableStatus;
+  timeTableListStatus: TimeTableListResponse['status'];
   timeTable: TimeTableData;
-  timeTableStatus: TimeTableStatus;
   replacements: Replacements;
 }
 
 const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
   const { timeTableList } = props;
+
   const router = useRouter();
 
   const routeContext = React.useMemo(
@@ -72,35 +68,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  let id = '';
+  const [tab, value] = context.params?.all || [];
 
-  if (context.params?.all) {
-    if (context.params.all[0] === 'class') id = `o${context.params.all[1]}`; // oddział
-    if (context.params.all[0] === 'teacher') id = `n${context.params.all[1]}`; // nauczyciel
-    if (context.params.all[0] === 'room') id = `s${context.params.all[1]}`; // sala
-  }
+  let timeTableData: TimeTableData | null = null;
 
-  const { timeTable, status: timeTableStatus }: TimeTableResponse =
-    await fetchTimetable(id);
-
-  const tableCellText: string = timeTable
-    .$('.op  table:nth-child(1) tr:nth-child(1) > td:nth-child(1)')
-    .text();
-  const date: string | undefined = tableCellText
-    .trim()
-    .split('\n')[0]
-    .split(' ')
-    .pop();
+  if (tab === 'class' || tab === 'teacher' || tab === 'room')
+    timeTableData = await fetchTimetableData(tab, Number(value));
 
   return {
     props: {
-      timeTable: {
-        days: timeTable.getDays(),
-        dayNames: timeTable.getDayNames(),
-        hours: timeTable.getHours(),
-        generatedDate: date,
-      },
-      timeTableStatus,
+      timeTable: timeTableData,
     },
     revalidate: 12 * 3600,
   };

@@ -182,10 +182,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const { timeTableList, status: timeTableListStatus }: TimeTableListResponse =
     await fetchTimeTableList();
+  const replacements = await fetchReplacements();
 
   const appProps = await App.getInitialProps(appContext);
-  const { replacements, status: replacementsStatus } =
-    await fetchReplacements();
 
   return {
     ...appProps,
@@ -194,7 +193,6 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
       timeTableListStatus,
 
       replacements,
-      replacementsStatus,
     },
   };
 };

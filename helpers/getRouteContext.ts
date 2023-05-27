@@ -11,7 +11,7 @@ const getRouteContext = (router: NextRouter, timeTableList: List) => {
   };
   if (router.query.all && router.query.all.length > 1) {
     const [firstQueryParam] = router.query.all;
-    returnedValue.type = firstQueryParam;
+    returnedValue.type = firstQueryParam as RouteContext['type'];
     const value = router.query.all[1];
     if (returnedValue.type === 'class' && classes.length > 0) {
       returnedValue.typeName = 'Oddziały';

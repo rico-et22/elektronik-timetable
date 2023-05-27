@@ -1,16 +1,15 @@
 import * as React from 'react';
-import type { GetServerSideProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import Head from 'next/head';
 import { List } from '@wulkanowy/timetable-parser';
-import { TimeTableStatus } from 'types/TimeTable';
+import { TimeTableData } from 'types/TimeTable';
 import Layout from 'components/Layout';
 import { useRouter } from 'next/router';
 import { Replacements } from 'types/Replacements';
-import fetchReplacements from 'helpers/fetchReplacements';
 
 interface ReplacementsPageProps {
   timeTableList: List;
-  timeTableListStatus: TimeTableStatus;
+  timeTableListStatus: TimeTableData['status'];
   replacements: Replacements;
 }
 
@@ -35,15 +34,5 @@ const ReplacementsPage: NextPage<ReplacementsPageProps> = (
     </>
   );
 };
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const replacements = await fetchReplacements();
-//   return {
-//     props: {
-//       replacements,
-//       isReplacements: true, // helper variable
-//     },
-//   };
-// };
 
 export default ReplacementsPage;
