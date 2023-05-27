@@ -27,8 +27,6 @@ async function fetchTimeTableList(): Promise<TimeTableListResponse> {
     status = 'error';
   }
 
-  // console.log(timeTableList);
-
   return { timeTableList, status };
 }
 

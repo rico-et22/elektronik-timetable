@@ -44,6 +44,7 @@ export default async function fetchTimetableData(
     generatedDate,
 
     dayNames: timeTable.getDayNames(),
+    shortDayNames: ['Pon.', 'Wt.', 'Śr.', 'Czw.', 'Pt.'],
     days: timeTable.getDays(),
     hours: timeTable.getHours(),
   };

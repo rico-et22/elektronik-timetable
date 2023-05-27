@@ -1,31 +1,6 @@
 import { TableLesson } from '@wulkanowy/timetable-parser';
-import { Replacements } from 'types/Replacements';
-/*
-const test = {
-  "subject": "Wychowanie fizyczne",
-  "lesson": "7",
-  "teacher": "Poprzedni nauczyciel",
-  "deputy": "Uczniowie zwolnieni do domu",
-  "classgroup": [
-    "3i",
-    "1/3" // dlaczego
-  ],
-  "room": "s5",
-  "notes": ""
-}
-const test2 = {
-  "lesson": "5",
-  "subject": "Wychowanie fizyczne",
-  "room": "210",
-  "deputy": "Poprzedni nauczyciel",
-  "teacher": "Zastępstwo z",
-  "classgroup": [
-      "3j",
-      "gr1" // dlaczego
-  ],
-  "notes": "Złączenie grup",
-}
-*/
+import { Replacement, Replacements } from 'types/Replacements';
+import { TimeTableData } from 'types/TimeTable';
 
 function normaliseGroup(group: string) {
   // 1/3
@@ -40,44 +15,38 @@ function normaliseGroup(group: string) {
 }
 
 export default function findReplacement(
-  { rows }: Replacements,
-  { className, groupName }: TableLesson,
+  { className, groupName, teacher, room }: TableLesson,
   hourIndex: number,
-) {
+  dayIndex: number,
+  { rows: replacementLessons, dayIndex: replacementDayIndex }: Replacements,
+  { type: dataType }: TimeTableData,
+): Replacement | undefined {
+  if (dayIndex !== replacementDayIndex) return undefined;
+
   const group = groupName ? normaliseGroup(groupName) : undefined;
-
-  return rows.find((replacementLesson) => {
-    const replacementClassName = replacementLesson.classgroup[0];
-    const replacementGroups = replacementLesson.classgroup
-      .slice(1)
-      .map((replacementGroup) => normaliseGroup(replacementGroup));
+  return replacementLessons.find((replacementLesson) => {
     const replacementLessonIndex = Number(replacementLesson.lesson) - 1;
+    if (replacementLessonIndex !== hourIndex) return false;
 
-    const isLessonIndexTheSame = replacementLessonIndex === hourIndex;
+    if (dataType === 'class') {
+      const replacementClassName = replacementLesson.classgroup[0];
+      if (replacementClassName !== className) return false; // the className is set by completeTimeTableData
+    } else if (dataType === 'room') {
+      if (replacementLesson.room !== room) return false;
+    } else {
+      // checking teacher is hard to implement with this replacements api. Because
+      // timeTableList.teachers?
+      return false;
+    }
 
-    const isClassTheSame =
-      className === undefined || replacementClassName === className;
+    if (group) {
+      const replacementGroups = replacementLesson.classgroup
+        .slice(1)
+        .find((replacementGroup) => normaliseGroup(replacementGroup) === group);
 
-    // the group isn't defined when lesson is for the whole class
-    const isGroupTheSame =
-      group === undefined ||
-      (replacementGroups.length > 0 &&
-        !!replacementGroups.find(
-          (replacementGroup) => replacementGroup === group,
-        ));
+      if (!replacementGroups) return false;
+    }
 
-    if (
-      replacementClassName === '1h' &&
-      isLessonIndexTheSame &&
-      isClassTheSame &&
-      isGroupTheSame
-    )
-      window.console.log(
-        { replacementClassName, replacementGroups, replacementLessonIndex },
-        { className, group, lessonIndex: hourIndex },
-        { isClassTheSame, isLessonIndexTheSame, isGroupTheSame },
-      );
-
-    return isLessonIndexTheSame && isClassTheSame && isGroupTheSame;
+    return true;
   });
 }

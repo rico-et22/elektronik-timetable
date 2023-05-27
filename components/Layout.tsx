@@ -172,6 +172,7 @@ const Layout = ({
                     <TimeTableAsTable
                       timeTable={timeTable}
                       timeTableList={timeTableList}
+                      replacements={replacements}
                     />
                   )}
                 </>

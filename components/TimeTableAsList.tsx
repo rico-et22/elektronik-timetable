@@ -27,8 +27,6 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
     number | undefined
   >();
 
-  const shortDayNames = ['Pon.', 'Wt.', 'Śr.', 'Czw.', 'Pt.'];
-
   const { showShortHours, shortHours } = React.useContext(SettingsContext);
 
   const router = useRouter();
@@ -124,7 +122,7 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
             onClick={() => setSelectedDayIndex(index)}
           >
             <span className="hidden xs:inline">{dayName}</span>
-            <span className="xs:hidden">{shortDayNames[index]}</span>
+            <span className="xs:hidden">{timeTable.shortDayNames[index]}</span>
           </button>
         ))}
       </div>
@@ -157,7 +155,14 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                 </div>
                 <div className="rounded-r bg-gray-50 dark:bg-zinc-800 dark:border-r dark:border-t dark:border-b dark:border-zinc-700 w-full px-4 py-1 overflow-hidden">
                   {lessonHour.map((lesson, lessonIndex) => {
-                    findReplacement(replacements, lesson, hourIndex);
+                    const replacement = findReplacement(
+                      lesson,
+                      hourIndex,
+                      selectedDayIndex,
+                      replacements,
+                      timeTable,
+                    );
+
                     return (
                       <div
                         // eslint-disable-next-line react/no-array-index-key
@@ -170,35 +175,32 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                         }
                       >
                         <p className="font-bold mb-1">
-                          {lesson.subject}
+                          {replacement?.subject || lesson.subject}
                           {lesson.groupName && ` (${lesson.groupName})`}
                         </p>
                         <div className="text-sm flex">
-                          {router.query.all &&
-                            router.query.all[0] !== 'class' &&
-                            lesson.className && (
-                              <div className="flex items-center mr-4">
-                                <AcademicCapIcon className="h-3 w-3 mr-1 shrink-0" />
-                                <Link
-                                  href={`/class/${
-                                    getClassData(lesson.className)?.value
-                                  }`}
-                                >
-                                  <a className="text-elektronik-blue">
-                                    {
-                                      getClassData(
-                                        lesson.className,
-                                      )?.name.split(' ')[0]
-                                    }
-                                  </a>
-                                </Link>
-                              </div>
-                            )}
-                          {router.query.all &&
-                            router.query.all[0] !== 'teacher' &&
-                            lesson.teacher && (
-                              <div className="flex items-center mr-4 w-3/5 xxs:w-auto">
-                                <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
+                          {lesson.className && (
+                            <div className="flex items-center mr-4">
+                              <AcademicCapIcon className="h-3 w-3 mr-1 shrink-0" />
+                              <Link
+                                href={`/class/${
+                                  getClassData(lesson.className)?.value
+                                }`}
+                              >
+                                <a className="text-elektronik-blue">
+                                  {
+                                    getClassData(lesson.className)?.name.split(
+                                      ' ',
+                                    )[0]
+                                  }
+                                </a>
+                              </Link>
+                            </div>
+                          )}
+                          {(replacement?.deputy || lesson.teacher) && (
+                            <div className="flex items-center mr-4 w-3/5 xxs:w-auto">
+                              <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
+                              {replacement?.deputy || (
                                 <Link
                                   href={`/teacher/${
                                     getTeacherData(lesson.teacher)?.value
@@ -212,28 +214,28 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                                     }
                                   </a>
                                 </Link>
-                              </div>
-                            )}{' '}
-                          {router.query.all &&
-                            router.query.all[0] !== 'room' &&
-                            lesson.room && (
-                              <div className="flex items-center">
-                                <MapPinIcon className="h-3 w-3 mr-1 shrink-0" />
-                                <Link
-                                  href={`/room/${
-                                    getRoomData(lesson.room)?.value
-                                  }`}
-                                >
-                                  <a className="text-elektronik-blue">
-                                    {
-                                      getRoomData(lesson.room)?.name.split(
-                                        ' ',
-                                      )[0]
-                                    }
-                                  </a>
-                                </Link>
-                              </div>
-                            )}
+                              )}
+                            </div>
+                          )}{' '}
+                          {(replacement?.room || lesson.room) && (
+                            <div className="flex items-center">
+                              <MapPinIcon className="h-3 w-3 mr-1 shrink-0" />
+                              <Link
+                                href={`/room/${
+                                  getRoomData(replacement?.room || lesson.room)
+                                    ?.value
+                                }`}
+                              >
+                                <a className="text-elektronik-blue">
+                                  {
+                                    getRoomData(
+                                      replacement?.room || lesson.room,
+                                    )?.name.split(' ')[0]
+                                  }
+                                </a>
+                              </Link>
+                            </div>
+                          )}
                         </div>
                       </div>
                     );

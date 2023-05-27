@@ -9,6 +9,7 @@ export interface TimeTableData {
   generatedDate?: string;
 
   dayNames: string[];
+  shortDayNames: string[];
   days: TableLesson[][][];
   hours: Record<number, TableHour>;
 }
