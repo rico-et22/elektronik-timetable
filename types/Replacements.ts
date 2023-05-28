@@ -25,11 +25,12 @@
 }
 */
 
+// nauczyciele są zapisani w ten sposób "<nazwisko> <pełne imię>"
 export interface Replacement {
   lesson: string; // na której lekcji. liczy od 1
   room: string; // w której sali lekcyjnej
   subject: string; // co się teraz ma
-  deputy: string; // nauczyciel z którym ma się teraz lekcję
+  deputy: string; // nauczyciel z którym ma się teraz lekcję lub wiadomość "Uczniowie zwolnieni do dom" lub "Uczniowie przychodzą później"
   classgroup: string[]; // pierwsza wartość to, która klasa, a wszystkie inne to które grupy (grupy nie muszą występować jeżeli jest to dla całej klasy)
   notes: string; // notatki
 

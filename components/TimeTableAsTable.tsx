@@ -6,7 +6,7 @@ import {
 import { List } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
-import * as React from 'react';
+import React from 'react';
 import getClassDataByCode from 'helpers/getClassDataByCode';
 import getHourData from 'helpers/getHourData';
 import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
@@ -15,6 +15,7 @@ import { SettingsContext } from 'pages/_app';
 import { TimeTableData } from 'types/TimeTable';
 import { Replacements } from 'types/Replacements';
 import findReplacement from 'helpers/findReplacement';
+import LessonHour from './LessonHour';
 
 interface Props {
   timeTable: TimeTableData;
@@ -145,89 +146,35 @@ const TimeTableAsTable = ({
                                   }`}
                   >
                     {timeTable.days[dayIndex][hourIndex].map(
-                      (lesson, lessonIndex) => {
+                      (lesson, lessonIndex, hourArray) => {
                         const replacement = findReplacement(
                           lesson,
                           hourIndex,
                           dayIndex,
                           replacements,
                           timeTable,
+                          timeTableList,
                         );
+
+                        const classData = getClassData(
+                          replacement?.classgroup[0] || lesson.className,
+                        );
+                        const teacherData = getTeacherData(lesson.teacher);
+                        const roomData = getRoomData(lesson.room);
+
                         return (
                           <div
-                            // eslint-disable-next-line react/no-array-index-key
                             key={`day-${dayIndex}-${hourIndex}-${lessonIndex}`}
-                            className={
-                              lessonIndex !==
-                              timeTable.days[dayIndex][hourIndex].length - 1
-                                ? 'mb-2'
-                                : ''
-                            }
                           >
-                            <p className="font-bold mb-1">
-                              {replacement?.subject || lesson.subject}
-                              {lesson.groupName && ` (${lesson.groupName})`}
-                            </p>
-                            <div className="flex">
-                              {lesson.className && (
-                                <div className="flex items-center mr-4">
-                                  <AcademicCapIcon className="h-3 w-3 mr-1" />
-                                  <Link
-                                    href={`/class/${
-                                      getClassData(lesson.className)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue">
-                                      {
-                                        getClassData(
-                                          lesson.className,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}
-                              {(replacement?.deputy || lesson.teacher) && (
-                                <div className="flex items-center mr-4 w-1/2">
-                                  <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
-                                  {replacement?.deputy || (
-                                    <Link
-                                      href={`/teacher/${
-                                        getTeacherData(lesson.teacher)?.value
-                                      }`}
-                                    >
-                                      <a className="text-elektronik-blue truncate">
-                                        {
-                                          getTeacherData(
-                                            lesson.teacher,
-                                          )?.name.split(' ')[0]
-                                        }
-                                      </a>
-                                    </Link>
-                                  )}
-                                </div>
-                              )}{' '}
-                              {(replacement?.room || lesson.room) && (
-                                <div className="flex items-center">
-                                  <MapPinIcon className="h-3 w-3 mr-1" />
-                                  <Link
-                                    href={`/room/${
-                                      getRoomData(
-                                        replacement?.room || lesson.room,
-                                      )?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue">
-                                      {
-                                        getRoomData(
-                                          replacement?.room || lesson.room,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}
-                            </div>
+                            <LessonHour
+                              subject={lesson.subject}
+                              replacement={replacement}
+                              groupName={lesson.groupName}
+                              classData={classData}
+                              teacherData={teacherData}
+                              roomData={roomData}
+                              small
+                            />
                           </div>
                         );
                       },

@@ -10,7 +10,7 @@ import TimeTableAsTable from 'components/TimeTableAsTable';
 import HeaderBar from 'components/HeaderBar';
 import TopBar from 'components/TopBar';
 import { SettingsContext } from 'pages/_app';
-import Spinner from 'components/Spinner';
+import Spinner from 'components/utils/Spinner';
 import { Replacements } from 'types/Replacements';
 import completeTimeTableData from 'helpers/completeTimeTableData';
 import ReplacementsTable from './ReplacementsTable';

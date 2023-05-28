@@ -1,6 +1,7 @@
-import { TableLesson } from '@wulkanowy/timetable-parser';
+import { List, TableLesson } from '@wulkanowy/timetable-parser';
 import { Replacement, Replacements } from 'types/Replacements';
 import { TimeTableData } from 'types/TimeTable';
+import getTeacherDataByCode from './getTeacherDataByCode';
 
 function normaliseGroup(group: string) {
   // 1/3
@@ -20,6 +21,7 @@ export default function findReplacement(
   dayIndex: number,
   { rows: replacementLessons, dayIndex: replacementDayIndex }: Replacements,
   { type: dataType }: TimeTableData,
+  timeTableList: List,
 ): Replacement | undefined {
   if (dayIndex !== replacementDayIndex) return undefined;
 
@@ -33,9 +35,18 @@ export default function findReplacement(
       if (replacementClassName !== className) return false; // the className is set by completeTimeTableData
     } else if (dataType === 'room') {
       if (replacementLesson.room !== room) return false;
+    } else if (dataType === 'teacher') {
+      if (teacher === undefined) return false;
+      const [surname, name] = replacementLesson.teacher.split(' ');
+      const replacedTeacherString = `${name[0]}.${surname}`.toLowerCase();
+
+      const teacherString = getTeacherDataByCode(timeTableList, teacher)
+        ?.name.toLowerCase()
+        .split(' ')
+        .shift();
+
+      if (replacedTeacherString !== teacherString) return false;
     } else {
-      // checking teacher is hard to implement with this replacements api. Because
-      // timeTableList.teachers?
       return false;
     }
 
