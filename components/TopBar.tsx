@@ -27,7 +27,7 @@ const TopBar = ({ timeTableList, printRef, showReplacements }: TopBarProps) => {
 
   const routeContext = React.useMemo(
     () => getRouteContext(router, timeTableList),
-    [router, timeTableList],
+    [router, timeTableList]
   );
 
   const handleDesktopComponentButtonClick = (value: DesktopComponent) => {

@@ -54,11 +54,11 @@ const Layout = ({
         if (
           (tab === 'class' &&
             timeTableList.classes.find(
-              (singleClass) => singleClass.value === id,
+              (singleClass) => singleClass.value === id
             )) ||
           (tab === 'teacher' &&
             timeTableList.teachers?.find(
-              (singleTeacher) => singleTeacher.value === id,
+              (singleTeacher) => singleTeacher.value === id
             )) ||
           (tab === 'room' &&
             timeTableList.rooms?.find((singleRoom) => singleRoom.value === id))

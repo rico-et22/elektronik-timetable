@@ -3,14 +3,17 @@ import {
   MapPinIcon,
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
-import { List } from '@wulkanowy/timetable-parser';
+import { List, ListItem } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import * as React from 'react';
 import getClassDataByCode from 'helpers/getClassDataByCode';
 import getHourData from 'helpers/getHourData';
 import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
-import getTeacherDataByCode from 'helpers/getTeacherDataByCode';
+import {
+  getTeacherDataByCode,
+  getTeacherDataByShortName,
+} from 'helpers/getTeacherData';
 import { SettingsContext } from 'pages/_app';
 import { TimeTableData } from 'types/TimeTable';
 import { Replacements } from 'types/Replacements';
@@ -51,19 +54,24 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
   const getClassData = React.useCallback(
     (classCode: string | undefined) =>
       getClassDataByCode(timeTableList, classCode),
-    [timeTableList],
+    [timeTableList]
   );
 
-  const getTeacherData = React.useCallback(
+  const getTeacherDataUsingCode = React.useCallback(
     (teacherCode: string | undefined) =>
       getTeacherDataByCode(timeTableList, teacherCode),
-    [timeTableList],
+    [timeTableList]
+  );
+  const getTeacherDataUsingShortName = React.useCallback(
+    (teacherCode: string | undefined) =>
+      getTeacherDataByCode(timeTableList, teacherCode),
+    [timeTableList]
   );
 
   const getRoomData = React.useCallback(
     (roomNumber: string | undefined) =>
       getRoomDataByNumber(timeTableList, roomNumber),
-    [timeTableList],
+    [timeTableList]
   );
 
   const isCurrentLesson = React.useCallback(
@@ -84,13 +92,13 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
         );
       return false;
     },
-    [selectedDayIndex, isClientSide],
+    [selectedDayIndex, isClientSide]
   );
 
   const dayTrimData = React.useMemo(
     () => ({
       firstNotEmptyIndex: timeTable.days.map((day) =>
-        day.findIndex((dayHour) => dayHour.length > 0),
+        day.findIndex((dayHour) => dayHour.length > 0)
       ),
       lastNotEmptyIndex: timeTable.days.map(
         (day) =>
@@ -99,10 +107,10 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
           day
             .slice()
             .reverse()
-            .findIndex((dayHour) => dayHour.length > 0),
+            .findIndex((dayHour) => dayHour.length > 0)
       ),
     }),
-    [timeTable.days],
+    [timeTable.days]
   );
 
   const hourData = React.useMemo(() => {
@@ -156,29 +164,68 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                 </div>
                 <div className="rounded-r bg-gray-50 dark:bg-zinc-800 dark:border-r dark:border-t dark:border-b dark:border-zinc-700 w-full px-4 py-1 overflow-hidden">
                   {lessonHour.map((lesson, lessonIndex) => {
+                    const classData = getClassData(lesson.className);
+                    const teacherData = getTeacherDataUsingCode(lesson.teacher);
+                    const roomData = getRoomData(lesson.room);
+
                     const replacement = findReplacement(
                       lesson,
                       hourIndex,
                       selectedDayIndex,
                       replacements,
                       timeTable,
-                      timeTableList,
+                      timeTableList
                     );
+                    let replacedClassData: ListItem | undefined;
+                    let replacedTeacherData: ListItem | undefined;
+                    let replacedRoomData: ListItem | undefined;
+                    let lessonRemoved = false;
 
-                    const classData = getClassData(
-                      replacement?.classgroup[0] || lesson.className,
-                    );
-                    const teacherData = getTeacherData(lesson.teacher);
-                    const roomData = getRoomData(lesson.room);
+                    if (replacement) {
+                      lessonRemoved =
+                        !!replacement.deputy.includes('Uczniowie');
+
+                      replacedClassData = getClassData(
+                        replacement.classgroup[0]
+                      );
+                      if (replacedClassData === classData)
+                        replacedClassData = undefined;
+                      // if you wonder what it does search for replacements type
+
+                      if (!lessonRemoved) {
+                        const [surname, name] = replacement.deputy.split(
+                          ' '
+                        ) || ['', ''];
+                        const replacedTeacherString = `${name[0]}.${surname}`;
+
+                        replacedTeacherData = getTeacherDataUsingShortName(
+                          replacedTeacherString
+                        ) || {
+                          name: replacedTeacherString, // replacement.deputy // it gets split so it can't be used
+                          value: '-1',
+                        };
+                        if (replacedTeacherData === teacherData)
+                          replacedTeacherData = undefined;
+                      }
+                      // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
+
+                      replacedRoomData = getRoomData(replacement.room);
+                      if (replacedRoomData === roomData)
+                        replacedRoomData = undefined;
+                    }
 
                     return (
                       <div
                         key={`day-${selectedDayIndex}-${hourIndex}-${lessonIndex}`}
                       >
                         <LessonHour
-                          subject={lesson.subject}
                           replacement={replacement}
+                          subject={lesson.subject}
                           groupName={lesson.groupName}
+                          lessonRemoved={lessonRemoved}
+                          replacedClassData={replacedClassData}
+                          replacedTeacherData={replacedTeacherData}
+                          replacedRoomData={replacedRoomData}
                           classData={classData}
                           teacherData={teacherData}
                           roomData={roomData}

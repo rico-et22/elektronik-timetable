@@ -25,7 +25,7 @@ const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
 
   const routeContext = React.useMemo(
     () => getRouteContext(router, timeTableList),
-    [timeTableList, router],
+    [timeTableList, router]
   );
 
   const titleText = React.useMemo(() => {
@@ -56,7 +56,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const { classes, teachers, rooms } = timeTableList;
   const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
   const teachersPaths = teachers?.map(
-    (teacherItem) => `/teacher/${teacherItem.value}`,
+    (teacherItem) => `/teacher/${teacherItem.value}`
   );
   const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
   if (!classesPaths || !teachersPaths || !roomsPaths)

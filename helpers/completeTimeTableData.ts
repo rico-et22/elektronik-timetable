@@ -3,7 +3,7 @@ import { TimeTableData } from 'types/TimeTable';
 
 export default function completeTimeTableData(
   { days, type: dataType, id }: TimeTableData,
-  timeTableList: List,
+  timeTableList: List
 ) {
   // used in _app.tsx
   const idAsString = String(id);

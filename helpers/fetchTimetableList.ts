@@ -11,7 +11,7 @@ async function fetchTimeTableList(): Promise<TimeTableListResponse> {
       process.env.NEXT_PUBLIC_PROXY_URL
         ? `${process.env.NEXT_PUBLIC_PROXY_URL}/`
         : ''
-    }${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/lista.html`,
+    }${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/lista.html`
   );
 
   const timeTableList = new TimetableList(await response.text()).getList();

@@ -21,7 +21,7 @@ function constructURL(dataType: TimeTableData['type'], id: number) {
 export default async function fetchTimetableData(
   dataType: TimeTableData['type'],
   id: number,
-  timeTableList?: List,
+  timeTableList?: List
 ): Promise<TimeTableData> {
   const response = await fetch(constructURL(dataType, id));
 

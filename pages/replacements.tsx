@@ -14,7 +14,7 @@ interface ReplacementsPageProps {
 }
 
 const ReplacementsPage: NextPage<ReplacementsPageProps> = (
-  props: ReplacementsPageProps,
+  props: ReplacementsPageProps
 ) => {
   const { replacements } = props;
   const router = useRouter();

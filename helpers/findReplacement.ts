@@ -1,9 +1,9 @@
 import { List, TableLesson } from '@wulkanowy/timetable-parser';
 import { Replacement, Replacements } from 'types/Replacements';
 import { TimeTableData } from 'types/TimeTable';
-import getTeacherDataByCode from './getTeacherDataByCode';
+import { getTeacherDataByCode } from './getTeacherData';
 
-function normaliseGroup(group: string) {
+function normalizeGroup(group: string) {
   // 1/3
   let split = group.split('/')[0];
   // "abc".split("/") === ["abc"]
@@ -21,11 +21,11 @@ export default function findReplacement(
   dayIndex: number,
   { rows: replacementLessons, dayIndex: replacementDayIndex }: Replacements,
   { type: dataType }: TimeTableData,
-  timeTableList: List,
+  timeTableList: List
 ): Replacement | undefined {
   if (dayIndex !== replacementDayIndex) return undefined;
 
-  const group = groupName ? normaliseGroup(groupName) : undefined;
+  const group = groupName ? normalizeGroup(groupName) : undefined;
   return replacementLessons.find((replacementLesson) => {
     const replacementLessonIndex = Number(replacementLesson.lesson) - 1;
     if (replacementLessonIndex !== hourIndex) return false;
@@ -53,7 +53,7 @@ export default function findReplacement(
     if (group) {
       const replacementGroups = replacementLesson.classgroup
         .slice(1)
-        .find((replacementGroup) => normaliseGroup(replacementGroup) === group);
+        .find((replacementGroup) => normalizeGroup(replacementGroup) === group);
 
       if (!replacementGroups) return false;
     }

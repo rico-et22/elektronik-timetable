@@ -8,7 +8,6 @@ import {
 import { ListItem } from '@wulkanowy/timetable-parser';
 import { TimeTableData } from 'types/TimeTable';
 import { Replacement } from 'types/Replacements';
-import StrikeThrough from './utils/StrikeThrough';
 
 interface IconProps {
   type: DataLinkProps['type'];
@@ -38,25 +37,47 @@ function Icon({ type }: IconProps): JSX.Element {
 interface DataLinkProps {
   type: TimeTableData['type'];
 
-  name: ListItem['name'];
-  id: ListItem['value'];
+  data: ListItem | undefined;
+  replacementData: ListItem | undefined;
 
   small: boolean;
 }
 
-function CustomLink({ type, name, id, small }: DataLinkProps) {
+function CustomLink({ type, data, replacementData, small }: DataLinkProps) {
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (!data && !replacementData) return <></>;
+
   // /class/6
-  const url = `/${type}/${id}`;
   // 1h 1Informatyk
-  const shortName = name.split(' ')[0]; // 1h // 203 // J.Kowalski
+  const shortName = data?.name.split(' ')[0]; // 1h // 203 // J.Kowalski
+  const shortReplacementName = replacementData?.name.split(' ')[0];
   // const smallClass = small ? "shrink-0" : "";
 
   return (
     <div className="flex items-center mr-4">
       <Icon type={type} />
-      <Link href={url}>
-        <a className="text-elektronik-blue">{shortName}</a>
-      </Link>
+      <table>
+        {data && (
+          <tr>
+            <Link href={`/${type}/${data.value}`}>
+              <a className="text-elektronik-blue">
+                {replacementData ? <del>{shortName}</del> : shortName}
+              </a>
+            </Link>
+          </tr>
+        )}
+        {replacementData && (
+          <tr>
+            {replacementData.value !== '-1' ? (
+              <Link href={`/${type}/${replacementData.value}`}>
+                <a className="text-elektronik-blue">{shortReplacementName}</a>
+              </Link>
+            ) : (
+              shortReplacementName
+            )}
+          </tr>
+        )}
+      </table>
     </div>
   );
 }
@@ -67,6 +88,12 @@ interface Props {
   groupName: string | undefined;
 
   small: boolean;
+
+  lessonRemoved: boolean;
+
+  replacedClassData: ListItem | undefined;
+  replacedTeacherData: ListItem | undefined;
+  replacedRoomData: ListItem | undefined;
 
   classData: ListItem | undefined;
   teacherData: ListItem | undefined;
@@ -80,22 +107,26 @@ export default function LessonHour({
 
   small,
 
+  lessonRemoved,
+  replacedClassData,
+  replacedTeacherData,
+  replacedRoomData,
+
   classData,
   teacherData,
   roomData,
 }: Props) {
-  const lessonRemoved = !!replacement?.deputy.includes('Uczniowie');
-  // const Teacher
+  const hasReplacement = !!replacement;
 
   return (
     <>
       <p className="font-bold mb-1">
-        {!replacement && subject}
-        {replacement && (
+        {!hasReplacement && subject}
+        {hasReplacement && (
           <>
             {subject && (
               <>
-                <StrikeThrough>{subject}</StrikeThrough>
+                <del>{subject}</del>
                 <br />
               </>
             )}
@@ -107,32 +138,26 @@ export default function LessonHour({
       </p>
 
       <div className="text-sm flex">
-        {classData && (
-          <CustomLink
-            type="class"
-            name={classData.name}
-            id={classData.value}
-            small={small}
-          />
-        )}
+        <CustomLink
+          type="class"
+          data={classData}
+          replacementData={replacedClassData}
+          small={small}
+        />
 
-        {teacherData && (
-          <CustomLink
-            type="teacher"
-            name={teacherData.name}
-            id={teacherData.value}
-            small={small}
-          />
-        )}
+        <CustomLink
+          type="teacher"
+          data={teacherData}
+          replacementData={replacedTeacherData}
+          small={small}
+        />
 
-        {roomData && (
-          <CustomLink
-            type="room"
-            name={roomData.name}
-            id={roomData.value}
-            small={small}
-          />
-        )}
+        <CustomLink
+          type="room"
+          data={roomData}
+          replacementData={replacedRoomData}
+          small={small}
+        />
       </div>
     </>
   );

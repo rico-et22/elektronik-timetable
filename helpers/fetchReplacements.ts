@@ -27,7 +27,7 @@ export default async function fetchReplacements(): Promise<Replacements> {
     } catch (e) {
       console.error(
         "Couldn't fetch replacements (zastępstwa) api. Are you sure you have configured the right link?",
-        e,
+        e
       );
       replacements.status = 'error';
     }

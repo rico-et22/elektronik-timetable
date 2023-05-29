@@ -102,13 +102,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const [desktopComponent, setDesktopComponent] =
     React.useState<DesktopComponent>(defaultContextValue.desktopComponent);
   const [showSpinner, setShowSpinner] = React.useState(
-    defaultContextValue.showSpinner,
+    defaultContextValue.showSpinner
   );
   const [bottomBarExpanded, setBottomBarExpanded] = React.useState(
-    defaultContextValue.bottomBarExpanded,
+    defaultContextValue.bottomBarExpanded
   );
   const [showShortHours, setShowShortHours] = React.useState(
-    defaultContextValue.showShortHours,
+    defaultContextValue.showShortHours
   );
   const [theme, setTheme] = React.useState(defaultContextValue.theme);
   const [supportsPWA, setSupportsPWA] = React.useState(false);
@@ -169,7 +169,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       showSpinner,
       supportsPWA,
       theme,
-    ],
+    ]
   );
 
   return (

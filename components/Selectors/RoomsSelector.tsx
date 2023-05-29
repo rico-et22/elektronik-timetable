@@ -26,7 +26,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
   const handleClick = (
     state: boolean,
     stateChangeFunction: Function,
-    ref: React.RefObject<HTMLDivElement>,
+    ref: React.RefObject<HTMLDivElement>
   ) => {
     if (!state && ref && ref.current !== null) {
       ref.current.style.maxHeight = `${ref.current.scrollHeight}px`;
@@ -75,7 +75,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
             char: '',
             items: rooms,
           },
-        ],
+        ]
       );
     }
   }, [rooms]);
@@ -85,7 +85,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
         type="button"
         onClick={() => handleClick(open, setOpen, selectorRef)}
         className={`bg-green-700 text-white bg-opacity-75 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
-          open,
+          open
         )}`}
       >
         <div className="flex items-center">

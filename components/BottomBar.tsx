@@ -36,7 +36,7 @@ const BottomBar = ({
 
   const routeContext = React.useMemo(
     () => getRouteContext(router, timeTableList),
-    [router, timeTableList],
+    [router, timeTableList]
   );
 
   const handleToggleButtonClick = () => {

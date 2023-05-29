@@ -16,12 +16,12 @@ const getRouteContext = (router: NextRouter, timeTableList: List) => {
     if (returnedValue.type === 'class' && classes.length > 0) {
       returnedValue.typeName = 'Oddziały';
       returnedValue.name = classes.find(
-        (singleClass) => singleClass.value === value,
+        (singleClass) => singleClass.value === value
       )?.name;
     } else if (returnedValue.type === 'room' && rooms && rooms.length > 0) {
       returnedValue.typeName = 'Sale';
       returnedValue.name = rooms.find(
-        (singleRoom) => singleRoom.value === value,
+        (singleRoom) => singleRoom.value === value
       )?.name;
     } else if (
       returnedValue.type === 'teacher' &&
@@ -30,7 +30,7 @@ const getRouteContext = (router: NextRouter, timeTableList: List) => {
     ) {
       returnedValue.typeName = 'Nauczyciele';
       returnedValue.name = teachers.find(
-        (singleTeacher) => singleTeacher.value === value,
+        (singleTeacher) => singleTeacher.value === value
       )?.name;
     }
   }
