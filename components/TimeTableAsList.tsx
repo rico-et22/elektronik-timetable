@@ -207,11 +207,14 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                         if (replacedTeacherData === teacherData)
                           replacedTeacherData = undefined;
                       }
-                      // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
-
-                      replacedRoomData = getRoomData(replacement.room);
+                      replacedRoomData = getRoomData(replacement.room) || {
+                        // sal też może nie być
+                        name: replacement.room, // replacement.deputy // it gets split so it can't be used
+                        value: '-1',
+                      };
                       if (replacedRoomData === roomData)
                         replacedRoomData = undefined;
+                      // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
                     }
 
                     return (

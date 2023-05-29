@@ -1,5 +1,10 @@
 import * as React from 'react';
-import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import type {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+} from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Layout from 'components/Layout';
@@ -10,6 +15,7 @@ import { TimeTableData, TimeTableListResponse } from 'types/TimeTable';
 import fetchTimetableData from 'helpers/fetchTimetable';
 import fetchTimeTableList from 'helpers/fetchTimetableList';
 import { Replacements } from 'types/Replacements';
+import fetchReplacements from 'helpers/fetchReplacements';
 
 interface TablePageProps {
   timeTableList: List;

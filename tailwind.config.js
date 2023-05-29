@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         'elektronik-red': '#D4293D',
         'elektronik-blue': '#5992ca',
+        'zastepstwo-yellow': '#ffaa00',
       },
       screens: {
         xxs: '420px',

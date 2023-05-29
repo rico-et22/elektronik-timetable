@@ -182,7 +182,8 @@ const TimeTableAsTable = ({
                           replacedClassData = getClassData(
                             replacement.classgroup[0]
                           );
-
+                          if (replacedClassData === classData)
+                            replacedClassData = undefined;
                           // if you wonder what it does search for replacements type
 
                           if (!lessonRemoved) {
@@ -197,11 +198,17 @@ const TimeTableAsTable = ({
                               name: replacedTeacherString, // replacement.deputy // it gets split so it can't be used
                               value: '-1',
                             };
+                            if (replacedTeacherData === teacherData)
+                              replacedTeacherData = undefined;
                           }
-
+                          replacedRoomData = getRoomData(replacement.room) || {
+                            // sal też może nie być
+                            name: replacement.room, // replacement.deputy // it gets split so it can't be used
+                            value: '-1',
+                          };
+                          if (replacedRoomData === roomData)
+                            replacedRoomData = undefined;
                           // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
-
-                          replacedRoomData = getRoomData(replacement.room);
                         }
 
                         return (

@@ -2,18 +2,20 @@ import { Replacements } from 'types/Replacements';
 
 const shortDayNames = ['pon.', 'wt.', 'śr.', 'czw.', 'pt.'];
 
+export const defaultReplacements: Replacements = {
+  status: 'not configured',
+
+  date: '',
+  shortDayName: '',
+  dayIndex: -1,
+
+  generated: '',
+  cols: [],
+  rows: [],
+};
+
 export default async function fetchReplacements(): Promise<Replacements> {
-  const replacements: Replacements = {
-    status: 'not configured',
-
-    date: '',
-    shortDayName: '',
-    dayIndex: -1,
-
-    generated: '',
-    cols: [],
-    rows: [],
-  };
+  const replacements: Replacements = Object.create(defaultReplacements);
 
   const url = process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL;
   if (url) {

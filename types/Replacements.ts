@@ -38,7 +38,7 @@ export interface Replacement {
 }
 
 export interface Replacements {
-  status: 'ok' | 'not configured' | 'error';
+  status: 'ok' | 'not configured' | 'fetching' | 'error';
   generated: string;
 
   date: string; // Dzień: 29.05.2023 (pon.)

@@ -9,8 +9,11 @@ import {
   Themes,
 } from 'types/SettingsContext';
 import fetchTimeTableList from 'helpers/fetchTimetableList';
-import fetchReplacements from 'helpers/fetchReplacements';
 import { TimeTableListResponse } from 'types/TimeTable';
+import fetchReplacements, {
+  defaultReplacements,
+} from 'helpers/fetchReplacements';
+import { Replacements } from 'types/Replacements';
 
 const shortHours = [
   {
@@ -93,6 +96,8 @@ const defaultContextValue: SettingsContextType = {
   showShortHours: false,
   theme: Themes.system,
   supportsPWA: false,
+
+  replacements: { ...defaultReplacements, status: 'fetching' },
 };
 
 export const SettingsContext =
@@ -125,6 +130,17 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     window.addEventListener('beforeinstallprompt', handler);
 
     return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const [replacements, setReplacements] =
+    React.useState<Replacements>(defaultReplacements);
+
+  React.useEffect(() => {
+    setShowSpinner(true);
+    fetchReplacements().then((a) => {
+      setReplacements(a);
+      setShowSpinner(false);
+    });
   }, []);
 
   React.useEffect(() => {
@@ -160,6 +176,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       setTheme,
       supportsPWA,
       promptInstall,
+      replacements,
     }),
     [
       bottomBarExpanded,
@@ -169,6 +186,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       showSpinner,
       supportsPWA,
       theme,
+      replacements,
     ]
   );
 
@@ -182,7 +200,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const { timeTableList, status: timeTableListStatus }: TimeTableListResponse =
     await fetchTimeTableList();
-  const replacements = await fetchReplacements();
 
   const appProps = await App.getInitialProps(appContext);
 
@@ -191,8 +208,6 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
     pageProps: {
       timeTableList,
       timeTableListStatus,
-
-      replacements,
     },
   };
 };

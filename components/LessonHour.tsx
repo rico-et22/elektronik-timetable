@@ -57,6 +57,17 @@ function CustomLink({ type, data, replacementData, small }: DataLinkProps) {
     <div className="flex items-center mr-4">
       <Icon type={type} />
       <table>
+        {replacementData && (
+          <tr>
+            {replacementData.value !== '-1' ? (
+              <Link href={`/${type}/${replacementData.value}`}>
+                <a className="text-zastepstwo-yellow">{shortReplacementName}</a>
+              </Link>
+            ) : (
+              <div>{shortReplacementName}</div>
+            )}
+          </tr>
+        )}
         {data && (
           <tr>
             <Link href={`/${type}/${data.value}`}>
@@ -64,17 +75,6 @@ function CustomLink({ type, data, replacementData, small }: DataLinkProps) {
                 {replacementData ? <del>{shortName}</del> : shortName}
               </a>
             </Link>
-          </tr>
-        )}
-        {replacementData && (
-          <tr>
-            {replacementData.value !== '-1' ? (
-              <Link href={`/${type}/${replacementData.value}`}>
-                <a className="text-elektronik-blue">{shortReplacementName}</a>
-              </Link>
-            ) : (
-              shortReplacementName
-            )}
           </tr>
         )}
       </table>
@@ -124,14 +124,21 @@ export default function LessonHour({
         {!hasReplacement && subject}
         {hasReplacement && (
           <>
+            {!lessonRemoved && (
+              <span className="text-zastepstwo-yellow">
+                {replacement.subject}
+              </span>
+            )}
+            <span className="text-elektronik-red">
+              {lessonRemoved && replacement.deputy} {replacement.notes}
+            </span>
+            <br />
             {subject && (
               <>
                 <del>{subject}</del>
                 <br />
               </>
             )}
-            {!lessonRemoved && replacement.subject}
-            {lessonRemoved && `${replacement.deputy}`} {replacement.notes}
           </>
         )}
         {groupName && ` (${groupName})`}

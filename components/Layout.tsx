@@ -20,7 +20,6 @@ interface Props {
   timeTableList: List;
   timeTableListStatus: TimeTableListResponse['status'];
   timeTable?: TimeTableData;
-  replacements: Replacements;
   showReplacements: boolean;
 }
 
@@ -28,11 +27,11 @@ const Layout = ({
   timeTableList,
   timeTableListStatus,
   timeTable,
-  replacements,
   showReplacements,
 }: Props) => {
   const router = useRouter();
-  const { desktopComponent, showSpinner } = React.useContext(SettingsContext);
+  const { desktopComponent, showSpinner, replacements } =
+    React.useContext(SettingsContext);
   const desktopLayoutRef = React.useRef<HTMLDivElement>(null);
   const printRef = React.useRef<HTMLDivElement>(null);
 
