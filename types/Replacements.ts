@@ -1,3 +1,5 @@
+import { ShortDayNameLowerCase, DayIndex } from 'helpers/ShortDayNames';
+
 /*
 {
   "subject": "Wychowanie fizyczne",
@@ -27,7 +29,8 @@
 
 // nauczyciele są zapisani w ten sposób "<nazwisko> <pełne imię>"
 export interface Replacement {
-  lesson: string; // na której lekcji. liczy od 1
+  /** na której lekcji. liczy od 1 */
+  lesson: string;
   room: string; // w której sali lekcyjnej
   subject: string; // co się teraz ma
   deputy: string; // nauczyciel z którym ma się teraz lekcję lub wiadomość "Uczniowie zwolnieni do dom" lub "Uczniowie przychodzą później"
@@ -37,17 +40,22 @@ export interface Replacement {
   teacher: string; // poprzedni nauczyciel
 }
 
-export interface Replacements {
-  status: 'ok' | 'not configured' | 'fetching' | 'error';
+export interface ReplacementsApiResponse {
   generated: string;
 
-  date: string; // Dzień: 29.05.2023 (pon.)
-  shortDayName: string; // pon.
-  dayIndex: number; // 0
+  /** Dzień: DD.MM.YYYY (pon.) */
+  date: `Dzień: ${number}.${number}.${number} (${ShortDayNameLowerCase})`;
 
   cols: {
     name: string;
     slug: string;
   }[];
   rows: Replacement[];
+}
+
+export interface Replacements extends ReplacementsApiResponse {
+  status: 'ok' | 'not configured' | 'fetching' | 'error';
+
+  shortDayName: ShortDayNameLowerCase;
+  dayIndex: DayIndex;
 }

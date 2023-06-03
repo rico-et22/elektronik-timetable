@@ -1,13 +1,12 @@
-import { Replacements } from 'types/Replacements';
-
-const shortDayNames = ['pon.', 'wt.', 'śr.', 'czw.', 'pt.'];
+import { Replacements, ReplacementsApiResponse } from 'types/Replacements';
+import { shortDayNamesLowerCase } from './ShortDayNames';
 
 export const defaultReplacements: Replacements = {
   status: 'not configured',
 
-  date: '',
-  shortDayName: '',
-  dayIndex: -1,
+  date: 'Dzień: 1.1.1970 (czw.)',
+  shortDayName: 'czw.',
+  dayIndex: 0,
 
   generated: '',
   cols: [],
@@ -20,12 +19,28 @@ export default async function fetchReplacements(): Promise<Replacements> {
   const url = process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL;
   if (url) {
     try {
-      const response = await fetch(url);
-      Object.assign(replacements, await response.json());
-      replacements.status = 'ok';
+      // https://developer.mozilla.org/en-US/docs/Web/API/fetch https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
+      const replacementsResponse: ReplacementsApiResponse = await fetch(url, {
+        cache: 'no-store',
+      }).then((response) => response.json());
 
-      replacements.shortDayName = replacements.date.split(' ')[2].slice(1, -1);
-      replacements.dayIndex = shortDayNames.indexOf(replacements.shortDayName);
+      // Można też użyć wyrażenia regularnego (RegExp)
+      const shortDayName = <Replacements['shortDayName']>replacements.date
+        .split(' ')[2] // (pon.)
+        .slice(1, -1); // pon.
+
+      const dayIndex = <Replacements['dayIndex']>(
+        shortDayNamesLowerCase.indexOf(replacements.shortDayName)
+      );
+
+      Object.assign(replacements, {
+        status: 'ok',
+
+        ...replacementsResponse,
+
+        shortDayName,
+        dayIndex,
+      });
     } catch (e) {
       console.error(
         "Couldn't fetch replacements (zastępstwa) api. Are you sure you have configured the right link?",

@@ -15,8 +15,8 @@ import { SettingsContext } from 'pages/_app';
 import getRouteContext from 'helpers/getRouteContext';
 import Search from 'components/Search';
 import ThemeSwitcher from 'components/ThemeSwitcher';
-import ReplacementsButton from './ReplacementsButton';
-import PWAInstallButton from './PWAInstallButton';
+import ReplacementsButton from 'components/ReplacementsButton';
+import PWAInstallButton from 'components/PWAInstallButton';
 
 type BottomBarProps = {
   timeTableList: List;

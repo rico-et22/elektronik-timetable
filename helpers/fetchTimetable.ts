@@ -7,17 +7,14 @@ function constructURL(dataType: TimeTableData['type'], id: number) {
     ? `${process.env.NEXT_PUBLIC_PROXY_URL}/`
     : '';
 
-  const plan =
-    ['o', 'n', 's', 'err'].at(['class', 'teacher', 'room'].indexOf(dataType)) +
-    String(id);
+  const planPrefix = ['o', 'n', 's'].at(
+    ['class', 'teacher', 'room'].indexOf(dataType)
+  );
 
-  if (plan === 'err')
-    throw new Error('Fetching timetable failed invalid dataType');
-
-  return `${prefix}${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/plany/${plan}.html`;
+  return `${prefix}${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/plany/${planPrefix}${id}.html`;
 }
 
-// @wulkanowy/timetable-parser@1.5.0 doesn't parse ZSE tables correctly. This on for example doesn't have any days data https://zse.rzeszow.pl/plan-lekcji/plany/s8.html
+// @wulkanowy/timetable-parser@1.5.0 źle analizuje plany lekcji ZSE np. https://zse.rzeszow.pl/plan-lekcji/plany/s8.html
 export default async function fetchTimetableData(
   dataType: TimeTableData['type'],
   id: number,
@@ -44,7 +41,6 @@ export default async function fetchTimetableData(
     generatedDate,
 
     dayNames: timeTable.getDayNames(),
-    shortDayNames: ['Pon.', 'Wt.', 'Śr.', 'Czw.', 'Pt.'],
     days: timeTable.getDays(),
     hours: timeTable.getHours(),
   };

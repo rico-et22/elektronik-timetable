@@ -22,7 +22,7 @@ const PWAInstallButton = () => {
       <button
         className="bg-stone-500 text-white w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg"
         type="button"
-        onClick={(e) => onClick(e)}
+        onClick={onClick}
       >
         <div className="flex items-center">
           <ArrowDownTrayIcon className="h-5 w-5 mr-2" />

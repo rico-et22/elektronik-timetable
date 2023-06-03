@@ -1,7 +1,10 @@
-import { List, TimetableList } from '@wulkanowy/timetable-parser';
+import React from 'react';
 import { useRouter } from 'next/router';
-import * as React from 'react';
+import { SettingsContext } from 'pages/_app';
+
+import { List, TimetableList } from '@wulkanowy/timetable-parser';
 import { TimeTableData, TimeTableListResponse } from 'types/TimeTable';
+
 import BottomBar from 'components/BottomBar';
 import NoTimeTableError from 'components/NoTimeTableError';
 import SideBar from 'components/SideBar';
@@ -9,9 +12,7 @@ import TimeTableAsList from 'components/TimeTableAsList';
 import TimeTableAsTable from 'components/TimeTableAsTable';
 import HeaderBar from 'components/HeaderBar';
 import TopBar from 'components/TopBar';
-import { SettingsContext } from 'pages/_app';
-import Spinner from 'components/utils/Spinner';
-import { Replacements } from 'types/Replacements';
+import Spinner from 'components/Spinner';
 import completeTimeTableData from 'helpers/completeTimeTableData';
 import ReplacementsTable from './ReplacementsTable';
 import ReplacementsInfo from './ReplacementsInfo';

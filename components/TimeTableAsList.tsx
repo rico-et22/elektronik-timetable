@@ -1,23 +1,21 @@
-import {
-  AcademicCapIcon,
-  MapPinIcon,
-  UserGroupIcon,
-} from '@heroicons/react/24/outline';
+import React from 'react';
+import { SettingsContext } from 'pages/_app';
 import { List, ListItem } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
-import Link from 'next/link';
-import * as React from 'react';
-import getClassDataByCode from 'helpers/getClassDataByCode';
-import getHourData from 'helpers/getHourData';
-import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
+
 import {
   getTeacherDataByCode,
   getTeacherDataByShortName,
 } from 'helpers/getTeacherData';
-import { SettingsContext } from 'pages/_app';
+import getHourData from 'helpers/getHourData';
+import getClassDataByCode from 'helpers/getClassDataByCode';
+import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
+
 import { TimeTableData } from 'types/TimeTable';
 import { Replacements } from 'types/Replacements';
+
 import findReplacement from 'helpers/findReplacement';
+import { shortDayNames } from 'helpers/ShortDayNames';
 import LessonHour from './LessonHour';
 
 interface Props {
@@ -63,8 +61,8 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
     [timeTableList]
   );
   const getTeacherDataUsingShortName = React.useCallback(
-    (teacherCode: string | undefined) =>
-      getTeacherDataByCode(timeTableList, teacherCode),
+    (teacherShortName: string | undefined) =>
+      getTeacherDataByShortName(timeTableList, teacherShortName),
     [timeTableList]
   );
 
@@ -100,14 +98,8 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
       firstNotEmptyIndex: timeTable.days.map((day) =>
         day.findIndex((dayHour) => dayHour.length > 0)
       ),
-      lastNotEmptyIndex: timeTable.days.map(
-        (day) =>
-          day.length -
-          1 -
-          day
-            .slice()
-            .reverse()
-            .findIndex((dayHour) => dayHour.length > 0)
+      lastNotEmptyIndex: timeTable.days.map((day) =>
+        day.findLastIndex((dayHour) => dayHour.length > 0)
       ),
     }),
     [timeTable.days]
@@ -131,7 +123,7 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
             onClick={() => setSelectedDayIndex(index)}
           >
             <span className="hidden xs:inline">{dayName}</span>
-            <span className="xs:hidden">{timeTable.shortDayNames[index]}</span>
+            <span className="xs:hidden">{shortDayNames[index]}</span>
           </button>
         ))}
       </div>
@@ -162,6 +154,7 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                     {hour[1].timeFrom} - {hour[1].timeTo}
                   </span>
                 </div>
+
                 <div className="rounded-r bg-gray-50 dark:bg-zinc-800 dark:border-r dark:border-t dark:border-b dark:border-zinc-700 w-full px-4 py-1 overflow-hidden">
                   {lessonHour.map((lesson, lessonIndex) => {
                     const classData = getClassData(lesson.className);

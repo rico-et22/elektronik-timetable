@@ -1,7 +1,7 @@
 import { List, TableLesson } from '@wulkanowy/timetable-parser';
 import { Replacement, Replacements } from 'types/Replacements';
 import { TimeTableData } from 'types/TimeTable';
-import { getTeacherDataByCode } from './getTeacherData';
+import { getTeacherDataByCode } from 'helpers/getTeacherData';
 
 function normalizeGroup(group: string) {
   // 1/3

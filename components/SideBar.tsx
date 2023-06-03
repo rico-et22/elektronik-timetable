@@ -5,37 +5,36 @@ import TeachersSelector from 'components/Selectors/TeachersSelector';
 import RoomsSelector from 'components/Selectors/RoomsSelector';
 import Credits from 'components/Credits';
 import Search from 'components/Search';
-import ReplacementsButton from './ReplacementsButton';
-import PWAInstallButton from './PWAInstallButton';
+import ReplacementsButton from 'components/ReplacementsButton';
+import PWAInstallButton from 'components/PWAInstallButton';
 
 type BottomBarProps = {
   timeTableList: List;
   generatedDate: string | undefined;
 };
 
-const SideBar = ({ timeTableList, generatedDate }: BottomBarProps) => {
-  const { classes, rooms, teachers } = timeTableList;
-
-  return (
-    <div className="w-full transform-gpu bg-gray-200 dark:bg-zinc-800 shadow-xl dark:shadow-none dark:border-r dark:border-zinc-700 h-[calc(100vh-4.5rem)] overflow-y-auto flex flex-col">
-      <div className="p-4">
-        <Search classes={classes} teachers={teachers} rooms={rooms} />
-        <ClassesSelector classes={classes} />
-        <TeachersSelector teachers={teachers} />
-        <RoomsSelector rooms={rooms} />
-        {process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL && <ReplacementsButton />}
-        <PWAInstallButton />
-      </div>
-      <div className="px-4 mb-5 mt-auto">
-        {generatedDate && (
-          <p className="text-xs text-center text-gray-500 dark:text-zinc-400 mb-4">
-            Wygenerowano {generatedDate}
-          </p>
-        )}
-        <Credits />
-      </div>
+const SideBar = ({
+  timeTableList: { classes, rooms, teachers },
+  generatedDate,
+}: BottomBarProps) => (
+  <div className="w-full transform-gpu bg-gray-200 dark:bg-zinc-800 shadow-xl dark:shadow-none dark:border-r dark:border-zinc-700 h-[calc(100vh-4.5rem)] overflow-y-auto flex flex-col">
+    <div className="p-4">
+      <Search classes={classes} teachers={teachers} rooms={rooms} />
+      <ClassesSelector classes={classes} />
+      <TeachersSelector teachers={teachers} />
+      <RoomsSelector rooms={rooms} />
+      {process.env.NEXT_PUBLIC_REPLACEMENTS_API_URL && <ReplacementsButton />}
+      <PWAInstallButton />
     </div>
-  );
-};
+    <div className="px-4 mb-5 mt-auto">
+      {generatedDate && (
+        <p className="text-xs text-center text-gray-500 dark:text-zinc-400 mb-4">
+          Wygenerowano {generatedDate}
+        </p>
+      )}
+      <Credits />
+    </div>
+  </div>
+);
 
 export default SideBar;
