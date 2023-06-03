@@ -1,7 +1,13 @@
 export type DayIndex = 0 | 1 | 2 | 3 | 4 | 6;
 
 export type ShortDayName =
-  'Pon.' | 'Wt.' | 'Śr.' | 'Czw.' | 'Pt.' | 'Sob.' | 'Ndz.';
+  | 'Pon.'
+  | 'Wt.'
+  | 'Śr.'
+  | 'Czw.'
+  | 'Pt.'
+  | 'Sob.'
+  | 'Ndz.';
 export const shortDayNames: readonly ShortDayName[] = [
   'Pon.',
   'Wt.',
