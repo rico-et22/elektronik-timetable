@@ -2,15 +2,15 @@ import { ShortDayNameLowerCase, DayIndex } from 'helpers/ShortDayNames';
 
 /*
 {
-  "subject": "Wychowanie fizyczne",
   "lesson": "7",
-  "teacher": "Poprzedni nauczyciel",
+  "subject": "Wychowanie fizyczne",
+  "room": "s5",
   "deputy": "Uczniowie zwolnieni do domu",
+  "teacher": "Poprzedni nauczyciel",
   "classgroup": [
     "3i",
     "1/3" // dlaczego
   ],
-  "room": "s5",
   "notes": ""
 }
 {
@@ -25,6 +25,19 @@ import { ShortDayNameLowerCase, DayIndex } from 'helpers/ShortDayNames';
   ],
   "notes": "Złączenie grup",
 }
+
+{
+  "lesson": "5",
+  "teacher": "Poprzedni nauczyciel",
+  "classgroup": [
+    "2h",
+    "gr2"
+  ],
+  "subject": "poprzednia lekcja",
+  "room": "17",
+  "deputy": "Zajęcia zorganizowane",
+  "notes": "historia za l. 8"
+},
 */
 
 // nauczyciele są zapisani w ten sposób "<nazwisko> <pełne imię>"
@@ -33,8 +46,18 @@ export interface Replacement {
   lesson: string;
   room: string; // w której sali lekcyjnej
   subject: string; // co się teraz ma
+  /**
+   * Uczniowie zwolnieni do domu
+   * Jeżeli przyjmie wartość "Zajęcia zorganizowane" to "notes", przyjmie wartość podobną do "historia za l. 8" czyli historii na lekcji 8 nie będzie
+   *
+   */
   deputy: string; // nauczyciel z którym ma się teraz lekcję lub wiadomość "Uczniowie zwolnieni do dom" lub "Uczniowie przychodzą później"
   classgroup: string[]; // pierwsza wartość to, która klasa, a wszystkie inne to które grupy (grupy nie muszą występować jeżeli jest to dla całej klasy)
+  /**
+   * Uczniowie zwolnieni do domu
+   * za nieobecny oddział
+   * Matura próbna z matematyki
+   */
   notes: string; // notatki
 
   teacher: string; // poprzedni nauczyciel
