@@ -25,14 +25,15 @@ export default async function fetchReplacements(): Promise<Replacements> {
       }).then((response) => response.json());
 
       // Można też użyć wyrażenia regularnego (RegExp)
-      const shortDayName = <Replacements['shortDayName']>replacements.date
-        .split(' ')[2] // (pon.)
-        .slice(1, -1); // pon.
-
-      const dayIndex = <Replacements['dayIndex']>(
-        shortDayNamesLowerCase.indexOf(replacements.shortDayName)
+      const shortDayName = <Replacements['shortDayName']>(
+        replacementsResponse.date
+          .split(' ')[2] // (pon.)
+          .slice(1, -1) // pon.
       );
 
+      const dayIndex = <Replacements['dayIndex']>(
+        shortDayNamesLowerCase.indexOf(shortDayName)
+      );
       Object.assign(replacements, {
         status: 'ok',
 
