@@ -11,7 +11,8 @@
     "check-types": "tsc --pretty --noEmit",
     "check-format": "prettier --check .",
     "format": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "browserslist-update": "npx browserslist@latest --update-db"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.16",

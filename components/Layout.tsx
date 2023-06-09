@@ -15,7 +15,6 @@ import TopBar from 'components/TopBar';
 import Spinner from 'components/Spinner';
 import completeTimeTableData from 'helpers/completeTimeTableData';
 import ReplacementsTable from './ReplacementsTable';
-import ReplacementsInfo from './ReplacementsInfo';
 
 interface Props {
   timeTableList: List;

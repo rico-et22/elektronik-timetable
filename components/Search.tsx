@@ -165,7 +165,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
             {filteredLinks &&
               filteredLinks.length > 0 &&
               filteredLinks.map((link, index) => (
-                <Link
+                <Link // TODO - fix this
                   legacyBehavior
                   key={`search-${link.type}-${link.value}`}
                   href={`/${link.type}/${link.value}`}

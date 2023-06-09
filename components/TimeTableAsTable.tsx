@@ -155,7 +155,7 @@ const TimeTableAsTable = ({
                                   }`}
                   >
                     {timeTable.days[dayIndex][hourIndex].map(
-                      (lesson, lessonIndex, hourArray) => {
+                      (lesson, lessonIndex) => {
                         // if someone reads this. sorry i didn't have the time to do this a proper, cleaner way
                         const classData = getClassData(lesson.className);
                         const teacherData = getTeacherDataUsingCode(
