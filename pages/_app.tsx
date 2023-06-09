@@ -10,9 +10,7 @@ import {
 } from 'types/SettingsContext';
 import fetchTimeTableList from 'helpers/fetchTimetableList';
 import { TimeTableListResponse } from 'types/TimeTable';
-import fetchReplacements, {
-  defaultReplacements,
-} from 'helpers/fetchReplacements';
+import fetchReplacements from 'helpers/fetchReplacements';
 import { Replacements } from 'types/Replacements';
 
 const shortHours = [
@@ -97,7 +95,7 @@ const defaultContextValue: SettingsContextType = {
   theme: Themes.system,
   supportsPWA: false,
 
-  replacements: { ...defaultReplacements, status: 'fetching' },
+  replacements: null,
 };
 
 export const SettingsContext =
@@ -132,8 +130,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
-  const [replacements, setReplacements] =
-    React.useState<Replacements>(defaultReplacements);
+  // https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side#client-side-data-fetching-with-useeffect
+  const [replacements, setReplacements] = React.useState<Replacements | null>(
+    null
+  );
 
   React.useEffect(() => {
     setShowSpinner(true);

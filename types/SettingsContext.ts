@@ -24,5 +24,5 @@ export interface SettingsContextType {
   supportsPWA: boolean;
   promptInstall?: Event | null;
 
-  replacements: Replacements;
+  replacements: Replacements | null;
 }

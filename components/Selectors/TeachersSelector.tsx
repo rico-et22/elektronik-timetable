@@ -87,6 +87,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
               </h3>
               {sortedItem.items.map((item) => (
                 <Link
+                  legacyBehavior
                   key={`bottomBar-teacher-letter-${sortedItem.char}-${item.value}`}
                   href={`/teacher/${item.value}`}
                 >

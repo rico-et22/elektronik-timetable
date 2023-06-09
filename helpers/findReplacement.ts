@@ -1,7 +1,8 @@
 import { List, TableLesson } from '@wulkanowy/timetable-parser';
 import { Replacement, Replacements } from 'types/Replacements';
 import { TimeTableData } from 'types/TimeTable';
-import { getTeacherDataByCode } from 'helpers/getTeacherData';
+import { getTeacherDataByCode } from 'helpers/dataGetters';
+import { spaceRegExp } from './sharedVariables';
 
 function normalizeGroup(group: string) {
   // 1/3
@@ -19,43 +20,41 @@ export default function findReplacement(
   { className, groupName, teacher, room }: TableLesson,
   hourIndex: number,
   dayIndex: number,
-  { rows: replacementLessons, dayIndex: replacementDayIndex }: Replacements,
+  { rows, dayIndex: replacementDayIndex }: Replacements,
   { type: dataType }: TimeTableData,
   timeTableList: List
 ): Replacement | undefined {
-  if (dayIndex !== replacementDayIndex) return undefined;
+  if (replacementDayIndex !== dayIndex) return undefined;
 
   const group = groupName ? normalizeGroup(groupName) : undefined;
-  return replacementLessons.find((replacementLesson) => {
-    const replacementLessonIndex = Number(replacementLesson.lesson) - 1;
-    if (replacementLessonIndex !== hourIndex) return false;
+
+  return rows.find((replacementLesson) => {
+    if (replacementLesson.lesson - 1 !== hourIndex) return false;
 
     if (dataType === 'class') {
-      const replacementClassName = replacementLesson.classgroup[0];
-      if (replacementClassName !== className) return false; // the className is set by completeTimeTableData
+      if (replacementLesson?.className !== className) return false;
     } else if (dataType === 'room') {
       if (replacementLesson.room !== room) return false;
     } else if (dataType === 'teacher') {
       if (teacher === undefined) return false;
-      const [surname, name] = replacementLesson.teacher.split(' ');
-      const replacedTeacherString = `${name[0]}.${surname}`.toLowerCase();
 
-      const teacherString = getTeacherDataByCode(timeTableList, teacher)
-        ?.name.toLowerCase()
-        .split(' ')
-        .shift();
+      const teacherShortString = getTeacherDataByCode(timeTableList, teacher)
+        ?.name.split(spaceRegExp)
+        .shift()
+        ?.toLowerCase();
 
-      if (replacedTeacherString !== teacherString) return false;
+      if (replacementLesson.teacher.shortString !== teacherShortString)
+        return false;
     } else {
       return false;
     }
 
     if (group) {
-      const replacementGroups = replacementLesson.classgroup
-        .slice(1)
-        .find((replacementGroup) => normalizeGroup(replacementGroup) === group);
+      const replacementGroup = replacementLesson.replacedGroups.find(
+        (grp) => normalizeGroup(grp) === group
+      );
 
-      if (!replacementGroups) return false;
+      if (!replacementGroup) return false;
     }
 
     return true;

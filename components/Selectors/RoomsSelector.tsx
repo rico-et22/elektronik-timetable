@@ -108,6 +108,7 @@ const RoomsSelector = ({ rooms }: RoomsSelectorProps) => {
               </h3>
               {sortedItem.items.map((item) => (
                 <Link
+                  legacyBehavior
                   key={`bottomBar-room-letter-${sortedItem.char}-${item.value}`}
                   href={`/room/${item.value}`}
                 >

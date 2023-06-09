@@ -30,30 +30,34 @@ export default function CustomLink({
   // const smallClass = small ? "shrink-0" : "";
 
   return (
-    <div className="flex items-center mr-4">
+    <div
+      className={`flex items-center mr-4 ${
+        type === 'teacher' && !small ? 'w-1/2' : ''
+      }`}
+    >
       <Icon type={type} />
-      <table>
-        {replacementData && (
-          <tr>
-            {replacementData.value !== '-1' ? (
+      {replacementData && (
+        <div>
+          {replacementData.value !== '-1' ? (
+            <span className="text-zastepstwo-yellow">
               <Link href={`/${type}/${replacementData.value}`}>
-                <a className="text-zastepstwo-yellow">{shortReplacementName}</a>
+                {shortReplacementName}
               </Link>
-            ) : (
-              <div>{shortReplacementName}</div>
-            )}
-          </tr>
-        )}
-        {data && (
-          <tr>
-            <Link href={`/${type}/${data.value}`}>
-              <a className="text-elektronik-blue">
-                {replacementData ? <del>{shortName}</del> : shortName}
-              </a>
-            </Link>
-          </tr>
-        )}
-      </table>
+            </span>
+          ) : (
+            shortReplacementName
+          )}
+        </div>
+      )}
+      {data && (
+        <div
+          className={`text-elektronik-blue ${
+            replacementData ? 'line-through' : ''
+          }`}
+        >
+          <Link href={`/${type}/${data.value}`}>{shortName}</Link>
+        </div>
+      )}
     </div>
   );
 }

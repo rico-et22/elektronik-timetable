@@ -6,10 +6,10 @@ import { useRouter } from 'next/dist/client/router';
 import {
   getTeacherDataByCode,
   getTeacherDataByShortName,
-} from 'helpers/getTeacherData';
-import getHourData from 'helpers/getHourData';
-import getClassDataByCode from 'helpers/getClassDataByCode';
-import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
+  getClassDataByCode,
+  getHourData,
+  getRoomDataByCode,
+} from 'helpers/dataGetters';
 
 import { TimeTableData } from 'types/TimeTable';
 import { Replacements } from 'types/Replacements';
@@ -21,7 +21,7 @@ import LessonHour from './LessonHour';
 interface Props {
   timeTable: TimeTableData;
   timeTableList: List;
-  replacements: Replacements;
+  replacements: Replacements | null;
 }
 
 const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
@@ -68,7 +68,7 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
 
   const getRoomData = React.useCallback(
     (roomNumber: string | undefined) =>
-      getRoomDataByNumber(timeTableList, roomNumber),
+      getRoomDataByCode(timeTableList, roomNumber),
     [timeTableList]
   );
 
@@ -161,45 +161,39 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                     const teacherData = getTeacherDataUsingCode(lesson.teacher);
                     const roomData = getRoomData(lesson.room);
 
-                    const replacement = findReplacement(
-                      lesson,
-                      hourIndex,
-                      selectedDayIndex,
-                      replacements,
-                      timeTable,
-                      timeTableList
-                    );
+                    const replacement = replacements
+                      ? findReplacement(
+                          lesson,
+                          hourIndex,
+                          selectedDayIndex,
+                          replacements,
+                          timeTable,
+                          timeTableList
+                        )
+                      : undefined;
+
                     let replacedClassData: ListItem | undefined;
                     let replacedTeacherData: ListItem | undefined;
                     let replacedRoomData: ListItem | undefined;
-                    let lessonRemoved = false;
 
                     if (replacement) {
-                      lessonRemoved =
-                        !!replacement.deputy.includes('Uczniowie');
-
-                      replacedClassData = getClassData(
-                        replacement.classgroup[0]
-                      );
+                      replacedClassData = getClassData(replacement.className);
                       if (replacedClassData === classData)
                         replacedClassData = undefined;
                       // if you wonder what it does search for replacements type
 
-                      if (!lessonRemoved) {
-                        const [surname, name] = replacement.deputy.split(
-                          ' '
-                        ) || ['', ''];
-                        const replacedTeacherString = `${name[0]}.${surname}`;
-
+                      if (replacement.deputy) {
+                        // if lesson is removed it has no value
                         replacedTeacherData = getTeacherDataUsingShortName(
-                          replacedTeacherString
+                          replacement.deputy.shortString
                         ) || {
-                          name: replacedTeacherString, // replacement.deputy // it gets split so it can't be used
+                          name: replacement.deputy.shortString, // replacement.deputy.notParsed // it gets split so it can't be used
                           value: '-1',
                         };
                         if (replacedTeacherData === teacherData)
                           replacedTeacherData = undefined;
                       }
+
                       replacedRoomData = getRoomData(replacement.room) || {
                         // sal też może nie być
                         name: replacement.room, // replacement.deputy // it gets split so it can't be used
@@ -209,7 +203,6 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                         replacedRoomData = undefined;
                       // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
                     }
-
                     return (
                       <div
                         key={`day-${selectedDayIndex}-${hourIndex}-${lessonIndex}`}
@@ -218,7 +211,6 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                           replacement={replacement}
                           subject={lesson.subject}
                           groupName={lesson.groupName}
-                          lessonRemoved={lessonRemoved}
                           replacedClassData={replacedClassData}
                           replacedTeacherData={replacedTeacherData}
                           replacedRoomData={replacedRoomData}

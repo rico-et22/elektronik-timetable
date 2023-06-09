@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { SettingsContext } from 'pages/_app';
 
-import { List, TimetableList } from '@wulkanowy/timetable-parser';
+import { List } from '@wulkanowy/timetable-parser';
 import { TimeTableData, TimeTableListResponse } from 'types/TimeTable';
 
 import BottomBar from 'components/BottomBar';
@@ -114,11 +114,8 @@ const Layout = ({
               replacements={replacements}
             />
           )}
-          {showReplacements && (
-            <>
-              <ReplacementsInfo date={replacements.date} />
-              <ReplacementsTable replacements={replacements} />
-            </>
+          {showReplacements && replacements && (
+            <ReplacementsTable replacements={replacements} />
           )}
           {showSpinner && <Spinner />}
         </div>
@@ -179,14 +176,13 @@ const Layout = ({
               )}
             </div>
           )}
-          {showReplacements && (
+          {showReplacements && replacements && (
             <div ref={printRef}>
               <TopBar
                 timeTableList={timeTableList}
                 showReplacements={showReplacements}
                 printRef={printRef}
               />
-              <ReplacementsInfo date={replacements.date} />
               <ReplacementsTable replacements={replacements} />
             </div>
           )}

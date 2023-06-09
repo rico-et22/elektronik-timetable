@@ -1,84 +1,59 @@
 import { ShortDayNameLowerCase, DayIndex } from 'helpers/ShortDayNames';
+import { ReplacementsApiResponse } from './ApiReplacements';
 
-/*
-{
-  "lesson": "7",
-  "subject": "Wychowanie fizyczne",
-  "room": "s5",
-  "deputy": "Uczniowie zwolnieni do domu",
-  "teacher": "Poprzedni nauczyciel",
-  "classgroup": [
-    "3i",
-    "1/3" // dlaczego
-  ],
-  "notes": ""
-}
-{
-  "lesson": "5",
-  "subject": "Wychowanie fizyczne",
-  "room": "210",
-  "deputy": "Poprzedni nauczyciel",
-  "teacher": "Zastępstwo z",
-  "classgroup": [
-      "3j",
-      "gr1" // dlaczego
-  ],
-  "notes": "Złączenie grup",
+export interface TeacherInfo {
+  notParsed: string;
+  shortString: string;
+  name: string;
+  surname: string;
 }
 
-{
-  "lesson": "5",
-  "teacher": "Poprzedni nauczyciel",
-  "classgroup": [
-    "2h",
-    "gr2"
-  ],
-  "subject": "poprzednia lekcja",
-  "room": "17",
-  "deputy": "Zajęcia zorganizowane",
-  "notes": "historia za l. 8"
-},
-*/
-
-// nauczyciele są zapisani w ten sposób "<nazwisko> <pełne imię>"
 export interface Replacement {
-  /** na której lekcji. liczy od 1 */
-  lesson: string;
-  room: string; // w której sali lekcyjnej
-  subject: string; // co się teraz ma
   /**
-   * Uczniowie zwolnieni do domu
-   * Jeżeli przyjmie wartość "Zajęcia zorganizowane" to "notes", przyjmie wartość podobną do "historia za l. 8" czyli historii na lekcji 8 nie będzie
-   *
+   * Is the lesson removed
    */
-  deputy: string; // nauczyciel z którym ma się teraz lekcję lub wiadomość "Uczniowie zwolnieni do dom" lub "Uczniowie przychodzą później"
-  classgroup: string[]; // pierwsza wartość to, która klasa, a wszystkie inne to które grupy (grupy nie muszą występować jeżeli jest to dla całej klasy)
+  lessonRemoved: boolean;
+  // TODO - Trzeba zrobić tak aby przenosiło lekcje poprawnie i ich informacje poprawnie, tylko trzeba na to mądry sposób
   /**
-   * Uczniowie zwolnieni do domu
-   * za nieobecny oddział
-   * Matura próbna z matematyki
+   * Może przyjąć wartości takie jak:
+   * Uczniowie zwolnieni do domu\
+   * Jeżeli przyjmie wartość "Zajęcia zorganizowane" to "notes", przyjmie wartość podobną do "historia za l. 8" czyli historii na lekcji 8 nie będzie, ale będzie na tej
    */
-  notes: string; // notatki
+  lessonRemovedReason: string | null;
+  lesson: number;
+  subject: string;
+  room: string;
 
-  teacher: string; // poprzedni nauczyciel
+  className: string;
+  replacedGroups: string[];
+
+  teacher: TeacherInfo;
+  deputy: TeacherInfo | null;
+
+  notes: string;
 }
 
-export interface ReplacementsApiResponse {
-  generated: string;
+export interface Replacements {
+  // status: 'ok' | 'not configured' | 'fetching' | 'error';
+  generatedDate: string;
 
-  /** Dzień: DD.MM.YYYY (pon.) */
-  date: `Dzień: ${number}.${number}.${number} (${ShortDayNameLowerCase})`;
+  // notParsed: ReplacementsApiResponse["date"];
+  /**
+   * It's ISO 8601 Date: YYYY-MM-DD\
+   * It's like that to make creating a Date instance easier
+   */
+  date: string;
+  /**
+   * DD-MM-YYYY\
+   */
+  PLDate: string;
+  shortDayName: ShortDayNameLowerCase;
+  dayIndex: DayIndex;
 
   cols: {
     name: string;
     slug: string;
   }[];
+
   rows: Replacement[];
-}
-
-export interface Replacements extends ReplacementsApiResponse {
-  status: 'ok' | 'not configured' | 'fetching' | 'error';
-
-  shortDayName: ShortDayNameLowerCase;
-  dayIndex: DayIndex;
 }

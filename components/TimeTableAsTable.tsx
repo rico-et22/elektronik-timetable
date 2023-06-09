@@ -1,19 +1,13 @@
-import {
-  AcademicCapIcon,
-  MapPinIcon,
-  UserGroupIcon,
-} from '@heroicons/react/24/outline';
-import { List, ListItem, TimetableList } from '@wulkanowy/timetable-parser';
+import { List, ListItem } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
-import Link from 'next/link';
 import React from 'react';
-import getClassDataByCode from 'helpers/getClassDataByCode';
-import getHourData from 'helpers/getHourData';
-import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
 import {
   getTeacherDataByCode,
   getTeacherDataByShortName,
-} from 'helpers/getTeacherData';
+  getClassDataByCode,
+  getHourData,
+  getRoomDataByCode,
+} from 'helpers/dataGetters';
 import { SettingsContext } from 'pages/_app';
 import { TimeTableData } from 'types/TimeTable';
 import { Replacements } from 'types/Replacements';
@@ -23,7 +17,7 @@ import LessonHour from './LessonHour';
 interface Props {
   timeTable: TimeTableData;
   timeTableList: List;
-  replacements: Replacements;
+  replacements: Replacements | null;
 }
 
 const TimeTableAsTable = ({
@@ -62,7 +56,7 @@ const TimeTableAsTable = ({
 
   const getRoomData = React.useCallback(
     (roomNumber: string | undefined) =>
-      getRoomDataByNumber(timeTableList, roomNumber),
+      getRoomDataByCode(timeTableList, roomNumber),
     [timeTableList]
   );
 
@@ -87,10 +81,16 @@ const TimeTableAsTable = ({
     [isClientSide]
   );
 
-  const hourData = React.useMemo(() => {
-    if (showShortHours) return getHourData(timeTable.hours, shortHours);
-    return timeTable.hours;
-  }, [shortHours, showShortHours, timeTable.hours]);
+  /**
+   * changes to shortHours if it needs to show shorthours
+   */
+  const hourData = React.useMemo(
+    () =>
+      showShortHours
+        ? getHourData(timeTable.hours, shortHours)
+        : timeTable.hours,
+    [shortHours, showShortHours, timeTable.hours]
+  );
 
   return (
     <div className="px-10 pb-16 mt-8">
@@ -145,6 +145,7 @@ const TimeTableAsTable = ({
                   <td
                     className={`bg-gray-50 dark:bg-zinc-800 p-2 border dark:border-zinc-700
                                   ${
+                                    /* if it's the last element of table then make a round corner */
                                     hourIndex ===
                                       Object.entries(timeTable.hours).length -
                                         1 &&
@@ -162,45 +163,40 @@ const TimeTableAsTable = ({
                         );
                         const roomData = getRoomData(lesson.room);
 
-                        const replacement = findReplacement(
-                          lesson,
-                          hourIndex,
-                          dayIndex,
-                          replacements,
-                          timeTable,
-                          timeTableList
-                        );
+                        const replacement = replacements
+                          ? findReplacement(
+                              lesson,
+                              hourIndex,
+                              dayIndex,
+                              replacements,
+                              timeTable,
+                              timeTableList
+                            )
+                          : undefined;
                         let replacedClassData: ListItem | undefined;
                         let replacedTeacherData: ListItem | undefined;
                         let replacedRoomData: ListItem | undefined;
-                        let lessonRemoved = false;
 
                         if (replacement) {
-                          lessonRemoved =
-                            !!replacement.deputy.includes('Uczniowie');
-
                           replacedClassData = getClassData(
-                            replacement.classgroup[0]
+                            replacement.className
                           );
                           if (replacedClassData === classData)
                             replacedClassData = undefined;
                           // if you wonder what it does search for replacements type
 
-                          if (!lessonRemoved) {
-                            const [surname, name] = replacement.deputy.split(
-                              ' '
-                            ) || ['', ''];
-                            const replacedTeacherString = `${name[0]}.${surname}`;
-
+                          if (replacement.deputy) {
+                            // if lesson is removed it has no value
                             replacedTeacherData = getTeacherDataUsingShortName(
-                              replacedTeacherString
+                              replacement.deputy.shortString
                             ) || {
-                              name: replacedTeacherString, // replacement.deputy // it gets split so it can't be used
+                              name: replacement.deputy.shortString, // replacement.deputy.notParsed // it gets split so it can't be used
                               value: '-1',
                             };
                             if (replacedTeacherData === teacherData)
                               replacedTeacherData = undefined;
                           }
+
                           replacedRoomData = getRoomData(replacement.room) || {
                             // sal też może nie być
                             name: replacement.room, // replacement.deputy // it gets split so it can't be used
@@ -219,14 +215,13 @@ const TimeTableAsTable = ({
                               replacement={replacement}
                               subject={lesson.subject}
                               groupName={lesson.groupName}
-                              lessonRemoved={lessonRemoved}
                               replacedClassData={replacedClassData}
                               replacedTeacherData={replacedTeacherData}
                               replacedRoomData={replacedRoomData}
                               classData={classData}
                               teacherData={teacherData}
                               roomData={roomData}
-                              small
+                              small={false}
                             />
                           </div>
                         );

@@ -12,8 +12,6 @@ interface Props {
 
   small: boolean;
 
-  lessonRemoved: boolean;
-
   replacedClassData: ListItem | undefined;
   replacedTeacherData: ListItem | undefined;
   replacedRoomData: ListItem | undefined;
@@ -30,7 +28,6 @@ export default function LessonHour({
 
   small,
 
-  lessonRemoved,
   replacedClassData,
   replacedTeacherData,
   replacedRoomData,
@@ -47,27 +44,23 @@ export default function LessonHour({
         {!hasReplacement && subject}
         {hasReplacement && (
           <>
-            {!lessonRemoved && (
+            {!replacement.lessonRemoved && (
               <span className="text-zastepstwo-yellow">
                 {replacement.subject}
               </span>
             )}
             <span className="text-elektronik-red">
-              {lessonRemoved && replacement.deputy} {replacement.notes}
+              {replacement.lessonRemoved && replacement.lessonRemovedReason}{' '}
+              {replacement.notes}
             </span>
             <br />
-            {subject && (
-              <>
-                <del>{subject}</del>
-                <br />
-              </>
-            )}
+            {subject && <del>{subject}</del>}
           </>
         )}
         {groupName && ` (${groupName})`}
       </p>
 
-      <div className="text-sm flex">
+      <div className="flex">
         <CustomLink
           type="class"
           data={classData}
