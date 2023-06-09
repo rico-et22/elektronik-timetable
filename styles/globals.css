@@ -38,7 +38,7 @@ a {
 }
 
 .react-tooltip {
-  background-color: #374151 !important;
+  background-color: #404040 !important;
   color: #fff !important;
   z-index: 10000 !important;
 }
@@ -52,5 +52,5 @@ a {
 }
 .dark .react-tooltip {
   background-color: #fff !important;
-  color: #374151 !important;
+  color: #404040 !important;
 }

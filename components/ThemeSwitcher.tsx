@@ -93,7 +93,6 @@ const ThemeSwitcher = () => {
           <MoonIcon className="h-8 left-2 absolute text-gray-700 dark:text-zinc-300 pointer-events-none" />
         )}
         <select
-          title="Motyw"
           onChange={handleChange}
           value={theme}
           className="appearance-none py-2 w-full opacity-0 cursor-pointer"
