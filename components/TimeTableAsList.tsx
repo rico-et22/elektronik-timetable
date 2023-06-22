@@ -178,6 +178,12 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
                     return (
                       <div
                         key={`day-${selectedDayIndex}-${hourIndex}-${lessonIndex}`}
+                        className={
+                          lessonIndex !==
+                          timeTable.days[selectedDayIndex][hourIndex].length - 1
+                            ? 'mb-2'
+                            : ''
+                        }
                       >
                         <LessonHour
                           replacement={replacement}

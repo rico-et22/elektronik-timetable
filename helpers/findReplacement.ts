@@ -1,6 +1,7 @@
 import { List, TableLesson } from '@wulkanowy/timetable-parser';
 import { Replacement, Replacements } from 'types/Replacements';
 import { TimeTableData } from 'types/TimeTable';
+// eslint-disable-next-line import/no-cycle
 import { getTeacherDataByCode } from 'helpers/dataGetters';
 import { spaceRegExp } from './sharedVariables';
 

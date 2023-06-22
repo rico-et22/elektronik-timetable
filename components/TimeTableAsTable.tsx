@@ -176,6 +176,12 @@ const TimeTableAsTable = ({
                         return (
                           <div
                             key={`day-${dayIndex}-${hourIndex}-${lessonIndex}`}
+                            className={
+                              lessonIndex !==
+                              timeTable.days[dayIndex][hourIndex].length - 1
+                                ? 'mb-2'
+                                : ''
+                            }
                           >
                             <LessonHour
                               replacement={replacement}
