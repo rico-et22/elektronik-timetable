@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ShortHour } from 'types/ShortHour';
+import { Replacements } from './Replacements';
 
 export type DesktopComponent = 'table' | 'list';
 
@@ -22,4 +23,6 @@ export interface SettingsContextType {
   setTheme?: Dispatch<SetStateAction<Themes>>;
   supportsPWA: boolean;
   promptInstall?: Event | null;
+
+  replacements: Replacements | null;
 }

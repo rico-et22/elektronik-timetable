@@ -1,21 +1,33 @@
-const fetchTimetableList = async () => {
-  let timeTableData = '';
-  let timeTableOk = false;
-  await fetch(
+import { TimeTableListResponse } from 'types/TimeTable';
+import { List, TimetableList } from '@wulkanowy/timetable-parser';
+
+function isTimetableListEmpty(list: List) {
+  return !list.classes.length || !list.teachers?.length || !list.rooms?.length;
+}
+
+async function fetchTimeTableList(): Promise<TimeTableListResponse> {
+  const response = await fetch(
     `${
       process.env.NEXT_PUBLIC_PROXY_URL
         ? `${process.env.NEXT_PUBLIC_PROXY_URL}/`
         : ''
-    }${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/lista.html`,
-  )
-    .then((response) => {
-      timeTableOk = response.ok;
-      return response.text();
-    })
-    .then((data) => {
-      timeTableData = data;
-    });
-  return { data: timeTableData, ok: timeTableOk };
-};
+    }${process.env.NEXT_PUBLIC_TIMETABLE_BASE_URL}/lista.html`
+  );
 
-export default fetchTimetableList;
+  const timeTableList = new TimetableList(await response.text()).getList();
+
+  let status: TimeTableListResponse['status'];
+
+  if (response.ok) {
+    status = 'ok';
+    if (isTimetableListEmpty(timeTableList)) {
+      status = 'empty';
+    }
+  } else {
+    status = 'error';
+  }
+
+  return { timeTableList, status };
+}
+
+export default fetchTimeTableList;

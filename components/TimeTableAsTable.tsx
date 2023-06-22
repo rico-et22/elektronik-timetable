@@ -1,25 +1,30 @@
-import {
-  AcademicCapIcon,
-  MapPinIcon,
-  UserGroupIcon,
-} from '@heroicons/react/24/outline';
-import { List } from '@wulkanowy/timetable-parser';
+import { List, ListItem } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
-import Link from 'next/link';
-import * as React from 'react';
-import getClassDataByCode from 'helpers/getClassDataByCode';
-import getHourData from 'helpers/getHourData';
-import getRoomDataByNumber from 'helpers/getRoomDataByNumber';
-import getTeacherDataByCode from 'helpers/getTeacherDataByCode';
+import React from 'react';
+import {
+  getTeacherDataByCode,
+  getTeacherDataByShortName,
+  getClassDataByCode,
+  getHourData,
+  getRoomDataByCode,
+} from 'helpers/dataGetters';
 import { SettingsContext } from 'pages/_app';
 import { TimeTableData } from 'types/TimeTable';
+import { Replacements } from 'types/Replacements';
+import findReplacement from 'helpers/findReplacement';
+import LessonHour from './LessonHour';
 
 interface Props {
   timeTable: TimeTableData;
   timeTableList: List;
+  replacements: Replacements | null;
 }
 
-const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
+const TimeTableAsTable = ({
+  timeTable,
+  timeTableList,
+  replacements,
+}: Props) => {
   const { showShortHours, shortHours } = React.useContext(SettingsContext);
 
   const [isClientSide, setIsClientSide] = React.useState(false);
@@ -35,19 +40,24 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
   const getClassData = React.useCallback(
     (classCode: string | undefined) =>
       getClassDataByCode(timeTableList, classCode),
-    [timeTableList],
+    [timeTableList]
   );
 
-  const getTeacherData = React.useCallback(
+  const getTeacherDataUsingCode = React.useCallback(
     (teacherCode: string | undefined) =>
       getTeacherDataByCode(timeTableList, teacherCode),
-    [timeTableList],
+    [timeTableList]
+  );
+  const getTeacherDataUsingShortName = React.useCallback(
+    (shortName: string | undefined) =>
+      getTeacherDataByShortName(timeTableList, shortName),
+    [timeTableList]
   );
 
   const getRoomData = React.useCallback(
     (roomNumber: string | undefined) =>
-      getRoomDataByNumber(timeTableList, roomNumber),
-    [timeTableList],
+      getRoomDataByCode(timeTableList, roomNumber),
+    [timeTableList]
   );
 
   const isCurrentLesson = React.useCallback(
@@ -68,13 +78,19 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
         );
       return false;
     },
-    [isClientSide],
+    [isClientSide]
   );
 
-  const hourData = React.useMemo(() => {
-    if (showShortHours) return getHourData(timeTable.hours, shortHours);
-    return timeTable.hours;
-  }, [shortHours, showShortHours, timeTable.hours]);
+  /**
+   * changes to shortHours if it needs to show shorthours
+   */
+  const hourData = React.useMemo(
+    () =>
+      showShortHours
+        ? getHourData(timeTable.hours, shortHours)
+        : timeTable.hours,
+    [shortHours, showShortHours, timeTable.hours]
+  );
 
   return (
     <div className="px-10 pb-16 mt-8">
@@ -100,36 +116,37 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(hourData).map((key, index) => (
-            <tr key={`table-hour-${key}`} className="text-xs">
+          {Object.entries(hourData).map((hour, hourIndex) => (
+            <tr key={`table-hour-${hour}`} className="text-xs">
               <td
                 className={`text-center p-2 text-sm ${
-                  index === Object.entries(timeTable.hours).length - 1
+                  hourIndex === Object.entries(timeTable.hours).length - 1
                     ? 'rounded-bl-lg'
                     : ''
                 } ${
-                  isCurrentLesson(key[1].timeFrom, key[1].timeTo)
+                  isCurrentLesson(hour[1].timeFrom, hour[1].timeTo)
                     ? 'bg-green-200 dark:text-zinc-700'
                     : 'bg-gray-200 dark:bg-zinc-700'
                 }`}
               >
-                <span className="font-bold">{key[1].number}</span>
+                <span className="font-bold">{hour[1].number}</span>
               </td>
               <td
                 className={`text-center p-2 ${
-                  isCurrentLesson(key[1].timeFrom, key[1].timeTo)
+                  isCurrentLesson(hour[1].timeFrom, hour[1].timeTo)
                     ? 'bg-green-200 dark:text-zinc-700'
                     : 'bg-gray-200 dark:bg-zinc-700'
                 }`}
               >
-                {key[1].timeFrom} - {key[1].timeTo}
+                {hour[1].timeFrom} - {hour[1].timeTo}
               </td>
               {timeTable.dayNames.map((dayName, dayIndex) => (
-                <React.Fragment key={`table-hour-${key}-dayName-${dayName}`}>
+                <React.Fragment key={`table-hour-${hour}-dayName-${dayName}`}>
                   <td
                     className={`bg-gray-50 dark:bg-zinc-800 p-2 border dark:border-zinc-700
                                   ${
-                                    index ===
+                                    /* if it's the last element of table then make a round corner */
+                                    hourIndex ===
                                       Object.entries(timeTable.hours).length -
                                         1 &&
                                     dayIndex === timeTable.dayNames.length - 1
@@ -137,86 +154,78 @@ const TimeTableAsTable = ({ timeTable, timeTableList }: Props) => {
                                       : ''
                                   }`}
                   >
-                    {timeTable.days[dayIndex][index].map(
-                      (subject, subjectIndex) => (
-                        <div
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={`day-${dayIndex}-${index}-${subjectIndex}`}
-                          className={
-                            subjectIndex !==
-                            timeTable.days[dayIndex][index].length - 1
-                              ? 'mb-2'
-                              : ''
+                    {timeTable.days[dayIndex][hourIndex].map(
+                      (lesson, lessonIndex) => {
+                        // if someone reads this. sorry i didn't have the time to do this a proper, cleaner way
+                        const classData = getClassData(lesson.className);
+                        const teacherData = getTeacherDataUsingCode(
+                          lesson.teacher
+                        );
+                        const roomData = getRoomData(lesson.room);
+
+                        const replacement = replacements
+                          ? findReplacement(
+                              lesson,
+                              hourIndex,
+                              dayIndex,
+                              replacements,
+                              timeTable,
+                              timeTableList
+                            )
+                          : undefined;
+                        let replacedClassData: ListItem | undefined;
+                        let replacedTeacherData: ListItem | undefined;
+                        let replacedRoomData: ListItem | undefined;
+
+                        if (replacement) {
+                          replacedClassData = getClassData(
+                            replacement.className
+                          );
+                          if (replacedClassData === classData)
+                            replacedClassData = undefined;
+                          // if you wonder what it does search for replacements type
+
+                          if (replacement.deputy) {
+                            // if lesson is removed it has no value
+                            replacedTeacherData = getTeacherDataUsingShortName(
+                              replacement.deputy.shortString
+                            ) || {
+                              name: replacement.deputy.shortString, // replacement.deputy.notParsed // it gets split so it can't be used
+                              value: '-1',
+                            };
+                            if (replacedTeacherData === teacherData)
+                              replacedTeacherData = undefined;
                           }
-                        >
-                          <p className="font-bold mb-1">
-                            {subject.subject}
-                            {subject.groupName && ` (${subject.groupName})`}
-                          </p>
-                          <div className="flex">
-                            {router.query.all &&
-                              router.query.all[0] !== 'class' &&
-                              subject.className && (
-                                <div className="flex items-center mr-4">
-                                  <AcademicCapIcon className="h-3 w-3 mr-1" />
-                                  <Link
-                                    href={`/class/${
-                                      getClassData(subject.className)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue">
-                                      {
-                                        getClassData(
-                                          subject.className,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}
-                            {router.query.all &&
-                              router.query.all[0] !== 'teacher' &&
-                              subject.teacher && (
-                                <div className="flex items-center mr-4 w-1/2">
-                                  <UserGroupIcon className="h-3 w-3 mr-1 shrink-0" />
-                                  <Link
-                                    href={`/teacher/${
-                                      getTeacherData(subject.teacher)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue truncate">
-                                      {
-                                        getTeacherData(
-                                          subject.teacher,
-                                        )?.name.split(' ')[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}{' '}
-                            {router.query.all &&
-                              router.query.all[0] !== 'room' &&
-                              subject.room && (
-                                <div className="flex items-center">
-                                  <MapPinIcon className="h-3 w-3 mr-1" />
-                                  <Link
-                                    href={`/room/${
-                                      getRoomData(subject.room)?.value
-                                    }`}
-                                  >
-                                    <a className="text-elektronik-blue">
-                                      {
-                                        getRoomData(subject.room)?.name.split(
-                                          ' ',
-                                        )[0]
-                                      }
-                                    </a>
-                                  </Link>
-                                </div>
-                              )}
+
+                          replacedRoomData = getRoomData(replacement.room) || {
+                            // sal też może nie być
+                            name: replacement.room, // replacement.deputy // it gets split so it can't be used
+                            value: '-1',
+                          };
+                          if (replacedRoomData === roomData)
+                            replacedRoomData = undefined;
+                          // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
+                        }
+
+                        return (
+                          <div
+                            key={`day-${dayIndex}-${hourIndex}-${lessonIndex}`}
+                          >
+                            <LessonHour
+                              replacement={replacement}
+                              subject={lesson.subject}
+                              groupName={lesson.groupName}
+                              replacedClassData={replacedClassData}
+                              replacedTeacherData={replacedTeacherData}
+                              replacedRoomData={replacedRoomData}
+                              classData={classData}
+                              teacherData={teacherData}
+                              roomData={roomData}
+                              small={false}
+                            />
                           </div>
-                        </div>
-                      ),
+                        );
+                      }
                     )}
                   </td>
                 </React.Fragment>

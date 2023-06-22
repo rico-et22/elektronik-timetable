@@ -17,17 +17,17 @@ import { Tooltip } from 'react-tooltip';
 type TopBarProps = {
   timeTableList: List;
   printRef: React.RefObject<HTMLDivElement>;
-  hasReplacements: boolean;
+  showReplacements: boolean;
 };
 
-const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
+const TopBar = ({ timeTableList, printRef, showReplacements }: TopBarProps) => {
   const router = useRouter();
   const { desktopComponent, setDesktopComponent } =
     React.useContext(SettingsContext);
 
   const routeContext = React.useMemo(
     () => getRouteContext(router, timeTableList),
-    [router, timeTableList],
+    [router, timeTableList]
   );
 
   const handleDesktopComponentButtonClick = (value: DesktopComponent) => {
@@ -42,11 +42,11 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
   return (
     <div className="bg-gray-100 dark:bg-zinc-900 flex h-[4.5rem] px-10 shadow-xl dark:shadow-none dark:border-b dark:border-zinc-700">
       <div className="w-full flex items-center">
-        {!hasReplacements && <ShortHoursSwitcher />}
+        {!showReplacements && <ShortHoursSwitcher />}
       </div>
       <div className=" w-full mx-4 flex justify-center items-center">
         <h2 className="text-lg truncate">
-          {!hasReplacements ? (
+          {!showReplacements ? (
             <>
               {routeContext.name && routeContext.typeName && (
                 <span className="text-gray-500 dark:text-zinc-400">
@@ -68,13 +68,13 @@ const TopBar = ({ timeTableList, printRef, hasReplacements }: TopBarProps) => {
           onClick={handlePrint}
           aria-label="Drukuj"
           className={`bg-gray-50 dark:bg-zinc-800 px-2 py-1 rounded border border-gray-300 dark:border-zinc-700 topbar-tooltip ${
-            hasReplacements ? 'mr-4' : ''
+            showReplacements ? 'mr-4' : ''
           }`}
           data-tooltip-content="Drukuj"
         >
           <PrinterIcon className="h-8 text-gray-700 dark:text-zinc-300" />
         </button>
-        {!hasReplacements && (
+        {!showReplacements && (
           <div className="bg-gray-50 dark:bg-zinc-800 mx-4 flex items-center rounded border border-gray-300 dark:border-zinc-700">
             <button
               type="button"

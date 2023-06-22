@@ -3,10 +3,10 @@ import {
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import * as React from 'react';
-import { TimeTableStatus } from 'types/TimeTable';
+import { TimeTableData } from 'types/TimeTable';
 
 interface Props {
-  status: TimeTableStatus;
+  status: TimeTableData['status'];
 }
 
 const NoTimeTableError = ({ status: timeTableStatus }: Props) => (

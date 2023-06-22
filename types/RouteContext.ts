@@ -1,5 +1,5 @@
 export interface RouteContext {
-  type: string | undefined;
+  type: 'class' | 'teacher' | 'room' | undefined;
   typeName: string | undefined;
   name: string | undefined;
 }

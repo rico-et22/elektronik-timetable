@@ -17,7 +17,7 @@ type TeachersSelectorProps = {
 const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
   const [open, setOpen] = React.useState(false);
   const [sortedTeachers, setSortedTeachers] = React.useState<SortedListItem[]>(
-    [],
+    []
   );
   const router = useRouter();
   const getRoundedClass = (stateValue: boolean) => {
@@ -28,7 +28,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
   const handleClick = (
     state: boolean,
     stateChangeFunction: Function,
-    ref: React.RefObject<HTMLDivElement>,
+    ref: React.RefObject<HTMLDivElement>
   ) => {
     if (!state && ref && ref.current !== null) {
       ref.current.style.maxHeight = `${ref.current.scrollHeight}px`;
@@ -41,15 +41,15 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
     if (teachers && teachers.length > 0) {
       setSortedTeachers(
         Array.from(
-          new Set(teachers.map((singleTeacher) => singleTeacher.name[2])),
+          new Set(teachers.map((singleTeacher) => singleTeacher.name[2]))
         )
           .sort((a, b) => a.localeCompare(b))
           .map((char) => ({
             char,
             items: teachers.filter(
-              (singleTeacher) => singleTeacher.name[2] === char,
+              (singleTeacher) => singleTeacher.name[2] === char
             ),
-          })),
+          }))
       );
     }
   }, [teachers]);
@@ -64,7 +64,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
         type="button"
         onClick={() => handleClick(open, setOpen, selectorRef)}
         className={`bg-elektronik-red text-white bg-opacity-75 w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
-          open,
+          open
         )}`}
       >
         <div className="flex items-center">
@@ -87,6 +87,7 @@ const TeachersSelector = ({ teachers }: TeachersSelectorProps) => {
               </h3>
               {sortedItem.items.map((item) => (
                 <Link
+                  legacyBehavior
                   key={`bottomBar-teacher-letter-${sortedItem.char}-${item.value}`}
                   href={`/teacher/${item.value}`}
                 >

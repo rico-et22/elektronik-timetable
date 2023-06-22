@@ -2,12 +2,16 @@ import * as React from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { List } from '@wulkanowy/timetable-parser';
-import { TimeTableStatus } from 'types/TimeTable';
+import { TimeTableData, TimeTableListResponse } from 'types/TimeTable';
 import Layout from 'components/Layout';
+import { Replacements } from 'types/Replacements';
 
 type HomeProps = {
+  timeTable: TimeTableData;
   timeTableList: List;
-  timeTableListStatus: TimeTableStatus;
+  timeTableListStatus: TimeTableListResponse['status'];
+  replacements: Replacements;
+  showReplacements: boolean;
 };
 
 const Home: NextPage<HomeProps> = (props: HomeProps) => (

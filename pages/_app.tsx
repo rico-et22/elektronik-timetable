@@ -1,7 +1,6 @@
 import * as React from 'react';
 import 'styles/globals.css';
 import type { AppContext, AppProps } from 'next/app';
-import { TimetableList } from '@wulkanowy/timetable-parser';
 import App from 'next/app';
 import { useRouter } from 'next/router';
 import {
@@ -9,8 +8,10 @@ import {
   SettingsContextType,
   Themes,
 } from 'types/SettingsContext';
-import fetchTimetableList from 'helpers/fetchTimetableList';
-import { TimeTableListResponse, TimeTableStatus } from 'types/TimeTable';
+import fetchTimeTableList from 'helpers/fetchTimetableList';
+import { TimeTableListResponse } from 'types/TimeTable';
+import fetchReplacements from 'helpers/fetchReplacements';
+import { Replacements } from 'types/Replacements';
 
 const shortHours = [
   {
@@ -93,6 +94,8 @@ const defaultContextValue: SettingsContextType = {
   showShortHours: false,
   theme: Themes.system,
   supportsPWA: false,
+
+  replacements: null,
 };
 
 export const SettingsContext =
@@ -102,13 +105,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const [desktopComponent, setDesktopComponent] =
     React.useState<DesktopComponent>(defaultContextValue.desktopComponent);
   const [showSpinner, setShowSpinner] = React.useState(
-    defaultContextValue.showSpinner,
+    defaultContextValue.showSpinner
   );
   const [bottomBarExpanded, setBottomBarExpanded] = React.useState(
-    defaultContextValue.bottomBarExpanded,
+    defaultContextValue.bottomBarExpanded
   );
   const [showShortHours, setShowShortHours] = React.useState(
-    defaultContextValue.showShortHours,
+    defaultContextValue.showShortHours
   );
   const [theme, setTheme] = React.useState(defaultContextValue.theme);
   const [supportsPWA, setSupportsPWA] = React.useState(false);
@@ -125,6 +128,19 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     window.addEventListener('beforeinstallprompt', handler);
 
     return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  // https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side#client-side-data-fetching-with-useeffect
+  const [replacements, setReplacements] = React.useState<Replacements | null>(
+    null
+  );
+
+  React.useEffect(() => {
+    setShowSpinner(true);
+    fetchReplacements().then((a) => {
+      setReplacements(a);
+      setShowSpinner(false);
+    });
   }, []);
 
   React.useEffect(() => {
@@ -160,6 +176,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       setTheme,
       supportsPWA,
       promptInstall,
+      replacements,
     }),
     [
       bottomBarExpanded,
@@ -169,7 +186,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       showSpinner,
       supportsPWA,
       theme,
-    ],
+      replacements,
+    ]
   );
 
   return (
@@ -180,34 +198,15 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 };
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
-  let timeTableResponse: TimeTableListResponse = {
-    data: '',
-    ok: false,
-  };
-  let timeTableListStatus: TimeTableStatus | null = null;
-  await fetchTimetableList().then((response) => {
-    timeTableResponse = response;
-  });
-  const timeTableList: TimetableList | null = new TimetableList(
-    timeTableResponse.data,
-  );
-  if (
-    timeTableResponse?.ok &&
-    (timeTableList.getList().classes.length > 0 ||
-      timeTableList.getList().teachers?.length ||
-      timeTableList.getList().rooms?.length)
-  ) {
-    timeTableListStatus = 'ok';
-  } else if (timeTableResponse?.ok) {
-    timeTableListStatus = 'empty';
-  } else timeTableListStatus = 'error';
+  const { timeTableList, status: timeTableListStatus }: TimeTableListResponse =
+    await fetchTimeTableList();
 
   const appProps = await App.getInitialProps(appContext);
 
   return {
     ...appProps,
     pageProps: {
-      timeTableList: timeTableList.getList(),
+      timeTableList,
       timeTableListStatus,
     },
   };

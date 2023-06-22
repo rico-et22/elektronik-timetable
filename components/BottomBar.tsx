@@ -15,19 +15,19 @@ import { SettingsContext } from 'pages/_app';
 import getRouteContext from 'helpers/getRouteContext';
 import Search from 'components/Search';
 import ThemeSwitcher from 'components/ThemeSwitcher';
-import ReplacementsButton from './ReplacementsButton';
-import PWAInstallButton from './PWAInstallButton';
+import ReplacementsButton from 'components/ReplacementsButton';
+import PWAInstallButton from 'components/PWAInstallButton';
 
 type BottomBarProps = {
   timeTableList: List;
   generatedDate: string | undefined;
-  hasReplacements: boolean;
+  showReplacements: boolean;
 };
 
 const BottomBar = ({
   timeTableList,
   generatedDate,
-  hasReplacements,
+  showReplacements,
 }: BottomBarProps) => {
   const { classes, rooms, teachers } = timeTableList;
   const router = useRouter();
@@ -36,7 +36,7 @@ const BottomBar = ({
 
   const routeContext = React.useMemo(
     () => getRouteContext(router, timeTableList),
-    [router, timeTableList],
+    [router, timeTableList]
   );
 
   const handleToggleButtonClick = () => {
@@ -83,7 +83,7 @@ const BottomBar = ({
           }`}
         >
           <h2 className="text-lg truncate">
-            {!hasReplacements ? (
+            {!showReplacements ? (
               <>
                 {routeContext.name && routeContext.typeName && (
                   <span className="text-gray-500 dark:text-zinc-400">
