@@ -1,6 +1,16 @@
-import { List, TableHour } from '@wulkanowy/timetable-parser';
+import {
+  List,
+  ListItem,
+  TableHour,
+  TableLesson,
+} from '@wulkanowy/timetable-parser';
 import { ShortHour } from 'types/ShortHour';
+import { NextRouter } from 'next/router';
+import { Replacements } from 'types/Replacements';
+import { TimeTableData } from 'types/TimeTable';
 import { spaceRegExp } from './sharedVariables';
+// eslint-disable-next-line import/no-cycle
+import findReplacement from './findReplacement';
 
 export const getTeacherDataByCode = (
   timeTableList: List,
@@ -56,17 +66,78 @@ export const getHourData = (
     })
   );
 
-/**
- *
- * @param type getter type
- */
-const getData = (
-  type:
-    | 'teacherDataByCode'
-    | 'teacherDataByShortName'
-    | 'classDataByCode'
-    | 'roomDataByCode',
-  timeTableList: List
-) => {};
+export const getReplacementData = (
+  lesson: TableLesson,
+  router: NextRouter,
+  timeTableList: List,
+  replacements: Replacements | null,
+  hourIndex: number,
+  dayIndex: number,
+  timeTable: TimeTableData
+) => {
+  const classData =
+    router.query.all && router.query.all[0] !== 'class'
+      ? getClassDataByCode(timeTableList, lesson.className)
+      : undefined;
+  const teacherData =
+    router.query.all && router.query.all[0] !== 'teacher'
+      ? getTeacherDataByCode(timeTableList, lesson.teacher)
+      : undefined;
+  const roomData =
+    (router.query.all &&
+      router.query.all[0] !== 'room' &&
+      getRoomDataByCode(timeTableList, lesson.room)) ||
+    undefined;
 
-export default getData;
+  const replacement = replacements
+    ? findReplacement(
+        lesson,
+        hourIndex,
+        dayIndex,
+        replacements,
+        timeTable,
+        timeTableList
+      )
+    : undefined;
+  let replacedClassData: ListItem | undefined;
+  let replacedTeacherData: ListItem | undefined;
+  let replacedRoomData: ListItem | undefined;
+
+  if (replacement) {
+    replacedClassData = getClassDataByCode(
+      timeTableList,
+      replacement.className
+    );
+    if (replacedClassData === classData) replacedClassData = undefined;
+    // if you wonder what it does search for replacements type
+
+    if (replacement.deputy) {
+      // if lesson is removed it has no value
+      replacedTeacherData = getTeacherDataByShortName(
+        timeTableList,
+        replacement.deputy.shortString
+      ) || {
+        name: replacement.deputy.shortString, // replacement.deputy.notParsed // it gets split so it can't be used
+        value: '-1',
+      };
+      if (replacedTeacherData === teacherData) replacedTeacherData = undefined;
+    }
+
+    replacedRoomData = getRoomDataByCode(timeTableList, replacement.room) || {
+      // sal też może nie być
+      name: replacement.room, // replacement.deputy // it gets split so it can't be used
+      value: '-1',
+    };
+    if (replacedRoomData === roomData) replacedRoomData = undefined;
+    // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
+  }
+  return {
+    classData,
+    teacherData,
+    roomData,
+    replacedClassData,
+    replacedRoomData,
+    replacedTeacherData,
+    replacement,
+  };
+};

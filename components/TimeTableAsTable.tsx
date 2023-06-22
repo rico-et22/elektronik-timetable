@@ -1,4 +1,4 @@
-import { List, ListItem } from '@wulkanowy/timetable-parser';
+import { List } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/dist/client/router';
 import React from 'react';
 import {
@@ -7,11 +7,11 @@ import {
   getClassDataByCode,
   getHourData,
   getRoomDataByCode,
+  getReplacementData,
 } from 'helpers/dataGetters';
 import { SettingsContext } from 'pages/_app';
 import { TimeTableData } from 'types/TimeTable';
 import { Replacements } from 'types/Replacements';
-import findReplacement from 'helpers/findReplacement';
 import LessonHour from './LessonHour';
 
 interface Props {
@@ -156,57 +156,23 @@ const TimeTableAsTable = ({
                   >
                     {timeTable.days[dayIndex][hourIndex].map(
                       (lesson, lessonIndex) => {
-                        // if someone reads this. sorry i didn't have the time to do this a proper, cleaner way
-                        const classData = getClassData(lesson.className);
-                        const teacherData = getTeacherDataUsingCode(
-                          lesson.teacher
+                        const {
+                          replacement,
+                          replacedClassData,
+                          replacedTeacherData,
+                          replacedRoomData,
+                          classData,
+                          teacherData,
+                          roomData,
+                        } = getReplacementData(
+                          lesson,
+                          router,
+                          timeTableList,
+                          replacements,
+                          hourIndex,
+                          dayIndex,
+                          timeTable
                         );
-                        const roomData = getRoomData(lesson.room);
-
-                        const replacement = replacements
-                          ? findReplacement(
-                              lesson,
-                              hourIndex,
-                              dayIndex,
-                              replacements,
-                              timeTable,
-                              timeTableList
-                            )
-                          : undefined;
-                        let replacedClassData: ListItem | undefined;
-                        let replacedTeacherData: ListItem | undefined;
-                        let replacedRoomData: ListItem | undefined;
-
-                        if (replacement) {
-                          replacedClassData = getClassData(
-                            replacement.className
-                          );
-                          if (replacedClassData === classData)
-                            replacedClassData = undefined;
-                          // if you wonder what it does search for replacements type
-
-                          if (replacement.deputy) {
-                            // if lesson is removed it has no value
-                            replacedTeacherData = getTeacherDataUsingShortName(
-                              replacement.deputy.shortString
-                            ) || {
-                              name: replacement.deputy.shortString, // replacement.deputy.notParsed // it gets split so it can't be used
-                              value: '-1',
-                            };
-                            if (replacedTeacherData === teacherData)
-                              replacedTeacherData = undefined;
-                          }
-
-                          replacedRoomData = getRoomData(replacement.room) || {
-                            // sal też może nie być
-                            name: replacement.room, // replacement.deputy // it gets split so it can't be used
-                            value: '-1',
-                          };
-                          if (replacedRoomData === roomData)
-                            replacedRoomData = undefined;
-                          // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
-                        }
-
                         return (
                           <div
                             key={`day-${dayIndex}-${hourIndex}-${lessonIndex}`}

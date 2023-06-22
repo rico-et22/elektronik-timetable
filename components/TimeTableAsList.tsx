@@ -9,6 +9,7 @@ import {
   getClassDataByCode,
   getHourData,
   getRoomDataByCode,
+  getReplacementData,
 } from 'helpers/dataGetters';
 
 import { TimeTableData } from 'types/TimeTable';
@@ -157,52 +158,23 @@ const TimeTableAsList = ({ timeTable, timeTableList, replacements }: Props) => {
 
                 <div className="rounded-r bg-gray-50 dark:bg-zinc-800 dark:border-r dark:border-t dark:border-b dark:border-zinc-700 w-full px-4 py-1 overflow-hidden">
                   {lessonHour.map((lesson, lessonIndex) => {
-                    const classData = getClassData(lesson.className);
-                    const teacherData = getTeacherDataUsingCode(lesson.teacher);
-                    const roomData = getRoomData(lesson.room);
-
-                    const replacement = replacements
-                      ? findReplacement(
-                          lesson,
-                          hourIndex,
-                          selectedDayIndex,
-                          replacements,
-                          timeTable,
-                          timeTableList
-                        )
-                      : undefined;
-
-                    let replacedClassData: ListItem | undefined;
-                    let replacedTeacherData: ListItem | undefined;
-                    let replacedRoomData: ListItem | undefined;
-
-                    if (replacement) {
-                      replacedClassData = getClassData(replacement.className);
-                      if (replacedClassData === classData)
-                        replacedClassData = undefined;
-                      // if you wonder what it does search for replacements type
-
-                      if (replacement.deputy) {
-                        // if lesson is removed it has no value
-                        replacedTeacherData = getTeacherDataUsingShortName(
-                          replacement.deputy.shortString
-                        ) || {
-                          name: replacement.deputy.shortString, // replacement.deputy.notParsed // it gets split so it can't be used
-                          value: '-1',
-                        };
-                        if (replacedTeacherData === teacherData)
-                          replacedTeacherData = undefined;
-                      }
-
-                      replacedRoomData = getRoomData(replacement.room) || {
-                        // sal też może nie być
-                        name: replacement.room, // replacement.deputy // it gets split so it can't be used
-                        value: '-1',
-                      };
-                      if (replacedRoomData === roomData)
-                        replacedRoomData = undefined;
-                      // if(replacedTeacherData) replacedTeacherData.value = replacement!.teacher; // bad idea
-                    }
+                    const {
+                      replacement,
+                      replacedClassData,
+                      replacedTeacherData,
+                      replacedRoomData,
+                      classData,
+                      teacherData,
+                      roomData,
+                    } = getReplacementData(
+                      lesson,
+                      router,
+                      timeTableList,
+                      replacements,
+                      hourIndex,
+                      selectedDayIndex,
+                      timeTable
+                    );
                     return (
                       <div
                         key={`day-${selectedDayIndex}-${hourIndex}-${lessonIndex}`}
