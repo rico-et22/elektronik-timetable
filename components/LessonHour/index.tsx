@@ -61,26 +61,32 @@ export default function LessonHour({
       </p>
 
       <div className="flex">
-        <CustomLink
-          type="class"
-          data={classData}
-          replacementData={replacedClassData}
-          small={small}
-        />
+        {classData && (
+          <CustomLink
+            type="class"
+            data={classData}
+            replacementData={replacedClassData}
+            small={small}
+          />
+        )}
 
-        <CustomLink
-          type="teacher"
-          data={teacherData}
-          replacementData={replacedTeacherData}
-          small={small}
-        />
+        {teacherData && (
+          <CustomLink
+            type="teacher"
+            data={teacherData}
+            replacementData={replacedTeacherData}
+            small={small}
+          />
+        )}
 
-        <CustomLink
-          type="room"
-          data={roomData}
-          replacementData={replacedRoomData}
-          small={small}
-        />
+        {roomData && (
+          <CustomLink
+            type="room"
+            data={roomData}
+            replacementData={replacedRoomData}
+            small={small}
+          />
+        )}
       </div>
     </>
   );
