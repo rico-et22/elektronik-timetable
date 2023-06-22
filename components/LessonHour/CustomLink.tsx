@@ -51,9 +51,9 @@ export default function CustomLink({
       )}
       {data && (
         <div
-          className={`text-elektronik-blue ${
+          className={`text-elektronik-blue truncate ${
             replacementData ? 'line-through' : ''
-          }`}
+          } ${type === 'teacher' && !small ? 'truncate' : ''}`}
         >
           <Link href={`/${type}/${data.value}`}>{shortName}</Link>
         </div>

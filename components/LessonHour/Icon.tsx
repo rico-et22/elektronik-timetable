@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function Icon({ type }: Props): JSX.Element {
-  const className = `h-3 w-3 mr-1`;
+  const className = `h-3 w-3 mr-1 shrink-0`;
 
   if (type === 'class') {
     return <ClassIcon className={className} />;
