@@ -62,7 +62,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '') // Match all unicode character modifiers from decomposited string. Example: ś => s (U+0073) + (U+0301)
             .replace(/\u0142/g, 'l') // Match ł character manually since it doesn't get decomposited into l
-            .includes(value.toLowerCase()),
+            .includes(value.toLowerCase())
       );
     }
     return [];
@@ -165,7 +165,8 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
             {filteredLinks &&
               filteredLinks.length > 0 &&
               filteredLinks.map((link, index) => (
-                <Link
+                <Link // TODO - fix this
+                  legacyBehavior
                   key={`search-${link.type}-${link.value}`}
                   href={`/${link.type}/${link.value}`}
                 >

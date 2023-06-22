@@ -17,7 +17,7 @@ type ClassesSelectorProps = {
 const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
   const [open, setOpen] = React.useState(false);
   const [sortedClasses, setSortedClasses] = React.useState<SortedListItem[]>(
-    [],
+    []
   );
   const router = useRouter();
   const getRoundedClass = (stateValue: boolean) => {
@@ -28,7 +28,7 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
   const handleClick = (
     state: boolean,
     stateChangeFunction: Function,
-    ref: React.RefObject<HTMLDivElement>,
+    ref: React.RefObject<HTMLDivElement>
   ) => {
     if (!state && ref && ref.current !== null)
       ref.current.style.maxHeight = `${ref.current.scrollHeight}px`;
@@ -45,9 +45,9 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
           .map((char) => ({
             char,
             items: classes.filter(
-              (singleClass) => singleClass.name[0] === char,
+              (singleClass) => singleClass.name[0] === char
             ),
-          })),
+          }))
       );
     }
   }, [classes]);
@@ -62,7 +62,7 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
         type="button"
         onClick={() => handleClick(open, setOpen, selectorRef)}
         className={`bg-elektronik-blue text-white w-full px-4 py-3 flex justify-between items-center transition-all duration-75 ${getRoundedClass(
-          open,
+          open
         )}`}
       >
         <div className="flex items-center">
@@ -85,6 +85,7 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
               </h3>
               {sortedItem.items.map((item) => (
                 <Link
+                  legacyBehavior
                   key={`bottomBar-class-letter-${sortedItem.char}-${item.value}`}
                   href={`/class/${item.value}`}
                 >

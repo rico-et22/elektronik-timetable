@@ -1,32 +1,31 @@
 import * as React from 'react';
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import { List, Table, TimetableList } from '@wulkanowy/timetable-parser';
 import { useRouter } from 'next/router';
-import {
-  TimeTableData,
-  TimeTableListResponse,
-  TimeTableStatus,
-} from 'types/TimeTable';
-import fetchTimetable from 'helpers/fetchTimetable';
 import Layout from 'components/Layout';
 import getRouteContext from 'helpers/getRouteContext';
-import fetchTimetableList from '../helpers/fetchTimetableList';
+
+import { List } from '@wulkanowy/timetable-parser';
+import { TimeTableData, TimeTableListResponse } from 'types/TimeTable';
+import fetchTimetableData from 'helpers/fetchTimetable';
+import fetchTimeTableList from 'helpers/fetchTimetableList';
+import { Replacements } from 'types/Replacements';
 
 interface TablePageProps {
   timeTableList: List;
-  timeTableListStatus: TimeTableStatus;
+  timeTableListStatus: TimeTableListResponse['status'];
   timeTable: TimeTableData;
-  timeTableStatus: TimeTableStatus;
+  replacements: Replacements;
 }
 
 const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
   const { timeTableList } = props;
+
   const router = useRouter();
 
   const routeContext = React.useMemo(
     () => getRouteContext(router, timeTableList),
-    [timeTableList, router],
+    [timeTableList, router]
   );
 
   const titleText = React.useMemo(() => {
@@ -46,19 +45,18 @@ const TablePage: NextPage<TablePageProps> = (props: TablePageProps) => {
           content={`${titleText} | Elektronik - plan lekcji express`}
         />
       </Head>
-      <Layout {...props} />
+      <Layout {...props} showReplacements={false} />
     </>
   );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const list = await fetchTimetableList();
-  const tableList = new TimetableList(list.data);
+  const { timeTableList } = await fetchTimeTableList();
 
-  const { classes, teachers, rooms } = tableList.getList();
+  const { classes, teachers, rooms } = timeTableList;
   const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
   const teachersPaths = teachers?.map(
-    (teacherItem) => `/teacher/${teacherItem.value}`,
+    (teacherItem) => `/teacher/${teacherItem.value}`
   );
   const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
   if (!classesPaths || !teachersPaths || !roomsPaths)
@@ -70,42 +68,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  let timeTableResponse: TimeTableListResponse = {
-    data: '',
-    ok: false,
-  };
-  let timeTableStatus: TimeTableStatus | null = null;
-  let id = '';
-  if (context.params?.all) {
-    if (context.params.all[0] === 'class') id = `o${context.params.all[1]}`;
-    if (context.params.all[0] === 'teacher') id = `n${context.params.all[1]}`;
-    if (context.params.all[0] === 'room') id = `s${context.params.all[1]}`;
-  }
-  await fetchTimetable(id).then((response) => {
-    timeTableResponse = response;
-  });
-  const timeTable: Table | null = new Table(timeTableResponse.data);
-  const tableCellText: string = timeTable
-    .$('.op  table:nth-child(1) tr:nth-child(1) > td:nth-child(1)')
-    .text();
-  const date: string | undefined = tableCellText
-    .trim()
-    .split('\n')[0]
-    .split(' ')
-    .pop();
-  if (timeTableResponse?.ok) {
-    timeTableStatus = 'ok';
-  } else timeTableStatus = 'error';
+  const [tab, value] = context.params?.all || [];
+
+  let timeTableData: TimeTableData | null = null;
+
+  if (tab === 'class' || tab === 'teacher' || tab === 'room')
+    timeTableData = await fetchTimetableData(tab, Number(value));
 
   return {
     props: {
-      timeTable: {
-        days: timeTable.getDays(),
-        dayNames: timeTable.getDayNames(),
-        hours: timeTable.getHours(),
-        generatedDate: date,
-      },
-      timeTableStatus,
+      timeTable: timeTableData,
     },
     revalidate: 12 * 3600,
   };

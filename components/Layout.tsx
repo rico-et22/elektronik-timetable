@@ -1,7 +1,10 @@
-import { List } from '@wulkanowy/timetable-parser';
+import React from 'react';
 import { useRouter } from 'next/router';
-import * as React from 'react';
-import { TimeTableData, TimeTableStatus } from 'types/TimeTable';
+import { SettingsContext } from 'pages/_app';
+
+import { List } from '@wulkanowy/timetable-parser';
+import { TimeTableData, TimeTableListResponse } from 'types/TimeTable';
+
 import BottomBar from 'components/BottomBar';
 import NoTimeTableError from 'components/NoTimeTableError';
 import SideBar from 'components/SideBar';
@@ -9,62 +12,60 @@ import TimeTableAsList from 'components/TimeTableAsList';
 import TimeTableAsTable from 'components/TimeTableAsTable';
 import HeaderBar from 'components/HeaderBar';
 import TopBar from 'components/TopBar';
-import { SettingsContext } from 'pages/_app';
 import Spinner from 'components/Spinner';
-import { Replacements } from 'types/Replacements';
+import completeTimeTableData from 'helpers/completeTimeTableData';
 import ReplacementsTable from './ReplacementsTable';
-import ReplacementsInfo from './ReplacementsInfo';
 
 interface Props {
   timeTableList: List;
-  timeTableListStatus: TimeTableStatus;
+  timeTableListStatus: TimeTableListResponse['status'];
   timeTable?: TimeTableData;
-  timeTableStatus?: TimeTableStatus;
-  replacements?: Replacements;
+  showReplacements: boolean;
 }
 
 const Layout = ({
   timeTableList,
   timeTableListStatus,
   timeTable,
-  timeTableStatus,
-  replacements,
+  showReplacements,
 }: Props) => {
   const router = useRouter();
-  const { desktopComponent, showSpinner } = React.useContext(SettingsContext);
+  const { desktopComponent, showSpinner, replacements } =
+    React.useContext(SettingsContext);
   const desktopLayoutRef = React.useRef<HTMLDivElement>(null);
   const printRef = React.useRef<HTMLDivElement>(null);
 
   const lastPathKey = 'elektronik-timetable-last-path';
+  if (timeTable) completeTimeTableData(timeTable, timeTableList);
 
   // Get last opened path saved in localStorage.
   // If the path corresponds to a valid class/teacher/room in timeTableList, redirect to it.
   // Otherwise, if possible, redirect to the first class in the list.
   // This code runs only on index page "/".
   React.useEffect(() => {
-    const lastPath = window.localStorage.getItem(lastPathKey);
     if (router.asPath === '/') {
+      const lastPath = window?.localStorage.getItem(lastPathKey);
       let isCorrect = false;
+
       const parsedPath: string = lastPath ? JSON.parse(lastPath) : '';
-      if (typeof window !== 'undefined' && lastPath) {
-        const splittedPath = parsedPath.split('/');
+      if (parsedPath.length) {
+        const [, tab, id] = parsedPath.split('/');
         if (
-          (splittedPath[1] === 'class' &&
+          (tab === 'class' &&
             timeTableList.classes.find(
-              (singleClass) => singleClass.value === splittedPath[2],
+              (singleClass) => singleClass.value === id
             )) ||
-          (splittedPath[1] === 'teacher' &&
+          (tab === 'teacher' &&
             timeTableList.teachers?.find(
-              (singleTeacher) => singleTeacher.value === splittedPath[2],
+              (singleTeacher) => singleTeacher.value === id
             )) ||
-          (splittedPath[1] === 'room' &&
-            timeTableList.rooms?.find(
-              (singleRoom) => singleRoom.value === splittedPath[2],
-            ))
+          (tab === 'room' &&
+            timeTableList.rooms?.find((singleRoom) => singleRoom.value === id))
         ) {
           isCorrect = true;
         }
       }
+
       if (isCorrect) router.replace(parsedPath);
       else if (timeTableList.classes.length > 0) {
         router.replace(`/class/${timeTableList.classes[0].value}`);
@@ -81,11 +82,11 @@ const Layout = ({
   // The app will automatically redirect to it when opening the app from the index page - if the path is still valid in timeTableList.
   React.useEffect(() => {
     if (router.asPath) {
-      if (typeof window !== 'undefined' && timeTableStatus === 'ok') {
+      if (typeof window !== 'undefined' && timeTable?.status === 'ok') {
         window.localStorage.setItem(lastPathKey, JSON.stringify(router.asPath));
       }
     }
-  }, [router.asPath, timeTableStatus]);
+  }, [router.asPath, timeTable?.status]);
 
   React.useEffect(() => {
     if (showSpinner) desktopLayoutRef.current?.scrollTo(0, 0);
@@ -93,12 +94,13 @@ const Layout = ({
 
   return (
     <>
+      {/* Small screens */}
       <div
         className={`${
-          timeTableStatus === 'ok' ? '' : 'h-screen flex flex-col '
+          timeTable?.status === 'ok' ? '' : 'h-screen flex flex-col '
         } lg:hidden`}
       >
-        <HeaderBar hasReplacements={!!replacements} />
+        <HeaderBar hideHoursSwitcher={showReplacements} />
         <div
           className={`relative min-h-[calc(100vh-4.5rem)] dark:bg-zinc-900 ${
             showSpinner ? 'h-[calc(100vh-9.75rem)] overflow-hidden' : ''
@@ -108,13 +110,11 @@ const Layout = ({
             <TimeTableAsList
               timeTable={timeTable}
               timeTableList={timeTableList}
+              replacements={replacements}
             />
           )}
-          {replacements && (
-            <>
-              <ReplacementsInfo date={replacements.date} />
-              <ReplacementsTable replacements={replacements} />
-            </>
+          {showReplacements && replacements && (
+            <ReplacementsTable replacements={replacements} />
           )}
           {showSpinner && <Spinner />}
         </div>
@@ -122,16 +122,18 @@ const Layout = ({
           <BottomBar
             timeTableList={timeTableList}
             generatedDate={timeTable?.generatedDate}
-            hasReplacements={!!replacements}
+            showReplacements={showReplacements}
           />
         )}
-        {timeTableStatus && timeTableStatus !== 'ok' && (
-          <NoTimeTableError status={timeTableStatus} />
+        {timeTable && timeTable.status !== 'ok' && (
+          <NoTimeTableError status={timeTable.status} />
         )}
       </div>
+      {/* Large screens */}
       <div className="hidden lg:flex">
         <div className="w-1/4 relative h-screen dark:bg-zinc-800">
-          <HeaderBar hasReplacements={!!replacements} />
+          <HeaderBar hideHoursSwitcher={showReplacements} />
+
           {timeTableListStatus === 'ok' && (
             <SideBar
               timeTableList={timeTableList}
@@ -139,6 +141,7 @@ const Layout = ({
             />
           )}
         </div>
+
         <div
           className={`w-3/4 h-screen relative dark:bg-zinc-900 ${
             showSpinner ? 'overflow-hidden' : 'overflow-y-auto'
@@ -150,41 +153,40 @@ const Layout = ({
               <TopBar
                 timeTableList={timeTableList}
                 printRef={printRef}
-                hasReplacements={!!replacements}
+                showReplacements={showReplacements}
               />
-              {timeTable && (
+              {timeTable.status === 'ok' && (
                 <>
-                  {desktopComponent === 'list' && timeTableStatus === 'ok' && (
+                  {desktopComponent === 'list' && (
                     <TimeTableAsList
                       timeTable={timeTable}
                       timeTableList={timeTableList}
+                      replacements={replacements}
                     />
                   )}
-                  {desktopComponent === 'table' && timeTableStatus === 'ok' && (
+                  {desktopComponent === 'table' && (
                     <TimeTableAsTable
                       timeTable={timeTable}
                       timeTableList={timeTableList}
+                      replacements={replacements}
                     />
                   )}
                 </>
               )}
             </div>
           )}
-          {replacements && (
+          {showReplacements && replacements && (
             <div ref={printRef}>
               <TopBar
                 timeTableList={timeTableList}
-                hasReplacements={!!replacements}
+                showReplacements={showReplacements}
                 printRef={printRef}
               />
-              <ReplacementsInfo date={replacements.date} />
-              {desktopComponent === 'table' && (
-                <ReplacementsTable replacements={replacements} />
-              )}
+              <ReplacementsTable replacements={replacements} />
             </div>
           )}
-          {timeTableStatus && timeTableStatus !== 'ok' && (
-            <NoTimeTableError status={timeTableStatus} />
+          {timeTable && timeTable.status !== 'ok' && (
+            <NoTimeTableError status={timeTable.status} />
           )}
           {showSpinner && <Spinner />}
         </div>
@@ -195,8 +197,6 @@ const Layout = ({
 
 Layout.defaultProps = {
   timeTable: undefined,
-  timeTableStatus: undefined,
-  replacements: undefined,
 };
 
 export default Layout;
