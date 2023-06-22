@@ -32,32 +32,42 @@ export default function CustomLink({
   return (
     <div
       className={`flex items-center mr-4 ${
-        type === 'teacher' && !small ? 'w-1/2' : ''
-      }`}
+        type === 'teacher' && !small ? 'w-1/2 overflow-hidden' : ''
+      } ${small ? 'text-sm' : ''}`}
     >
       <Icon type={type} />
-      {replacementData && (
-        <div>
-          {replacementData.value !== '-1' ? (
-            <span className="text-zastepstwo-yellow">
-              <Link href={`/${type}/${replacementData.value}`}>
+      <div
+        className={
+          replacementData ? 'flex flex-col overflow-hidden' : 'overflow-hidden'
+        }
+      >
+        {replacementData && (
+          <div>
+            {replacementData.value !== '-1' ? (
+              <span className="text-zastepstwo-yellow block truncate">
+                <Link href={`/${type}/${replacementData.value}`}>
+                  {shortReplacementName}
+                </Link>
+              </span>
+            ) : (
+              <span className="text-zastepstwo-yellow block truncate">
                 {shortReplacementName}
-              </Link>
-            </span>
-          ) : (
-            shortReplacementName
-          )}
-        </div>
-      )}
-      {data && (
-        <div
-          className={`text-elektronik-blue truncate ${
-            replacementData ? 'line-through' : ''
-          } ${type === 'teacher' && !small ? 'truncate' : ''}`}
-        >
-          <Link href={`/${type}/${data.value}`}>{shortName}</Link>
-        </div>
-      )}
+              </span>
+            )}
+          </div>
+        )}
+        {data && (
+          <div
+            className={`text-elektronik-blue ${
+              replacementData ? 'line-through' : ''
+            } ${type === 'teacher' ? 'truncate' : ''}`}
+          >
+            <Link href={`/${type}/${data.value}`} className="block truncate">
+              {shortName}
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -42,6 +42,7 @@ export default function LessonHour({
     <>
       <p className="font-bold mb-1">
         {!hasReplacement && subject}
+        {!hasReplacement && groupName && ` (${groupName})`}
         {hasReplacement && (
           <>
             {!replacement.lessonRemoved && (
@@ -54,10 +55,14 @@ export default function LessonHour({
               {replacement.notes}
             </span>
             <br />
-            {subject && <del>{subject}</del>}
+            {subject && (
+              <span className="line-through text-gray-500">{subject}</span>
+            )}
+            {groupName && (
+              <span className="line-through text-gray-500"> ({groupName})</span>
+            )}
           </>
         )}
-        {groupName && ` (${groupName})`}
       </p>
 
       <div className="flex">
