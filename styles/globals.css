@@ -18,6 +18,10 @@ a {
   text-decoration: none;
 }
 
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -33,6 +37,7 @@ a {
 .rounded-l-0_18 {
   border-radius: 0.18rem 0 0 0.18rem;
 }
+
 .rounded-r-0_18 {
   border-radius: 0 0.18rem 0.18rem 0;
 }
@@ -42,14 +47,17 @@ a {
   color: #fff !important;
   z-index: 10000 !important;
 }
+
 @media (max-width: 1023.98px) {
   .react-tooltip {
     display: none !important;
   }
 }
+
 .react-tooltip.styles-module_show__2NboJ {
   opacity: 1 !important;
 }
+
 .dark .react-tooltip {
   background-color: #fff !important;
   color: #404040 !important;
