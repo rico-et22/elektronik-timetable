@@ -26,7 +26,7 @@ After cloning the repo, define the environment variables (.env), depending on th
 
 In this method we're going to use the original timetable hosted on your school's website.
 
-Simply define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://elektronik.rzeszow.pl/plan-lekcji-2`.
+Simply define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://zse.rzeszow.pl/plan-lekcji`.
 
 In some cases, the timetable may not fetch to this app due to CORS issues. Use method 2 then.
 
@@ -34,13 +34,13 @@ In some cases, the timetable may not fetch to this app due to CORS issues. Use m
 
 It's the same as method 1, but we're adding a CORS Anywhere proxy server to clear all CORS-related issues while fetching the timetable from the school servers. Don't worry, there are no sensitive data passing through, it's just a timetable 😅. However if security is your #1 priority use method 3.
 
-As in method 1 - define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://elektronik.rzeszow.pl/plan-lekcji-2`.
+As in method 1 - define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://zse.rzeszow.pl/plan-lekcji`.
 
 Then deploy a CORS Anywhere instance.
 
 Before deploying your instance, set `requireHeader` in its config file to `[]`.
 
-Check out if CORS Anywhere works by proxying your school's timetable base URL like so: `http://<cors_anywhere_url>/https://www.elektronik.rzeszow.pl/plan-lekcji-2`.
+Check out if CORS Anywhere works by proxying your school's timetable base URL like so: `http://<cors_anywhere_url>/https://zse.rzeszow.pl/plan-lekcji`.
 
 You should see two frames with "Not Found" errors. That's okay.
 
@@ -58,7 +58,7 @@ However, you'll lose any automatic updates of the timetable. Be sure to check th
 
 To clone the website, run `wget -mpEk <timetable_base_url> --no-check-certificate`
 
-Example: `wget -mpEk https://www.elektronik.rzeszow.pl/plan-lekcji-2 --no-check-certificate`
+Example: `wget -mpEk https://zse.rzeszow.pl/plan-lekcji --no-check-certificate`
 
 Then, define the `NEXT_PUBLIC_TIMETABLE_BASE_URL` env variable with the timetable base URL, such as `https://dummy-server.dev/timetable-to-serve`.
 
@@ -68,12 +68,12 @@ Compatible only with [Zespół Szkół Elektronicznych w Rzeszowie's own API.](h
 To enable, add `NEXT_PUBLIC_REPLACEMENTS_API_URL=https://www.elektronik.rzeszow.pl/api/replacements.json` to env.
 
 ## .env example
-
+**with proxy**
 ```
 NEXT_PUBLIC_PROXY_URL=http://localhost:8080
-NEXT_PUBLIC_TIMETABLE_BASE_URL=https://www.elektronik.rzeszow.pl/plan-lekcji
+NEXT_PUBLIC_TIMETABLE_BASE_URL=https://zse.rzeszow.pl/plan-lekcji
+NEXT_PUBLIC_REPLACEMENTS_API_URL=https://www.elektronik.rzeszow.pl/api/replacements.json
 ```
-
 ## Startup
 
 Then you can install the packages & run the app:
