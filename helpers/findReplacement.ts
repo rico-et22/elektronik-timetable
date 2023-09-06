@@ -44,7 +44,7 @@ export default function findReplacement(
         .shift()
         ?.toLowerCase();
 
-      if (replacementLesson.teacher.shortString !== teacherShortString)
+      if (replacementLesson.teacher.shortString.toLowerCase() !== teacherShortString)
         return false;
     } else {
       return false;
