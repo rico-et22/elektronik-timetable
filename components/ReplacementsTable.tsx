@@ -1,56 +1,65 @@
 import * as React from 'react';
 import { Tooltip } from 'react-tooltip';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { Replacements, Replacement } from 'types/Replacements';
-import sortReplacementsRows from 'helpers/sort';
+import sortReplacementsRows from 'helpers/replacements';
 import ReplacementsInfo from './ReplacementsInfo';
 
 interface Props {
   replacements: Replacements;
 }
 
-interface SortedColumn {
-  name: keyof Replacement;
-  type: 'asc' | 'desc';
+interface SortingSettings {
+  columnName: keyof Replacement;
+  orderType: 'asc' | 'desc';
 }
 
 const ReplacementsTable = ({ replacements }: Props) => {
+  const replacementsSortingSettingsKey = 'replacements-sorting-settings';
+
   const replacementsSortingSettings = window.localStorage.getItem(
-    'replacements-sorting-settings'
+    replacementsSortingSettingsKey
   );
 
-  const defaultReplacementsSortingSettings = {
-    name: replacementsSortingSettings
-      ? JSON.parse(replacementsSortingSettings).name
-      : 'lesson',
-    type: replacementsSortingSettings
-      ? JSON.parse(replacementsSortingSettings).type
-      : 'asc',
-  };
+  const defaultReplacementsSortingSettings: SortingSettings =
+    replacementsSortingSettings
+      ? JSON.parse(replacementsSortingSettings)
+      : {
+          name: 'lesson',
+          type: 'asc',
+        };
 
-  const [sortedColumn, setSortedColumn] = React.useState<SortedColumn>(
+  const [sortingSettings, setSortingSettings] = React.useState<SortingSettings>(
     defaultReplacementsSortingSettings
   );
 
   React.useEffect(() => {
     window.localStorage.setItem(
-      'replacements-sorting-settings',
-      JSON.stringify(sortedColumn)
+      replacementsSortingSettingsKey,
+      JSON.stringify(sortingSettings)
     );
-  }, [sortedColumn]);
+  }, [sortingSettings]);
 
   const sortRows = React.useCallback(
     (a: Replacement, b: Replacement) =>
-      sortReplacementsRows(a, b, sortedColumn.name, sortedColumn.type),
-    [sortedColumn]
+      sortReplacementsRows(
+        a,
+        b,
+        sortingSettings.columnName,
+        sortingSettings.orderType
+      ),
+    [sortingSettings]
   );
 
-  const handleColumnTitleClick = (name: string) => {
-    setSortedColumn((prev) => ({
-      name: (name === 'classgroup' ? 'className' : name) as keyof Replacement,
-      type:
-        (prev.name === name ||
-          (prev.name === 'className' && name === 'classgroup')) &&
-        prev.type === 'asc'
+  const handleColumnTitleClick = (columnName: string) => {
+    setSortingSettings((prev) => ({
+      columnName: (columnName === 'classgroup'
+        ? 'className'
+        : columnName) as keyof Replacement,
+      orderType:
+        (prev.columnName === columnName ||
+          (prev.columnName === 'className' && columnName === 'classgroup')) &&
+        prev.orderType === 'asc'
           ? 'desc'
           : 'asc',
     }));
@@ -63,9 +72,13 @@ const ReplacementsTable = ({ replacements }: Props) => {
         <table className="w-full border-separate border-0 drop-shadow-lg mb-5 lg:mb-0 dark:drop-shadow-none rounded-lg border-spacing-0">
           <thead className="rounded">
             <tr className="text-white text-sm rounded-t-lg">
-              {replacements.cols
-                // .slice(0, replacements.cols.length - 1)
-                .map((col, index) => (
+              {replacements.cols.map((col, index) => {
+                const isSorting =
+                  sortingSettings.columnName === col.slug ||
+                  (sortingSettings.columnName === 'className' &&
+                    col.slug === 'classgroup');
+
+                return (
                   <th
                     key={`replacementsTable-col-${index}`}
                     className={`py-3 border bg-elektronik-red border-gray-100/50 dark:border-zinc-700/50 cursor-pointer sort-replacements-tooltip ${
@@ -76,16 +89,24 @@ const ReplacementsTable = ({ replacements }: Props) => {
                         : ''
                     }`}
                     data-tooltip-content={
-                      sortedColumn.name === col.slug &&
-                      sortedColumn.type === 'asc'
+                      isSorting && sortingSettings.orderType === 'asc'
                         ? 'Sortuj malejąco'
                         : 'Sortuj rosnąco'
                     }
                     onClick={() => handleColumnTitleClick(col.slug)}
                   >
-                    <span>{col.name}</span>
+                    <div className="flex justify-center items-center">
+                      <span>{col.name}</span>
+                      {isSorting &&
+                        (sortingSettings.orderType === 'asc' ? (
+                          <ChevronDownIcon className="h-3 w-3 ml-2 stroke-[4px]" />
+                        ) : (
+                          <ChevronUpIcon className="h-3 w-3 ml-2 stroke-[4px]" />
+                        ))}
+                    </div>
                   </th>
-                ))}
+                );
+              })}
             </tr>
           </thead>
           <tbody>
