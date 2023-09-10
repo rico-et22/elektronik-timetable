@@ -23,10 +23,10 @@ const ReplacementsTable = ({ replacements }: Props) => {
 
   const defaultReplacementsSortingSettings: SortingSettings =
     replacementsSortingSettings
-      ? JSON.parse(replacementsSortingSettings)
+      ? (JSON.parse(replacementsSortingSettings) as SortingSettings)
       : {
-          name: 'lesson',
-          type: 'asc',
+          columnName: 'lesson',
+          orderType: 'asc',
         };
 
   const [sortingSettings, setSortingSettings] = React.useState<SortingSettings>(
