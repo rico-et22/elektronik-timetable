@@ -68,12 +68,15 @@ Compatible only with [Zespół Szkół Elektronicznych w Rzeszowie's own API.](h
 To enable, add `NEXT_PUBLIC_REPLACEMENTS_API_URL=https://www.elektronik.rzeszow.pl/api/replacements.json` to env.
 
 ## .env example
+
 **with proxy**
+
 ```
 NEXT_PUBLIC_PROXY_URL=http://localhost:8080
 NEXT_PUBLIC_TIMETABLE_BASE_URL=https://zse.rzeszow.pl/plan-lekcji
 NEXT_PUBLIC_REPLACEMENTS_API_URL=https://www.elektronik.rzeszow.pl/api/replacements.json
 ```
+
 ## Startup
 
 Then you can install the packages & run the app:
