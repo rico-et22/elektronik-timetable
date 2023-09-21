@@ -65,10 +65,16 @@ const ReplacementsTable = ({ replacements }: Props) => {
     }));
   };
 
+  const dateParts = replacements.PLDate.split('.').map((datePart) =>
+    parseInt(datePart, 10)
+  );
+
   return (
     <>
       <div className="px-4 lg:px-10 pb-24 lg:pb-16 overflow-x-auto dark:bg-zinc-900">
-        <ReplacementsInfo date={replacements.PLDate} />
+        <ReplacementsInfo
+          date={new Date(dateParts[2], dateParts[1] - 1, dateParts[0])}
+        />
         <table className="w-full border-separate border-0 drop-shadow-lg mb-5 lg:mb-0 dark:drop-shadow-none rounded-lg border-spacing-0">
           <thead className="rounded">
             <tr className="text-white text-sm rounded-t-lg">
