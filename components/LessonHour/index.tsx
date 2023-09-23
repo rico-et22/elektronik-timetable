@@ -45,22 +45,23 @@ export default function LessonHour({
         {!hasReplacement && groupName && ` (${groupName})`}
         {hasReplacement && (
           <>
-            {!replacement.lessonRemoved && (
-              <span className="text-zastepstwo-yellow">
-                {replacement.subject}
-              </span>
-            )}
-            <span className="text-elektronik-red">
-              {replacement.lessonRemoved && replacement.lessonRemovedReason}{' '}
-              {replacement.notes}
-            </span>
-            <br />
             {subject && (
               <span className="line-through text-gray-500">{subject}</span>
             )}
             {groupName && (
               <span className="line-through text-gray-500"> ({groupName})</span>
             )}
+            <br />
+            {!replacement.lessonRemoved && (
+              <span className="text-zastepstwo-yellow">
+                {replacement.subject}
+              </span>
+            )}
+            <span className="text-elektronik-red">
+              {replacement.lessonRemoved && replacement.lessonRemovedReason}
+              <br />
+              {replacement.notes}
+            </span>
           </>
         )}
       </p>
