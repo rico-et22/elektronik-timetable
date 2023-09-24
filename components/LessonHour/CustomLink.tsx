@@ -41,6 +41,17 @@ export default function CustomLink({
           replacementData ? 'flex flex-col overflow-hidden' : 'overflow-hidden'
         }
       >
+        {data && (
+          <div
+            className={`text-elektronik-blue ${
+              replacementData ? 'line-through text-gray-500' : ''
+            } ${type === 'teacher' ? 'truncate' : ''}`}
+          >
+            <Link href={`/${type}/${data.value}`} className="block truncate">
+              {shortName}
+            </Link>
+          </div>
+        )}
         {replacementData && (
           <div>
             {replacementData.value !== '-1' ? (
@@ -54,17 +65,6 @@ export default function CustomLink({
                 {shortReplacementName}
               </span>
             )}
-          </div>
-        )}
-        {data && (
-          <div
-            className={`text-elektronik-blue ${
-              replacementData ? 'line-through' : ''
-            } ${type === 'teacher' ? 'truncate' : ''}`}
-          >
-            <Link href={`/${type}/${data.value}`} className="block truncate">
-              {shortName}
-            </Link>
           </div>
         )}
       </div>
