@@ -24,7 +24,9 @@ function parseTeacher(teacherString: string): TeacherInfo {
 }
 
 function normalizeApiReplacement(replacement: ApiReplacement): Replacement {
-  const lessonRemoved = replacement.deputy.includes('Uczniowie');
+  const lessonRemoved =
+    replacement.deputy.includes('Uczniowie') ||
+    replacement.deputy.includes('Zastępstwo');
   const lessonRemovedReason = lessonRemoved ? replacement.deputy : null;
 
   const [className, ...replacedGroups] = replacement.classgroup;
