@@ -40,7 +40,7 @@ const TopBar = ({ timeTableList, printRef, showReplacements }: TopBarProps) => {
   });
 
   return (
-    <div className="bg-gray-100 dark:bg-zinc-900 flex h-[4.5rem] px-10 shadow-xl dark:shadow-none dark:border-b dark:border-zinc-700">
+    <div className="bg-gray-100 dark:bg-zinc-900 flex h-[4.5rem] px-10 shadow-xl dark:shadow-none dark:border-b dark:border-zinc-700 sticky top-0 z-10">
       <div className="w-full flex items-center">
         {!showReplacements && <ShortHoursSwitcher />}
       </div>
