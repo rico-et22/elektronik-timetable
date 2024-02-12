@@ -71,18 +71,18 @@ const shortHours = [
   },
   {
     number: 12,
-    timeFrom: '14:00',
-    timeTo: '14:30',
+    timeFrom: '13:55',
+    timeTo: '14:25',
   },
   {
     number: 13,
-    timeFrom: '14:35',
-    timeTo: '15:05',
+    timeFrom: '14:30',
+    timeTo: '15:00',
   },
   {
     number: 14,
-    timeFrom: '15:10',
-    timeTo: '15:40',
+    timeFrom: '15:05',
+    timeTo: '15:35',
   },
 ];
 
