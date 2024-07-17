@@ -13,7 +13,7 @@ const ReplacementsButton = () => {
   };
   return (
     <div className="mb-8">
-      <Link href="/replacements" passHref legacyBehavior>
+      <Link href="/replacements" passHref legacyBehavior prefetch={false}>
         <a
           className="bg-gray-600 text-white w-full px-4 py-3 flex justify-between items-center transition-all duration-75 rounded-lg"
           onClick={() => handleLinkClick()}

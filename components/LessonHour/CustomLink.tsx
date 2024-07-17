@@ -47,7 +47,11 @@ export default function CustomLink({
               replacementData ? 'line-through text-gray-500' : ''
             } ${type === 'teacher' ? 'truncate' : ''}`}
           >
-            <Link href={`/${type}/${data.value}`} className="block truncate">
+            <Link
+              href={`/${type}/${data.value}`}
+              className="block truncate"
+              prefetch={false}
+            >
               {shortName}
             </Link>
           </div>
@@ -56,7 +60,10 @@ export default function CustomLink({
           <div>
             {replacementData.value !== '-1' ? (
               <span className="text-zastepstwo-yellow block truncate">
-                <Link href={`/${type}/${replacementData.value}`}>
+                <Link
+                  href={`/${type}/${replacementData.value}`}
+                  prefetch={false}
+                >
                   {shortReplacementName}
                 </Link>
               </span>

@@ -169,6 +169,7 @@ const Search = ({ classes, teachers, rooms }: SearchProps) => {
                   legacyBehavior
                   key={`search-${link.type}-${link.value}`}
                   href={`/${link.type}/${link.value}`}
+                  prefetch={false}
                 >
                   <a
                     id={`link-${index}`}
