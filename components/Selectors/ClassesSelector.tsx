@@ -88,6 +88,7 @@ const ClassesSelector = ({ classes }: ClassesSelectorProps) => {
                   legacyBehavior
                   key={`bottomBar-class-letter-${sortedItem.char}-${item.value}`}
                   href={`/class/${item.value}`}
+                  prefetch={false}
                 >
                   <a
                     className={`mb-2 mx-4 first:pt-4 last:mb-4 block px-1 py-px rounded transition duration-100 hover:bg-blue-100 dark:hover:text-gray-700 ${
