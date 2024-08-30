@@ -94,6 +94,7 @@ export default async function fetchReplacements(): Promise<Replacements | null> 
 
       // Show only replacements valid this week or later (to be extended by introducing calendar to tables and calculating dates for each day of week as it's passing)
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const monday = new Date(today);
       monday.setDate(
         today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1)
