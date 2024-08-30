@@ -76,8 +76,6 @@ export default async function fetchReplacements(): Promise<Replacements | null> 
         cache: 'no-store',
       }).then((response) => response.json());
 
-      // I'm not going to use regexp with typescript ever again
-
       // eslint-disable-next-line prefer-const
       const [, PLDate, shortDayNameWithBrackets] =
         replacementsResponse.date.split(spaceRegExp);
@@ -86,7 +84,24 @@ export default async function fetchReplacements(): Promise<Replacements | null> 
       );
 
       // if(!dateInfo) throw new Error(`Couldn't parse date from replacements api. Got: ${replacementsResponse.date}`);
-      const [day, month, year] = PLDate;
+      const [day, month, year] = PLDate.split('.');
+
+      const replacementDate = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day)
+      );
+
+      // Show only replacements valid this week or later (to be extended by introducing calendar to tables and calculating dates for each day of week as it's passing)
+      const today = new Date();
+      const monday = new Date(today);
+      monday.setDate(
+        today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1)
+      );
+
+      if (replacementDate < monday) {
+        return null;
+      }
 
       const dayIndex = <DayIndex>shortDayNamesLowerCase.indexOf(shortDayName);
 
