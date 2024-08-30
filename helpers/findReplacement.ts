@@ -21,10 +21,29 @@ export default function findReplacement(
   { className, groupName, teacher, room }: TableLesson,
   hourIndex: number,
   dayIndex: number,
-  { rows, dayIndex: replacementDayIndex }: Replacements,
+  { rows, dayIndex: replacementDayIndex, date }: Replacements,
   { type: dataType }: TimeTableData,
   timeTableList: List
 ): Replacement | undefined {
+  const [year, month, day] = date.split('-');
+  const replacementDate = new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day)
+  );
+
+  // Show only replacements valid this week or later (to be extended by introducing calendar to tables and calculating dates for each day of week as it's passing)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const monday = new Date(today);
+  monday.setDate(
+    today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1)
+  );
+
+  if (replacementDate < monday) {
+    return undefined;
+  }
+
   if (replacementDayIndex !== dayIndex) return undefined;
 
   const group = groupName ? normalizeGroup(groupName) : undefined;
