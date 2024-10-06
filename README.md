@@ -9,6 +9,7 @@
 - Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/wulkanowy/timetable-parser-js)
 - Teacher replacements view based on Zespół Szkół Elektronicznych w Rzeszowie's own API
 - Technologies: React, Next.js, TypeScript, Tailwind CSS
+- An open-source project with other contributors
 
 # Getting started & preparing the timetable to use with the app
 
