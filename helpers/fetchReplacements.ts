@@ -16,7 +16,7 @@ function parseTeacher(teacherString: string): TeacherInfo {
 
   return {
     notParsed: teacherString,
-    shortString: `${name[0]}.${surname}`,
+    shortString: name ? `${name}.${surname}` : surname,
 
     name,
     surname,
