@@ -6,7 +6,7 @@
 - Crafted for [Zespół Szkół Elektronicznych w Rzeszowie](https://www.elektronik.rzeszow.pl/) technical high school from Rzeszow, Poland
 - Mobile-first design made to match the school's website one
 - Can run for many other Optivum-based school timetables too!
-- Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/wulkanowy/timetable-parser-js)
+- Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://www.npmjs.com/package/@wulkanowy/timetable-parser)
 - Teacher replacements view based on Zespół Szkół Elektronicznych w Rzeszowie's own API
 - Technologies: React, Next.js, TypeScript, Tailwind CSS
 - An open-source project with other contributors
