@@ -43,7 +43,7 @@ function normalizeApiReplacement(replacement: ApiReplacement): Replacement {
     lessonRemoved,
     lessonRemovedReason,
 
-    lesson: Number(replacement.lesson),
+    lesson: Number(replacement.lesson.split(",")[0]),
     subject: replacement.subject,
     room: replacement.room,
 
