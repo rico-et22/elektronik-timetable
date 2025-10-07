@@ -13,10 +13,10 @@ import { spaceRegExp } from './sharedVariables';
 
 function parseTeacher(teacherString: string): TeacherInfo {
   const [surname, name] = teacherString.split(spaceRegExp);
-
+  let shortName = name ? name[0] : null;
   return {
     notParsed: teacherString,
-    shortString: name ? `${name}.${surname}` : surname,
+    shortString: shortName ? `${shortName}.${surname}` : surname,
 
     name,
     surname,
@@ -24,9 +24,7 @@ function parseTeacher(teacherString: string): TeacherInfo {
 }
 
 function normalizeApiReplacement(replacement: ApiReplacement): Replacement {
-  const lessonRemoved =
-    replacement.deputy.includes('Uczniowie') ||
-    replacement.deputy.includes('Zastępstwo');
+  const lessonRemoved = (/uczniowie|zast.pstwo/gi).test(replacement.deputy);
   const lessonRemovedReason = lessonRemoved ? replacement.deputy : null;
 
   const [className, ...replacedGroups] = replacement.classgroup;
