@@ -76,9 +76,21 @@ export default function findReplacement(
       const replacementGroup = replacementLesson.replacedGroups.find(
         (grp) => normalizeGroup(grp) === group
       );
+	  
 
       if (!replacementGroup) return false;
-    }
+    } else {
+		 const teacherShortString = getTeacherDataByCode(timeTableList, teacher)
+        ?.name.split(spaceRegExp)
+        .shift()
+        ?.toLowerCase();
+
+      if (
+        replacementLesson.teacher.shortString.toLowerCase() !==
+        teacherShortString
+      )
+        return false;
+	}
 
     return true;
   });
