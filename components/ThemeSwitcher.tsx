@@ -80,7 +80,7 @@ const ThemeSwitcher = () => {
   return (
     <>
       <div
-        className="w-20 flex items-center relative bg-gray-50 dark:lg:bg-zinc-800 dark:bg-zinc-900 rounded border border-gray-300 dark:border-zinc-700 theme-switcher-tooltip"
+        className="w-28 flex items-center relative bg-gray-50 dark:lg:bg-zinc-800 dark:bg-zinc-900 rounded border border-gray-300 dark:border-zinc-700 theme-switcher-tooltip"
         data-tooltip-content="Motyw"
       >
         {theme === Themes.system && (
@@ -95,7 +95,7 @@ const ThemeSwitcher = () => {
         <select
           onChange={handleChange}
           value={theme}
-          className="appearance-none py-2 w-full opacity-0 cursor-pointer"
+          className="appearance-none p-2 w-full opacity-0 cursor-pointer"
         >
           {themeSwitcherItems.map((item) => (
             <option
